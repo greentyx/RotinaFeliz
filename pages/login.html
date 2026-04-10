@@ -275,8 +275,14 @@ const firebaseConfig = {
 
   // Redireciona se já logado
   onAuthStateChanged(auth, user => {
-    if (user) window.location.href = 'app.html';
+    if (user) redirectTo('app.html');
   });
+
+  function redirectTo(url) {
+    document.body.style.transition = 'opacity .35s ease';
+    document.body.style.opacity = '0';
+    setTimeout(() => window.location.href = url, 360);
+  }
 
   // ── HELPERS ────────────────────────────────────────────
   function setLoading(btnId, spinId, loading) {
@@ -318,7 +324,7 @@ const firebaseConfig = {
     setLoading('btnLogin','spinLogin',true);
     try {
       await signInWithEmailAndPassword(auth, email, pass);
-      window.location.href = 'app.html';
+      redirectTo('app.html');
     } catch(e) {
       showError(friendlyError(e.code));
     } finally {
