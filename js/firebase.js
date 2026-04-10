@@ -16,9 +16,22 @@
  */
 
 import { initializeApp }        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth }              from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore }         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage }           from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import { getAuth,
+         onAuthStateChanged,
+         signOut,
+         updatePassword,
+         deleteUser,
+         createUserWithEmailAndPassword,
+         signInWithEmailAndPassword }
+                                from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore,
+         collection, doc,
+         addDoc, setDoc, getDoc, getDocs, updateDoc, deleteDoc,
+         query, where, orderBy,
+         onSnapshot }           from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage,
+         ref, uploadBytes, getDownloadURL }
+                                from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 // ── SUBSTITUA AQUI com suas credenciais ─────────────────────
 const firebaseConfig = {
@@ -36,3 +49,14 @@ const app     = initializeApp(firebaseConfig);
 export const auth    = getAuth(app);
 export const db      = getFirestore(app);
 export const storage = getStorage(app);
+
+// Re-export Auth helpers
+export { onAuthStateChanged, signOut, updatePassword, deleteUser,
+         createUserWithEmailAndPassword, signInWithEmailAndPassword };
+
+// Re-export Firestore helpers
+export { collection, doc, addDoc, setDoc, getDoc, getDocs, updateDoc, deleteDoc,
+         query, where, orderBy, onSnapshot };
+
+// Re-export Storage helpers
+export { ref, uploadBytes, getDownloadURL };
