@@ -615,8 +615,17 @@ async function loadDashboard() {
   // Week chart
   renderWeekChart();
 
-  // Today's task list
-  renderTodayProgress(pSnap.docs.map(d=>d.data()));
+  // Today's task list — enrich with task titles
+  const progressItems = pSnap.docs.map(d=>d.data());
+  const taskTitles = {};
+  const taskIds = [...new Set(progressItems.map(p=>p.taskId).filter(Boolean))];
+  await Promise.all(taskIds.map(async id => {
+    try {
+      const tDoc = await getDoc(doc(db,'tasks',id));
+      if (tDoc.exists()) taskTitles[id] = tDoc.data().title;
+    } catch(_) {}
+  }));
+  renderTodayProgress(progressItems, taskTitles);
 }
 
 async function renderWeekChart() {
@@ -642,19 +651,27 @@ async function renderWeekChart() {
   `).join('');
 }
 
-function renderTodayProgress(items) {
+function renderTodayProgress(items, taskTitles={}) {
   const el = document.getElementById('todayProgress');
   if (!items.length) {
     el.innerHTML='<div class="empty"><div class="empty-emoji">😊</div><h3>Nenhuma tarefa hoje ainda</h3><p>Ative o Modo Criança para começar!</p></div>';
     return;
   }
-  el.innerHTML = items.map(()=>`
+  el.innerHTML = items.map(item=>{
+    const title = (item.taskId && taskTitles[item.taskId]) || 'Tarefa concluída';
+    const timeStr = item.createdAt
+      ? new Date(item.createdAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})
+      : '';
+    return `
     <div class="task-row">
       <div style="font-size:1.4rem">✅</div>
-      <div class="task-info"><div class="task-title">Tarefa concluída</div></div>
-      <span class="badge badge-blue">+10 pts</span>
-    </div>
-  `).join('');
+      <div class="task-info">
+        <div class="task-title">${title}</div>
+        ${timeStr ? `<div class="task-order">⏰ ${timeStr}</div>` : ''}
+      </div>
+      <span class="badge badge-blue">+${item.points||10} pts</span>
+    </div>`;
+  }).join('');
 }
 
 // ── UI HELPERS ──────────────────────────────────────────────
