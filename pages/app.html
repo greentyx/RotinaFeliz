@@ -371,26 +371,12 @@
 
 <!-- FIREBASE -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut }
-  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc,
-         query, where, orderBy, onSnapshot, getDoc, getDocs, setDoc }
-  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL }
-  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
-
-// 🔧 SUBSTITUA com suas credenciais
-const firebaseConfig = {
-  apiKey:"SUA_API_KEY", authDomain:"SEU.firebaseapp.com",
-  projectId:"SEU_PROJECT_ID", storageBucket:"SEU.appspot.com",
-  messagingSenderId:"SEU_ID", appId:"SEU_APP_ID"
-};
-
-const app     = initializeApp(firebaseConfig);
-const auth    = getAuth(app);
-const db      = getFirestore(app);
-const storage = getStorage(app);
+import { auth, db, storage,
+         onAuthStateChanged, signOut,
+         collection, doc, addDoc, updateDoc, deleteDoc,
+         query, where, orderBy, onSnapshot, getDoc, getDocs, setDoc,
+         ref, uploadBytes, getDownloadURL }
+  from "../js/firebase.js";
 
 let currentUser = null;
 let routinesMap  = {};
