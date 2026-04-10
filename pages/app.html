@@ -699,17 +699,20 @@ window.showPage = (page) => {
   }
 };
 
-window.openModalById = id => document.getElementById(id).classList.add('open');
-window.closeModalById = id => document.getElementById(id).classList.remove('open');
+function openModalById(id)  { document.getElementById(id).classList.add('open'); }
+function closeModalById(id) { document.getElementById(id).classList.remove('open'); }
+window.openModalById  = openModalById;
+window.closeModalById = closeModalById;
 window.closeModal = (e,id) => { if (e.target===document.getElementById(id)) closeModalById(id); };
 
 let toastTimer;
-window.toast = (msg) => {
+function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent=msg; el.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(()=>el.classList.remove('show'),2800);
-};
+}
+window.toast = toast;
 </script>
 </body>
 </html>
