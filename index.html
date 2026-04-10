@@ -582,21 +582,88 @@
     <div class="footer-col">
       <h4>Legal</h4>
       <ul>
-        <li><a href="#">Termos de Uso</a></li>
-        <li><a href="#">Privacidade</a></li>
-        <li><a href="#">Cookies</a></li>
+        <li><a href="javascript:void(0)" onclick="openLegalModal('terms')">Termos de Uso</a></li>
+        <li><a href="javascript:void(0)" onclick="openLegalModal('privacy')">Privacidade</a></li>
+        <li><a href="javascript:void(0)" onclick="openLegalModal('cookies')">Cookies</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
     <span>© 2025 RotinaFeliz · Todos os direitos reservados</span>
     <div class="footer-bottom-links">
-      <a href="#">Termos</a>
-      <a href="#">Privacidade</a>
-      <a href="#">Contato</a>
+      <a href="javascript:void(0)" onclick="openLegalModal('terms')">Termos</a>
+      <a href="javascript:void(0)" onclick="openLegalModal('privacy')">Privacidade</a>
+      <a href="javascript:void(0)" onclick="openLegalModal('contact')">Contato</a>
     </div>
   </div>
 </footer>
+
+<!-- LEGAL MODAL -->
+<div id="legalOverlay" style="display:none;position:fixed;inset:0;background:rgba(30,27,46,.55);z-index:900;align-items:center;justify-content:center;padding:24px;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:#fff;border-radius:24px;padding:36px;max-width:540px;width:100%;max-height:80vh;overflow-y:auto;animation:slideUp .25s ease">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <h2 id="legalTitle" style="font-family:'Baloo 2',cursive;font-size:1.4rem;font-weight:900"></h2>
+      <button onclick="document.getElementById('legalOverlay').style.display='none'" style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:#6B6880">✕</button>
+    </div>
+    <div id="legalBody" style="font-size:.95rem;line-height:1.7;color:#4a4a6a"></div>
+  </div>
+</div>
+<script>
+const legalContent = {
+  terms: {
+    title: '📄 Termos de Uso',
+    body: `<p>Bem-vindo ao <strong>RotinaFeliz</strong>. Ao usar este serviço, você concorda com estes termos.</p>
+      <h4 style="margin:16px 0 8px;font-weight:800">1. Uso do Serviço</h4>
+      <p>O RotinaFeliz é um serviço voltado para auxiliar famílias com crianças com TEA a organizar rotinas visuais. O uso é pessoal e não comercial.</p>
+      <h4 style="margin:16px 0 8px;font-weight:800">2. Conta de Usuário</h4>
+      <p>Você é responsável por manter a confidencialidade da sua senha e por todas as atividades realizadas na sua conta.</p>
+      <h4 style="margin:16px 0 8px;font-weight:800">3. Conteúdo</h4>
+      <p>Você mantém a propriedade de todo conteúdo que enviar (imagens, textos). Ao enviar, concede ao RotinaFeliz licença para armazenar e exibir esse conteúdo para você.</p>
+      <h4 style="margin:16px 0 8px;font-weight:800">4. Alterações</h4>
+      <p>Reservamo-nos o direito de modificar estes termos a qualquer momento. Continuando a usar o serviço após alterações, você aceita os novos termos.</p>
+      <p style="margin-top:16px;color:#9990b0;font-size:.85rem">Última atualização: Janeiro de 2025</p>`
+  },
+  privacy: {
+    title: '🔒 Política de Privacidade',
+    body: `<p>Sua privacidade é importante para nós. Esta política descreve como tratamos seus dados.</p>
+      <h4 style="margin:16px 0 8px;font-weight:800">Dados coletados</h4>
+      <p>Coletamos: e-mail, nome, rotinas e tarefas criadas, e histórico de progresso das crianças.</p>
+      <h4 style="margin:16px 0 8px;font-weight:800">Uso dos dados</h4>
+      <p>Os dados são usados exclusivamente para fornecer o serviço de rotinas visuais. Não vendemos nem compartilhamos seus dados com terceiros.</p>
+      <h4 style="margin:16px 0 8px;font-weight:800">Armazenamento</h4>
+      <p>Os dados são armazenados com segurança no Firebase (Google), com criptografia em trânsito e em repouso.</p>
+      <h4 style="margin:16px 0 8px;font-weight:800">Exclusão de dados</h4>
+      <p>Você pode excluir sua conta e todos os seus dados a qualquer momento na página de Perfil.</p>
+      <p style="margin-top:16px;color:#9990b0;font-size:.85rem">Última atualização: Janeiro de 2025</p>`
+  },
+  cookies: {
+    title: '🍪 Política de Cookies',
+    body: `<p>O RotinaFeliz utiliza apenas cookies essenciais para o funcionamento do serviço.</p>
+      <h4 style="margin:16px 0 8px;font-weight:800">Cookies utilizados</h4>
+      <p>Usamos cookies do Firebase Authentication para manter sua sessão ativa de forma segura. Não utilizamos cookies de rastreamento ou publicidade.</p>
+      <h4 style="margin:16px 0 8px;font-weight:800">Controle</h4>
+      <p>Você pode desativar cookies nas configurações do seu navegador, mas isso poderá impedir o funcionamento do login.</p>
+      <p style="margin-top:16px;color:#9990b0;font-size:.85rem">Última atualização: Janeiro de 2025</p>`
+  },
+  contact: {
+    title: '✉️ Contato',
+    body: `<p>Tem dúvidas, sugestões ou precisa de ajuda?</p>
+      <div style="background:#f0f7ff;border-radius:14px;padding:20px;margin:16px 0">
+        <p>📧 <strong>E-mail:</strong> contato@rotinasfeliz.com.br</p>
+        <p style="margin-top:10px">⏰ <strong>Horário de atendimento:</strong> Seg–Sex, 9h–18h</p>
+      </div>
+      <p>Respondemos em até 2 dias úteis. Para questões urgentes relacionadas a dados pessoais, inclua "LGPD" no assunto.</p>`
+  }
+};
+function openLegalModal(type) {
+  const content = legalContent[type];
+  if (!content) return;
+  document.getElementById('legalTitle').innerHTML = content.title;
+  document.getElementById('legalBody').innerHTML  = content.body;
+  const overlay = document.getElementById('legalOverlay');
+  overlay.style.display = 'flex';
+}
+</script>
 
 <script>
   function toggleFaq(btn) {
