@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Perfil — RotinaFeliz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="shortcut icon" href="assets/rf.png" type="image/x-icon">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:#4A90D9; --blue-lt:#EAF3FB; --green:#5BB974; --green-lt:#E8F7EC;
+      --yellow:#F7C948; --peach:#F4956A;
+      --bg:#F7F5FF; --white:#fff; --ink:#1E1B2E; --muted:#6B6880;
+      --error:#E05C5C; --radius:20px; --shadow:0 8px 32px rgba(74,144,217,.13);
+    }
+    body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--ink); display:flex; min-height:100vh; }
+
+    /* ── SIDEBAR ─────────────────────────────────────────── */
+    .sidebar {
+      width:260px; flex-shrink:0;
+      background:var(--white); border-right:1px solid #ede9f8;
+      display:flex; flex-direction:column;
+      padding:24px 0; position:fixed; top:0; left:0; bottom:0;
+      z-index:50; transition:transform .3s;
+    }
+    .sidebar-logo {
+      font-family:'Baloo 2',cursive; font-size:1.5rem; font-weight:900;
+      color:var(--blue); text-decoration:none;
+      padding:0 24px 24px; display:block;
+      border-bottom:1px solid #ede9f8; margin-bottom:16px;
+    }
+    .nav-label { font-size:.72rem; font-weight:800; color:var(--muted); letter-spacing:.08em; padding:0 24px; margin-bottom:6px; text-transform:uppercase; }
+    .nav-item {
+      display:flex; align-items:center; gap:12px;
+      padding:12px 24px; font-weight:700; font-size:.95rem;
+      color:var(--muted); text-decoration:none; background:none; border:none;
+      cursor:pointer; width:100%; text-align:left; transition:all .15s;
+      border-radius:0;
+    }
+    .nav-item:hover { background:var(--blue-lt); color:var(--blue); }
+    .nav-item.active { background:var(--blue-lt); color:var(--blue); font-weight:800; }
+    .nav-icon { font-size:1.1rem; }
+    .nav-section { padding:0 12px; margin-bottom:8px; }
+    .sidebar-footer { margin-top:auto; padding:20px 16px 0; border-top:1px solid #ede9f8; }
+    .user-card { display:flex; align-items:center; gap:12px; padding:14px 8px; }
+    .user-avatar {
+      width:40px; height:40px; border-radius:50%;
+      background:var(--blue); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:900; font-size:1.1rem; flex-shrink:0;
+    }
+    .user-name { font-weight:800; font-size:.9rem; }
+    .user-email { font-size:.78rem; color:var(--muted); }
+    .btn-logout {
+      width:100%; padding:10px; margin-top:8px;
+      background:none; border:1.5px solid #ede9f8; border-radius:12px;
+      font-family:'Nunito',sans-serif; font-weight:700; font-size:.9rem;
+      color:var(--muted); cursor:pointer; transition:all .2s;
+    }
+    .btn-logout:hover { border-color:var(--peach); color:var(--peach); }
+
+    /* ── MAIN ────────────────────────────────────────────── */
+    .main { margin-left:260px; flex:1; min-height:100vh; display:flex; flex-direction:column; }
+    .topbar {
+      position:sticky; top:0; z-index:40;
+      background:rgba(247,245,255,.92); backdrop-filter:blur(12px);
+      border-bottom:1px solid #ede9f8;
+      padding:16px 32px; display:flex; align-items:center; gap:16px;
+    }
+    .topbar h1 { font-family:'Baloo 2',cursive; font-size:1.4rem; font-weight:900; }
+    .content { padding:32px; max-width:860px; }
+
+    /* ── PROFILE CARD ────────────────────────────────────── */
+    .profile-header {
+      background:linear-gradient(135deg,var(--blue) 0%,#6B7FD7 100%);
+      border-radius:var(--radius); padding:36px; margin-bottom:24px;
+      display:flex; align-items:center; gap:28px;
+      box-shadow:0 8px 32px rgba(74,144,217,.25);
+    }
+    .profile-avatar-big {
+      width:88px; height:88px; border-radius:50%;
+      background:rgba(255,255,255,.25); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Baloo 2',cursive; font-size:2.6rem; font-weight:900;
+      border:3px solid rgba(255,255,255,.4); flex-shrink:0;
+    }
+    .profile-header-info h2 { font-family:'Baloo 2',cursive; font-size:1.7rem; font-weight:900; color:#fff; margin-bottom:4px; }
+    .profile-header-info p { color:rgba(255,255,255,.8); font-size:.95rem; }
+    .profile-badge {
+      margin-left:auto; background:rgba(255,255,255,.2);
+      border:1.5px solid rgba(255,255,255,.35); border-radius:50px;
+      padding:8px 20px; color:#fff; font-weight:800; font-size:.85rem;
+      white-space:nowrap;
+    }
+
+    /* ── CARDS ───────────────────────────────────────────── */
+    .card {
+      background:var(--white); border-radius:var(--radius);
+      box-shadow:var(--shadow); padding:32px; margin-bottom:20px;
+    }
+    .card-title {
+      font-family:'Baloo 2',cursive; font-size:1.2rem; font-weight:900;
+      margin-bottom:24px; display:flex; align-items:center; gap:10px;
+    }
+    .form-group { margin-bottom:20px; }
+    .form-label { display:block; font-weight:700; font-size:.88rem; margin-bottom:7px; color:var(--ink); }
+    .form-input {
+      width:100%; padding:13px 16px; border:2px solid #e4e0f0; border-radius:12px;
+      font-family:'Nunito',sans-serif; font-size:.95rem; background:var(--white);
+      color:var(--ink); outline:none; transition:border-color .2s;
+    }
+    .form-input:focus { border-color:var(--blue); }
+    .form-input:disabled { background:#f5f4fa; color:var(--muted); cursor:not-allowed; }
+    .form-hint { font-size:.8rem; color:var(--muted); margin-top:5px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+    /* ── BUTTONS ─────────────────────────────────────────── */
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:12px 28px; border-radius:50px; font-family:'Nunito',sans-serif;
+      font-weight:800; font-size:1rem; cursor:pointer; text-decoration:none;
+      transition:transform .18s,box-shadow .18s; border:none;
+    }
+    .btn:hover { transform:translateY(-2px); }
+    .btn-primary { background:var(--blue); color:#fff; box-shadow:0 6px 24px rgba(74,144,217,.35); }
+    .btn-outline { background:transparent; color:var(--blue); border:2.5px solid var(--blue); }
+    .btn-danger  { background:transparent; color:var(--error); border:2.5px solid var(--error); }
+    .btn-sm { padding:8px 20px; font-size:.88rem; }
+
+    /* ── STATS ROW ───────────────────────────────────────── */
+    .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px; }
+    .stat-card {
+      background:var(--white); border-radius:var(--radius);
+      box-shadow:var(--shadow); padding:24px;
+      display:flex; flex-direction:column; gap:6px;
+    }
+    .stat-emoji { font-size:1.8rem; }
+    .stat-value { font-family:'Baloo 2',cursive; font-size:2rem; font-weight:900; }
+    .stat-label { font-size:.82rem; font-weight:700; color:var(--muted); }
+
+    /* ── DANGER ZONE ─────────────────────────────────────── */
+    .danger-zone { border:2px solid #fcd4d4; border-radius:var(--radius); padding:28px; }
+    .danger-zone .card-title { color:var(--error); }
+
+    /* ── TOAST ───────────────────────────────────────────── */
+    .toast {
+      position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px);
+      background:var(--ink); color:#fff; padding:12px 24px; border-radius:50px;
+      font-weight:700; font-size:.95rem; z-index:500;
+      transition:transform .3s; white-space:nowrap;
+    }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+
+    /* ── LOADING ─────────────────────────────────────────── */
+    .skeleton {
+      background:linear-gradient(90deg,#ede9f8 25%,#f5f3fc 50%,#ede9f8 75%);
+      background-size:200% 100%; border-radius:8px;
+      animation:shimmer 1.4s infinite;
+    }
+    @keyframes shimmer { to{background-position:-200% 0} }
+
+    @media(max-width:768px) {
+      .sidebar { transform:translateX(-100%); }
+      .sidebar.open { transform:translateX(0); }
+      .main { margin-left:0; }
+      .form-row { grid-template-columns:1fr; }
+      .stats-row { grid-template-columns:1fr; }
+      .profile-badge { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <a href="../index.html" class="sidebar-logo">⭐ RotinaFeliz</a>
+  <div class="nav-section">
+    <div class="nav-label">Menu</div>
+    <a href="app.html" class="nav-item">
+      <span class="nav-icon">📋</span> Minhas Rotinas
+    </a>
+    <a href="app.html#dashboard" class="nav-item">
+      <span class="nav-icon">📊</span> Progresso
+    </a>
+    <a href="child.html" class="nav-item" style="color:var(--green)">
+      <span class="nav-icon">🧒</span> Modo Criança
+    </a>
+    <a href="profile.html" class="nav-item active">
+      <span class="nav-icon">👤</span> Meu Perfil
+    </a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avatar" id="sidebarAvatar">?</div>
+      <div>
+        <div class="user-name" id="sidebarName">Carregando...</div>
+        <div class="user-email" id="sidebarEmail"></div>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">🚪 Sair da conta</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <h1>👤 Meu Perfil</h1>
+  </div>
+
+  <div class="content">
+
+    <!-- PROFILE HEADER -->
+    <div class="profile-header">
+      <div class="profile-avatar-big" id="profileAvatarBig">?</div>
+      <div class="profile-header-info">
+        <h2 id="profileHeaderName">Carregando...</h2>
+        <p id="profileHeaderEmail">...</p>
+      </div>
+      <div class="profile-badge">👨‍👩‍👧 Responsável</div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-emoji">📋</div>
+        <div class="stat-value" id="statRoutines">—</div>
+        <div class="stat-label">Rotinas criadas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-emoji">✅</div>
+        <div class="stat-value" id="statTasksDone">—</div>
+        <div class="stat-label">Tarefas concluídas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-emoji">⭐</div>
+        <div class="stat-value" id="statTotalPoints">—</div>
+        <div class="stat-label">Pontos totais</div>
+      </div>
+    </div>
+
+    <!-- EDIT PROFILE -->
+    <div class="card">
+      <div class="card-title">✏️ Editar informações</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nome completo</label>
+          <input class="form-input" id="fieldName" type="text" placeholder="Seu nome" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" id="fieldEmail" type="email" disabled />
+          <div class="form-hint">O email não pode ser alterado</div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="saveProfile()">💾 Salvar alterações</button>
+    </div>
+
+    <!-- CHANGE PASSWORD -->
+    <div class="card">
+      <div class="card-title">🔒 Alterar senha</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nova senha</label>
+          <input class="form-input" id="fieldNewPass" type="password" placeholder="Mínimo 6 caracteres" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirmar nova senha</label>
+          <input class="form-input" id="fieldConfirmPass" type="password" placeholder="Repita a senha" />
+        </div>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="changePassword()">🔑 Alterar senha</button>
+    </div>
+
+    <!-- DANGER ZONE -->
+    <div class="danger-zone">
+      <div class="card-title">⚠️ Zona de perigo</div>
+      <p style="color:var(--muted);font-size:.9rem;line-height:1.7;margin-bottom:20px">
+        Excluir sua conta é uma ação <strong>permanente e irreversível</strong>. Todos os dados,
+        rotinas e histórico de progresso serão deletados para sempre.
+      </p>
+      <button class="btn btn-danger btn-sm" onclick="confirmDeleteAccount()">🗑️ Excluir minha conta</button>
+    </div>
+
+  </div>
+</main>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut, updatePassword, deleteUser }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc, collection, query, where, getDocs, deleteDoc }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// 🔧 SUBSTITUA com suas credenciais Firebase
+const firebaseConfig = {
+  apiKey:"SUA_API_KEY", authDomain:"SEU.firebaseapp.com",
+  projectId:"SEU_PROJECT_ID", storageBucket:"SEU.appspot.com",
+  messagingSenderId:"SEU_ID", appId:"SEU_APP_ID"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+let currentUser = null;
+
+// ── AUTH GUARD ───────────────────────────────────────────
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href = 'login.html'; return; }
+  currentUser = user;
+
+  const userDoc = await getDoc(doc(db, 'users', user.uid));
+  const data = userDoc.exists() ? userDoc.data() : {};
+  const name = data.name || user.email;
+
+  // Sidebar
+  document.getElementById('sidebarName').textContent  = name;
+  document.getElementById('sidebarEmail').textContent = user.email;
+  document.getElementById('sidebarAvatar').textContent= name[0].toUpperCase();
+
+  // Profile header
+  document.getElementById('profileAvatarBig').textContent   = name[0].toUpperCase();
+  document.getElementById('profileHeaderName').textContent  = name;
+  document.getElementById('profileHeaderEmail').textContent = user.email;
+
+  // Form fields
+  document.getElementById('fieldName').value  = name;
+  document.getElementById('fieldEmail').value = user.email;
+
+  loadStats(user.uid);
+});
+
+// ── STATS ────────────────────────────────────────────────
+async function loadStats(uid) {
+  const routinesSnap = await getDocs(query(collection(db,'routines'), where('userId','==',uid)));
+  document.getElementById('statRoutines').textContent = routinesSnap.size;
+
+  const progressSnap = await getDocs(query(collection(db,'progress'), where('userId','==',uid), where('completed','==',true)));
+  document.getElementById('statTasksDone').textContent = progressSnap.size;
+
+  let totalPts = 0;
+  progressSnap.docs.forEach(d => totalPts += d.data().points || 0);
+  document.getElementById('statTotalPoints').textContent = totalPts;
+}
+
+// ── SAVE PROFILE ─────────────────────────────────────────
+window.saveProfile = async () => {
+  const name = document.getElementById('fieldName').value.trim();
+  if (!name) { toast('⚠️ Informe seu nome'); return; }
+  try {
+    await updateDoc(doc(db, 'users', currentUser.uid), { name });
+    document.getElementById('profileHeaderName').textContent  = name;
+    document.getElementById('sidebarName').textContent        = name;
+    document.getElementById('sidebarAvatar').textContent      = name[0].toUpperCase();
+    document.getElementById('profileAvatarBig').textContent   = name[0].toUpperCase();
+    toast('✅ Perfil atualizado!');
+  } catch(e) {
+    toast('❌ Erro ao salvar: ' + e.message);
+  }
+};
+
+// ── CHANGE PASSWORD ──────────────────────────────────────
+window.changePassword = async () => {
+  const newPass     = document.getElementById('fieldNewPass').value;
+  const confirmPass = document.getElementById('fieldConfirmPass').value;
+  if (newPass.length < 6) { toast('⚠️ A senha precisa ter pelo menos 6 caracteres'); return; }
+  if (newPass !== confirmPass) { toast('⚠️ As senhas não coincidem'); return; }
+  try {
+    await updatePassword(currentUser, newPass);
+    document.getElementById('fieldNewPass').value    = '';
+    document.getElementById('fieldConfirmPass').value = '';
+    toast('✅ Senha alterada com sucesso!');
+  } catch(e) {
+    if (e.code === 'auth/requires-recent-login') {
+      toast('⚠️ Faça login novamente para alterar a senha');
+    } else {
+      toast('❌ Erro: ' + e.message);
+    }
+  }
+};
+
+// ── DELETE ACCOUNT ───────────────────────────────────────
+window.confirmDeleteAccount = async () => {
+  const confirmed = confirm(
+    '⚠️ Tem certeza que deseja excluir sua conta?\n\n' +
+    'AÇÃO IRREVERSÍVEL: todos os seus dados, rotinas e histórico serão deletados para sempre.'
+  );
+  if (!confirmed) return;
+
+  try {
+    const uid = currentUser.uid;
+    // Deletar rotinas e tarefas
+    const routinesSnap = await getDocs(query(collection(db,'routines'), where('userId','==',uid)));
+    for (const r of routinesSnap.docs) {
+      const tasksSnap = await getDocs(query(collection(db,'tasks'), where('routineId','==',r.id)));
+      for (const t of tasksSnap.docs) await deleteDoc(t.ref);
+      await deleteDoc(r.ref);
+    }
+    // Deletar progresso
+    const progressSnap = await getDocs(query(collection(db,'progress'), where('userId','==',uid)));
+    for (const p of progressSnap.docs) await deleteDoc(p.ref);
+    // Deletar documento do usuário
+    await deleteDoc(doc(db,'users',uid));
+    // Deletar conta Firebase
+    await deleteUser(currentUser);
+    window.location.href = '../index.html';
+  } catch(e) {
+    if (e.code === 'auth/requires-recent-login') {
+      toast('⚠️ Faça login novamente para excluir a conta');
+    } else {
+      toast('❌ Erro: ' + e.message);
+    }
+  }
+};
+
+window.doLogout = () => signOut(auth).then(() => window.location.href = 'login.html');
+</script>
+
+<script>
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>

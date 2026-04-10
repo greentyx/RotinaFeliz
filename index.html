@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RotinaFeliz — Rotinas Visuais para Crianças com TEA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="shortcut icon" href="assets/rf.png" type="image/x-icon">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:    #4A90D9;
+      --blue-lt: #EAF3FB;
+      --green:   #5BB974;
+      --green-lt:#E8F7EC;
+      --yellow:  #F7C948;
+      --peach:   #F4956A;
+      --bg:      #F7F5FF;
+      --white:   #FFFFFF;
+      --ink:     #1E1B2E;
+      --muted:   #6B6880;
+      --card:    #FFFFFF;
+      --radius:  20px;
+      --shadow:  0 8px 32px rgba(74,144,217,.13);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; }
+
+    /* ── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 60px;
+      background: rgba(247,245,255,.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(74,144,217,.1);
+    }
+    .nav-logo {
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.6rem; font-weight: 900;
+      color: var(--blue); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a { font-weight: 700; font-size: .95rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--blue); }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; padding: 12px 28px;
+      border-radius: 50px; font-family: 'Nunito', sans-serif;
+      font-weight: 800; font-size: 1rem;
+      cursor: pointer; text-decoration: none;
+      transition: transform .18s, box-shadow .18s; border: none;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--blue); color: #fff; box-shadow: 0 6px 24px rgba(74,144,217,.35); }
+    .btn-primary:hover { box-shadow: 0 10px 32px rgba(74,144,217,.45); }
+    .btn-outline { background: transparent; color: var(--blue); border: 2.5px solid var(--blue); }
+    .btn-lg { padding: 16px 40px; font-size: 1.1rem; }
+    .btn-white { background: #fff; color: var(--blue); box-shadow: 0 8px 32px rgba(0,0,0,.15); }
+
+    /* ── HERO ────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 120px 24px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-blobs { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .45; animation: float 8s ease-in-out infinite; }
+    .blob-1 { width: 420px; height: 420px; background: #c7dffb; top: -80px; left: -100px; }
+    .blob-2 { width: 320px; height: 320px; background: #c5f0d0; top: 60px; right: -60px; animation-delay: -3s; }
+    .blob-3 { width: 260px; height: 260px; background: #fde8b0; bottom: 40px; left: 30%; animation-delay: -6s; }
+    @keyframes float { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.04); } }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--blue-lt); color: var(--blue);
+      padding: 8px 20px; border-radius: 50px;
+      font-weight: 800; font-size: .85rem;
+      margin-bottom: 28px; position: relative; z-index: 1;
+      border: 1.5px solid rgba(74,144,217,.2);
+      animation: fadeUp .6s ease both;
+    }
+    .hero h1 {
+      font-family: 'Baloo 2', cursive;
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 900; line-height: 1.1;
+      color: var(--ink); margin-bottom: 24px;
+      position: relative; z-index: 1;
+      animation: fadeUp .6s .1s ease both;
+    }
+    .hero h1 span { color: var(--blue); }
+    .hero > p {
+      font-size: 1.2rem; color: var(--muted);
+      max-width: 560px; line-height: 1.7; margin: 0 auto 40px;
+      position: relative; z-index: 1; animation: fadeUp .6s .2s ease both;
+    }
+    .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; position: relative; z-index: 1; animation: fadeUp .6s .3s ease both; }
+    .hero-img { margin-top: 64px; position: relative; z-index: 1; animation: fadeUp .7s .4s ease both; }
+    .hero-mockup {
+      background: var(--white); border-radius: 28px; padding: 32px;
+      box-shadow: 0 24px 80px rgba(74,144,217,.18); max-width: 780px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    }
+    .mock-card { background: var(--bg); border-radius: 16px; padding: 20px 16px; display: flex; flex-direction: column; align-items: center; gap: 10px; transition: transform .2s; }
+    .mock-card:hover { transform: translateY(-4px); }
+    .mock-icon { font-size: 2.4rem; }
+    .mock-label { font-weight: 800; font-size: .9rem; color: var(--ink); text-align: center; }
+    .mock-done { background: var(--green-lt); }
+    .mock-check { width: 28px; height: 28px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── SECTIONS ────────────────────────────────────────── */
+    section { padding: 96px 24px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block; background: var(--blue-lt); color: var(--blue);
+      padding: 6px 18px; border-radius: 50px;
+      font-weight: 800; font-size: .8rem; margin-bottom: 16px; letter-spacing: .04em;
+    }
+    h2 { font-family: 'Baloo 2', cursive; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; line-height: 1.15; margin-bottom: 16px; }
+    .subtitle { font-size: 1.1rem; color: var(--muted); max-width: 560px; line-height: 1.7; margin-bottom: 48px; }
+
+    /* ── FEATURES ────────────────────────────────────────── */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .feature-card {
+      background: var(--white); border-radius: var(--radius); padding: 32px;
+      box-shadow: var(--shadow); transition: transform .2s, box-shadow .2s;
+      border: 1.5px solid rgba(74,144,217,.08);
+    }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(74,144,217,.18); }
+    .feat-icon { width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 20px; }
+    .feat-icon.blue  { background: var(--blue-lt); }
+    .feat-icon.green { background: var(--green-lt); }
+    .feat-icon.yellow { background: #FEF9E7; }
+    .feat-icon.peach { background: #FEF0E9; }
+    .feature-card h3 { font-family: 'Baloo 2', cursive; font-size: 1.2rem; font-weight: 800; margin-bottom: 10px; }
+    .feature-card p { color: var(--muted); line-height: 1.65; font-size: .95rem; }
+
+    /* ── HOW IT WORKS ────────────────────────────────────── */
+    .how-bg { background: var(--white); }
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px; }
+    .step { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .step-num {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--blue); color: #fff;
+      font-family: 'Baloo 2', cursive; font-size: 1.6rem; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 24px rgba(74,144,217,.35);
+    }
+    .step h3 { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 1.1rem; }
+    .step p { color: var(--muted); font-size: .9rem; line-height: 1.6; }
+
+    /* ── PRICING ─────────────────────────────────────────── */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 860px; margin: 0 auto; }
+    .pricing-card {
+      background: var(--white); border-radius: var(--radius); padding: 40px 32px;
+      box-shadow: var(--shadow); border: 2px solid transparent;
+      position: relative; overflow: hidden; transition: transform .2s;
+    }
+    .pricing-card:hover { transform: translateY(-4px); }
+    .pricing-card.featured { border-color: var(--blue); background: linear-gradient(135deg, #fff 0%, var(--blue-lt) 100%); }
+    .pricing-badge { position: absolute; top: 20px; right: -28px; background: var(--blue); color: #fff; padding: 4px 40px; font-size: .75rem; font-weight: 800; transform: rotate(45deg); }
+    .price-plan { font-weight: 800; font-size: .85rem; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+    .price-amount { font-family: 'Baloo 2', cursive; font-size: 3rem; font-weight: 900; color: var(--ink); margin: 12px 0 4px; }
+    .price-amount span { font-size: 1.2rem; color: var(--muted); }
+    .price-desc { color: var(--muted); font-size: .9rem; margin-bottom: 28px; }
+    .price-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .price-features li { display: flex; align-items: center; gap: 10px; font-size: .95rem; font-weight: 600; }
+    .price-features li::before { content: "✓"; color: var(--green); font-weight: 900; font-size: 1rem; }
+    .price-features li.no { color: var(--muted); }
+    .price-features li.no::before { content: "✗"; color: #ddd; }
+
+    /* ── TESTIMONIALS ────────────────────────────────────── */
+    .testi-bg { background: linear-gradient(135deg, var(--blue-lt) 0%, var(--green-lt) 100%); }
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .testi-card { background: var(--white); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); }
+    .testi-stars { color: var(--yellow); font-size: 1.1rem; margin-bottom: 14px; }
+    .testi-text { font-size: 1rem; line-height: 1.7; color: var(--ink); margin-bottom: 20px; font-style: italic; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--blue); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; }
+    .testi-name { font-weight: 800; font-size: .95rem; }
+    .testi-role { font-size: .8rem; color: var(--muted); }
+
+    /* ── FAQ ─────────────────────────────────────────────── */
+    .faq-list { max-width: 740px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .faq-item {
+      background: var(--white); border-radius: var(--radius);
+      box-shadow: var(--shadow); overflow: hidden;
+      border: 1.5px solid rgba(74,144,217,.08);
+    }
+    .faq-question {
+      width: 100%; background: none; border: none; cursor: pointer;
+      padding: 22px 28px; display: flex; align-items: center; justify-content: space-between;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
+      color: var(--ink); text-align: left; gap: 16px;
+      transition: background .2s;
+    }
+    .faq-question:hover { background: var(--blue-lt); }
+    .faq-question.open { color: var(--blue); }
+    .faq-icon { font-size: 1.2rem; flex-shrink: 0; transition: transform .3s; }
+    .faq-question.open .faq-icon { transform: rotate(45deg); }
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height .35s ease, padding .3s;
+      padding: 0 28px;
+    }
+    .faq-answer.open { max-height: 300px; padding: 0 28px 22px; }
+    .faq-answer p { color: var(--muted); line-height: 1.7; font-size: .95rem; }
+
+    /* ── CTA FINAL ───────────────────────────────────────── */
+    .cta-section { background: linear-gradient(135deg, var(--blue) 0%, #6B7FD7 100%); text-align: center; padding: 96px 24px; }
+    .cta-section h2 { color: #fff; }
+    .cta-section p { color: rgba(255,255,255,.85); max-width: 480px; margin: 0 auto 40px; font-size: 1.1rem; line-height: 1.7; }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    footer {
+      background: var(--ink); color: rgba(255,255,255,.55);
+      padding: 64px 24px 40px;
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+    }
+    .footer-brand { display: flex; flex-direction: column; gap: 16px; }
+    .footer-logo { font-family: 'Baloo 2', cursive; font-size: 1.5rem; font-weight: 900; color: #fff; }
+    .footer-brand p { font-size: .9rem; line-height: 1.7; max-width: 260px; }
+    .footer-col h4 { color: #fff; font-weight: 800; font-size: .9rem; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul li a { color: rgba(255,255,255,.55); text-decoration: none; font-size: .9rem; transition: color .2s; }
+    .footer-col ul li a:hover { color: #fff; }
+    .footer-bottom {
+      max-width: 1100px; margin: 48px auto 0;
+      padding-top: 24px; border-top: 1px solid rgba(255,255,255,.1);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px; font-size: .85rem;
+    }
+    .footer-bottom-links { display: flex; gap: 20px; }
+    .footer-bottom-links a { color: rgba(255,255,255,.45); text-decoration: none; transition: color .2s; }
+    .footer-bottom-links a:hover { color: #fff; }
+
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { gap: 16px; }
+      .nav-links a:not(.btn) { display: none; }
+      .hero-mockup { grid-template-columns: 1fr 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .hero-mockup { grid-template-columns: 1fr; }
+      .hero-cta { flex-direction: column; align-items: center; }
+      .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">⭐ RotinaFeliz</a>
+  <div class="nav-links">
+    <a href="#funcionalidades">Funcionalidades</a>
+    <a href="#como-funciona">Como Funciona</a>
+    <a href="#precos">Preços</a>
+    <a href="#faq">FAQ</a>
+    <a href="pages/login.html" class="btn btn-outline" style="padding:10px 22px">Entrar</a>
+    <a href="pages/login.html?tab=register" class="btn btn-primary" style="padding:10px 22px">Começar Grátis</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="hero-badge">🌟 Especialmente desenvolvido para crianças com TEA</div>
+  <h1>Rotinas visuais que<br/><span>transformam o dia a dia</span></h1>
+  <p>Crie rotinas interativas com imagens, acompanhe o progresso dos seus filhos e celebre cada conquista com gamificação simples e acolhedora.</p>
+
+  <div class="hero-cta">
+    <a href="pages/login.html?tab=register" class="btn btn-primary btn-lg">Criar conta grátis ✨</a>
+    <a href="#como-funciona" class="btn btn-outline btn-lg">Ver como funciona</a>
+  </div>
+
+  <div class="hero-img">
+    <div class="hero-mockup">
+      <div class="mock-card mock-done">
+        <div class="mock-icon">🦷</div>
+        <div class="mock-label">Escovar os dentes</div>
+        <div class="mock-check">✓</div>
+      </div>
+      <div class="mock-card mock-done">
+        <div class="mock-icon">🍳</div>
+        <div class="mock-label">Tomar café da manhã</div>
+        <div class="mock-check">✓</div>
+      </div>
+      <div class="mock-card">
+        <div class="mock-icon">👕</div>
+        <div class="mock-label">Se vestir</div>
+        <div style="width:28px;height:28px;border-radius:50%;border:2.5px solid #ccc;"></div>
+      </div>
+      <div class="mock-card">
+        <div class="mock-icon">🎒</div>
+        <div class="mock-label">Pegar a mochila</div>
+        <div style="width:28px;height:28px;border-radius:50%;border:2.5px solid #ccc;"></div>
+      </div>
+      <div class="mock-card" style="background:#FEF9E7">
+        <div class="mock-icon">⭐</div>
+        <div class="mock-label">20 pontos hoje!</div>
+        <div style="font-size:.8rem;color:#F7C948;font-weight:800">ÓTIMO!</div>
+      </div>
+      <div class="mock-card">
+        <div class="mock-icon">📚</div>
+        <div class="mock-label">Fazer tarefa</div>
+        <div style="width:28px;height:28px;border-radius:50%;border:2.5px solid #ccc;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="funcionalidades">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:56px">
+      <div class="section-tag">FUNCIONALIDADES</div>
+      <h2>Tudo que você precisa<br/>em um só lugar</h2>
+      <p class="subtitle" style="margin:0 auto">Desenvolvido com foco nas necessidades reais de famílias que convivem com o TEA.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feat-icon blue">📋</div>
+        <h3>Rotinas Visuais</h3>
+        <p>Crie rotinas personalizadas com imagens ilustrativas para cada tarefa. A criança entende e se organiza com autonomia.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon green">✅</div>
+        <h3>Check Interativo</h3>
+        <p>Botões grandes e feedback visual imediato ao concluir cada tarefa. Projetado para ser intuitivo e satisfatório.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon yellow">⭐</div>
+        <h3>Gamificação Suave</h3>
+        <p>Cada tarefa concluída vale 10 pontos. Pontuação diária e geral para motivar sem pressionar.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon peach">📊</div>
+        <h3>Dashboard dos Pais</h3>
+        <p>Acompanhe o progresso em tempo real, veja o histórico semanal e celebre as conquistas juntos.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon blue">🖼️</div>
+        <h3>Imagens Personalizadas</h3>
+        <p>Faça upload de fotos reais ou use emojis para cada tarefa. Quanto mais familiar, melhor para a criança.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon green">🔒</div>
+        <h3>Seguro e Privado</h3>
+        <p>Dados protegidos por Firebase com autenticação segura. Apenas você acessa as informações da sua família.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="como-funciona" class="how-bg">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:56px">
+      <div class="section-tag">COMO FUNCIONA</div>
+      <h2>Simples para os pais.<br/>Mágico para as crianças.</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Crie sua conta</h3>
+        <p>Cadastre-se gratuitamente em menos de 1 minuto. Sem cartão de crédito.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Monte a rotina</h3>
+        <p>Adicione tarefas com nome, imagem e ordem. Você pode ter várias rotinas (manhã, tarde, noite).</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Entregue para a criança</h3>
+        <p>Ative o Modo Criança — tela simples, botões grandes, sem distrações.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Acompanhe o progresso</h3>
+        <p>Veja pontos, tarefas concluídas e histórico da semana no dashboard.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="precos">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:56px">
+      <div class="section-tag">PREÇOS</div>
+      <h2>Planos acessíveis<br/>para todas as famílias</h2>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="price-plan">Gratuito</div>
+        <div class="price-amount">R$0<span>/mês</span></div>
+        <div class="price-desc">Para começar a explorar</div>
+        <ul class="price-features">
+          <li>1 rotina</li>
+          <li>Até 5 tarefas por rotina</li>
+          <li>Modo Criança</li>
+          <li>Pontuação diária</li>
+          <li class="no">Histórico estendido</li>
+          <li class="no">Upload de imagens</li>
+        </ul>
+        <a href="pages/login.html?tab=register" class="btn btn-outline" style="width:100%">Começar Grátis</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-badge">POPULAR</div>
+        <div class="price-plan">Família</div>
+        <div class="price-amount">R$19<span>/mês</span></div>
+        <div class="price-desc">Para uso diário completo</div>
+        <ul class="price-features">
+          <li>Rotinas ilimitadas</li>
+          <li>Tarefas ilimitadas</li>
+          <li>Modo Criança</li>
+          <li>Pontuação diária e geral</li>
+          <li>Histórico de 30 dias</li>
+          <li>Upload de imagens</li>
+        </ul>
+        <a href="pages/login.html?tab=register" class="btn btn-primary" style="width:100%">Assinar Agora ✨</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-bg">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px">
+      <div class="section-tag">DEPOIMENTOS</div>
+      <h2>O que as famílias dizem</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Meu filho de 7 anos adora ver os pontos acumulando! Ele mesmo vai completando as tarefas sem eu precisar ficar lembrando."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">A</div>
+          <div><div class="testi-name">Ana Paula</div><div class="testi-role">Mãe de criança com TEA grau 1</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"As imagens fazem toda diferença. Conseguimos criar uma rotina de higiene que ele respeita todos os dias há 2 meses."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:var(--green)">M</div>
+          <div><div class="testi-name">Marcos</div><div class="testi-role">Pai e terapeuta comportamental</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Interface muito simples — tanto para mim criar as rotinas quanto para minha filha usar. Recomendo para todas as famílias TEA."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:var(--peach)">C</div>
+          <div><div class="testi-name">Carla</div><div class="testi-role">Mãe de gêmeas autistas</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:56px">
+      <div class="section-tag">FAQ</div>
+      <h2>Dúvidas frequentes</h2>
+      <p class="subtitle" style="margin:0 auto">Tudo que você precisa saber antes de começar.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          O RotinaFeliz funciona para qualquer criança com TEA?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Sim! O app foi pensado para diferentes graus do espectro autista. A interface visual, os botões grandes e o feedback imediato tornam a experiência acessível e agradável para a maioria das crianças. Recomendamos adaptar as tarefas à realidade e capacidade do seu filho.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Preciso instalar alguma coisa no celular?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Não! O RotinaFeliz é 100% web — funciona direto no navegador de qualquer dispositivo: celular, tablet ou computador. Basta acessar o site e fazer login. Nenhum download necessário.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          O plano gratuito tem limite de tempo?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Não! O plano gratuito é para sempre. Você pode criar 1 rotina com até 5 tarefas sem nenhum custo e sem prazo de expiração. Faça upgrade para o plano Família quando precisar de mais recursos.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Como funciona a gamificação? Pode causar frustração?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>A gamificação é suave e positiva — cada tarefa concluída gera pontos, sem penalidades por tarefas não feitas. Não há cronômetro nem pressão. O objetivo é celebrar o que foi realizado, não criar ansiedade pelo que ficou pendente.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Meus dados e os da minha criança estão seguros?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Sim. Utilizamos o Firebase do Google para autenticação e armazenamento, com criptografia em trânsito e em repouso. Cada conta só pode acessar seus próprios dados. Nunca compartilhamos informações pessoais com terceiros.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Posso cancelar a assinatura a qualquer momento?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Sim, sem burocracia. Você pode cancelar a qualquer momento pelo painel da sua conta. Após o cancelamento, você continua com acesso ao plano Família até o fim do período pago e depois retorna automaticamente ao plano gratuito.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-section">
+  <h2>Comece hoje mesmo — é grátis ✨</h2>
+  <p>Junte-se a centenas de famílias que já estão transformando a rotina dos seus filhos com o RotinaFeliz.</p>
+  <a href="pages/login.html?tab=register" class="btn btn-white btn-lg">Criar minha conta grátis</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">⭐ RotinaFeliz</div>
+      <p>Rotinas visuais interativas para crianças com TEA. Feito com 💙 para famílias especiais.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Produto</h4>
+      <ul>
+        <li><a href="#funcionalidades">Funcionalidades</a></li>
+        <li><a href="#como-funciona">Como Funciona</a></li>
+        <li><a href="#precos">Preços</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Conta</h4>
+      <ul>
+        <li><a href="pages/login.html">Entrar</a></li>
+        <li><a href="pages/login.html?tab=register">Criar conta</a></li>
+        <li><a href="pages/app.html">Painel</a></li>
+        <li><a href="pages/child.html">Modo Criança</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Termos de Uso</a></li>
+        <li><a href="#">Privacidade</a></li>
+        <li><a href="#">Cookies</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 RotinaFeliz · Todos os direitos reservados</span>
+    <div class="footer-bottom-links">
+      <a href="#">Termos</a>
+      <a href="#">Privacidade</a>
+      <a href="#">Contato</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    // Fecha todos
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.classList.remove('open');
+      q.nextElementSibling.classList.remove('open');
+    });
+    // Abre o clicado (se estava fechado)
+    if (!isOpen) {
+      btn.classList.add('open');
+      answer.classList.add('open');
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrar — RotinaFeliz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="shortcut icon" href="assets/rf.png" type="image/x-icon">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:#4A90D9; --blue-lt:#EAF3FB; --green:#5BB974;
+      --bg:#F7F5FF; --white:#fff; --ink:#1E1B2E; --muted:#6B6880;
+      --error:#E05C5C; --radius:18px;
+    }
+    body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; display:flex; }
+
+    /* ── LEFT PANEL ───────────────────────────────────────── */
+    .left-panel {
+      display:none;
+      width:420px; flex-shrink:0;
+      background:linear-gradient(160deg,#4A90D9 0%,#6B7FD7 100%);
+      padding:60px 48px;
+      flex-direction:column; justify-content:space-between;
+      position:relative; overflow:hidden;
+    }
+    @media(min-width:900px){ .left-panel{display:flex;} }
+    .left-panel::before {
+      content:''; position:absolute; width:360px;height:360px;
+      border-radius:50%; background:rgba(255,255,255,.08);
+      top:-80px; right:-80px;
+    }
+    .left-panel::after {
+      content:''; position:absolute; width:260px;height:260px;
+      border-radius:50%; background:rgba(255,255,255,.06);
+      bottom:-60px; left:-60px;
+    }
+    .panel-logo {
+      font-family:'Baloo 2',cursive; font-size:1.7rem; font-weight:900;
+      color:#fff; text-decoration:none; position:relative;z-index:1;
+    }
+    .panel-content { position:relative;z-index:1; }
+    .panel-content h2 {
+      font-family:'Baloo 2',cursive; font-size:2rem; font-weight:900;
+      color:#fff; line-height:1.2; margin-bottom:16px;
+    }
+    .panel-content p { color:rgba(255,255,255,.8); line-height:1.7; font-size:1rem; margin-bottom:32px; }
+    .panel-perks { display:flex; flex-direction:column; gap:16px; }
+    .perk {
+      display:flex; align-items:center; gap:14px;
+      background:rgba(255,255,255,.12); border-radius:12px;
+      padding:14px 18px; backdrop-filter:blur(8px);
+    }
+    .perk-icon { font-size:1.4rem; }
+    .perk-text { color:#fff; font-weight:700; font-size:.9rem; }
+    .panel-footer { color:rgba(255,255,255,.5); font-size:.8rem; position:relative;z-index:1; }
+
+    /* ── RIGHT PANEL ──────────────────────────────────────── */
+    .right-panel {
+      flex:1; display:flex; align-items:center; justify-content:center;
+      padding:40px 24px;
+    }
+    .auth-box { width:100%; max-width:440px; }
+    .mobile-logo {
+      display:block; font-family:'Baloo 2',cursive;
+      font-size:1.5rem; font-weight:900; color:var(--blue);
+      text-decoration:none; margin-bottom:36px; text-align:center;
+    }
+    @media(min-width:900px){ .mobile-logo{display:none;} }
+
+    .auth-tabs {
+      display:flex; background:#ece9f8; border-radius:14px;
+      padding:5px; margin-bottom:36px; gap:4px;
+    }
+    .tab-btn {
+      flex:1; padding:12px; border:none; border-radius:10px;
+      font-family:'Nunito',sans-serif; font-weight:800; font-size:.95rem;
+      cursor:pointer; transition:all .2s;
+      background:transparent; color:var(--muted);
+    }
+    .tab-btn.active { background:#fff; color:var(--ink); box-shadow:0 2px 8px rgba(0,0,0,.1); }
+
+    h1 { font-family:'Baloo 2',cursive; font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+    .auth-sub { color:var(--muted); font-size:.95rem; margin-bottom:28px; }
+
+    .form-group { margin-bottom:18px; }
+    label { display:block; font-weight:700; font-size:.9rem; margin-bottom:7px; color:var(--ink); }
+    .input-wrap { position:relative; }
+    .input-wrap .ico {
+      position:absolute; left:16px; top:50%; transform:translateY(-50%);
+      font-size:1rem; color:var(--muted); pointer-events:none;
+    }
+    input[type=text], input[type=email], input[type=password] {
+      width:100%; padding:14px 16px 14px 44px;
+      border:2px solid #e4e0f0; border-radius:12px;
+      font-family:'Nunito',sans-serif; font-size:1rem;
+      background:#fff; color:var(--ink);
+      transition:border-color .2s, box-shadow .2s;
+      outline:none;
+    }
+    input:focus { border-color:var(--blue); box-shadow:0 0 0 4px rgba(74,144,217,.12); }
+    input.error { border-color:var(--error); }
+    .field-error { color:var(--error); font-size:.8rem; margin-top:5px; font-weight:700; display:none; }
+    .field-error.show { display:block; }
+
+    .toggle-pass {
+      position:absolute; right:14px; top:50%; transform:translateY(-50%);
+      background:none; border:none; cursor:pointer; color:var(--muted);
+      font-size:1.1rem; padding:4px;
+    }
+
+    .btn-submit {
+      width:100%; padding:15px; margin-top:8px;
+      background:var(--blue); color:#fff;
+      border:none; border-radius:12px;
+      font-family:'Nunito',sans-serif; font-weight:800; font-size:1.05rem;
+      cursor:pointer; transition:all .2s;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .btn-submit:hover { background:#3d7fcb; transform:translateY(-1px); box-shadow:0 8px 24px rgba(74,144,217,.3); }
+    .btn-submit:disabled { background:#c5d8f0; cursor:not-allowed; transform:none; box-shadow:none; }
+
+    .divider { display:flex; align-items:center; gap:12px; margin:20px 0; }
+    .divider::before, .divider::after { content:''; flex:1; height:1px; background:#e4e0f0; }
+    .divider span { color:var(--muted); font-size:.8rem; font-weight:700; }
+
+    .global-error {
+      background:#FEE; border:1.5px solid #f5c0c0; border-radius:10px;
+      padding:12px 16px; color:var(--error); font-weight:700;
+      font-size:.9rem; margin-bottom:20px; display:none;
+    }
+    .global-error.show { display:block; }
+
+    .spinner {
+      width:18px; height:18px; border:2.5px solid rgba(255,255,255,.4);
+      border-top-color:#fff; border-radius:50%;
+      animation:spin .7s linear infinite; display:none;
+    }
+    @keyframes spin { to{transform:rotate(360deg);} }
+
+    .terms {
+      font-size:.8rem; color:var(--muted); text-align:center;
+      margin-top:16px; line-height:1.6;
+    }
+    .terms a { color:var(--blue); font-weight:700; text-decoration:none; }
+  </style>
+</head>
+<body>
+
+<!-- LEFT PANEL -->
+<div class="left-panel">
+  <a href="../index.html" class="panel-logo">⭐ RotinaFeliz</a>
+  <div class="panel-content">
+    <h2>Transforme a rotina do seu filho</h2>
+    <p>Rotinas visuais interativas que ajudam crianças com TEA a ganhar autonomia e confiança.</p>
+    <div class="panel-perks">
+      <div class="perk"><span class="perk-icon">📋</span><span class="perk-text">Crie rotinas com imagens personalizadas</span></div>
+      <div class="perk"><span class="perk-icon">⭐</span><span class="perk-text">Gamificação que motiva sem pressionar</span></div>
+      <div class="perk"><span class="perk-icon">📊</span><span class="perk-text">Acompanhe o progresso em tempo real</span></div>
+    </div>
+  </div>
+  <div class="panel-footer">© 2025 RotinaFeliz · Feito com 💙</div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right-panel">
+  <div class="auth-box">
+    <a href="../index.html" class="mobile-logo">⭐ RotinaFeliz</a>
+
+    <!-- TABS -->
+    <div class="auth-tabs">
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Entrar</button>
+      <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Criar conta</button>
+    </div>
+
+    <!-- ERRO GLOBAL -->
+    <div class="global-error" id="globalError"></div>
+
+    <!-- ── FORM LOGIN ──────────────────────────────────────── -->
+    <div id="formLogin">
+      <h1>Bem-vindo de volta! 👋</h1>
+      <p class="auth-sub">Entre na sua conta para continuar</p>
+
+      <div class="form-group">
+        <label>Email</label>
+        <div class="input-wrap">
+          <span class="ico">✉️</span>
+          <input type="email" id="loginEmail" placeholder="seu@email.com" />
+        </div>
+        <div class="field-error" id="loginEmailErr">Email inválido</div>
+      </div>
+
+      <div class="form-group">
+        <label>Senha</label>
+        <div class="input-wrap">
+          <span class="ico">🔒</span>
+          <input type="password" id="loginPass" placeholder="••••••••" />
+          <button class="toggle-pass" type="button" onclick="togglePass('loginPass',this)">👁️</button>
+        </div>
+        <div class="field-error" id="loginPassErr">Mínimo 6 caracteres</div>
+      </div>
+
+      <button class="btn-submit" id="btnLogin" onclick="doLogin()">
+        <span>Entrar na minha conta</span>
+        <div class="spinner" id="spinLogin"></div>
+      </button>
+      <p class="terms">Ao entrar você concorda com nossos <a href="#">Termos de Uso</a></p>
+    </div>
+
+    <!-- ── FORM REGISTER ───────────────────────────────────── -->
+    <div id="formRegister" style="display:none">
+      <h1>Criar sua conta ✨</h1>
+      <p class="auth-sub">Comece gratuitamente, sem cartão de crédito</p>
+
+      <div class="form-group">
+        <label>Seu nome</label>
+        <div class="input-wrap">
+          <span class="ico">👤</span>
+          <input type="text" id="regName" placeholder="Ex: Ana Paula" />
+        </div>
+        <div class="field-error" id="regNameErr">Informe seu nome</div>
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <div class="input-wrap">
+          <span class="ico">✉️</span>
+          <input type="email" id="regEmail" placeholder="seu@email.com" />
+        </div>
+        <div class="field-error" id="regEmailErr">Email inválido</div>
+      </div>
+
+      <div class="form-group">
+        <label>Senha</label>
+        <div class="input-wrap">
+          <span class="ico">🔒</span>
+          <input type="password" id="regPass" placeholder="Mínimo 6 caracteres" />
+          <button class="toggle-pass" type="button" onclick="togglePass('regPass',this)">👁️</button>
+        </div>
+        <div class="field-error" id="regPassErr">Mínimo 6 caracteres</div>
+      </div>
+
+      <button class="btn-submit" id="btnReg" onclick="doRegister()">
+        <span>Criar conta grátis</span>
+        <div class="spinner" id="spinReg"></div>
+      </button>
+      <p class="terms">Ao criar conta você concorda com nossos <a href="#">Termos de Uso</a> e <a href="#">Privacidade</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- FIREBASE SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged }
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc }
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // 🔧 SUBSTITUA com suas credenciais Firebase
+  const firebaseConfig = {
+    apiKey: "SUA_API_KEY",
+    authDomain: "SEU_PROJECT.firebaseapp.com",
+    projectId: "SEU_PROJECT_ID",
+    storageBucket: "SEU_PROJECT.appspot.com",
+    messagingSenderId: "SEU_SENDER_ID",
+    appId: "SEU_APP_ID"
+  };
+
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  // Redireciona se já logado
+  onAuthStateChanged(auth, user => {
+    if (user) window.location.href = 'app.html';
+  });
+
+  // ── HELPERS ────────────────────────────────────────────
+  function setLoading(btnId, spinId, loading) {
+    const btn  = document.getElementById(btnId);
+    const spin = document.getElementById(spinId);
+    btn.disabled = loading;
+    spin.style.display = loading ? 'block' : 'none';
+  }
+  function showError(msg) {
+    const el = document.getElementById('globalError');
+    el.textContent = msg; el.classList.add('show');
+  }
+  function clearError() {
+    document.getElementById('globalError').classList.remove('show');
+  }
+  function friendlyError(code) {
+    const map = {
+      'auth/user-not-found': 'Usuário não encontrado. Verifique o email.',
+      'auth/wrong-password': 'Senha incorreta. Tente novamente.',
+      'auth/invalid-email': 'Email inválido.',
+      'auth/email-already-in-use': 'Este email já está cadastrado.',
+      'auth/weak-password': 'Senha muito fraca. Use pelo menos 6 caracteres.',
+      'auth/network-request-failed': 'Erro de conexão. Verifique sua internet.',
+      'auth/invalid-credential': 'Email ou senha incorretos.',
+    };
+    return map[code] || 'Ocorreu um erro. Tente novamente.';
+  }
+
+  // ── LOGIN ──────────────────────────────────────────────
+  window.doLogin = async function() {
+    clearError();
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass  = document.getElementById('loginPass').value;
+    let valid = true;
+    if (!email.includes('@')) { document.getElementById('loginEmailErr').classList.add('show'); valid=false; } else { document.getElementById('loginEmailErr').classList.remove('show'); }
+    if (pass.length < 6) { document.getElementById('loginPassErr').classList.add('show'); valid=false; } else { document.getElementById('loginPassErr').classList.remove('show'); }
+    if (!valid) return;
+
+    setLoading('btnLogin','spinLogin',true);
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      window.location.href = 'app.html';
+    } catch(e) {
+      showError(friendlyError(e.code));
+    } finally {
+      setLoading('btnLogin','spinLogin',false);
+    }
+  };
+
+  // ── REGISTER ───────────────────────────────────────────
+  window.doRegister = async function() {
+    clearError();
+    const name  = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass  = document.getElementById('regPass').value;
+    let valid = true;
+    if (!name) { document.getElementById('regNameErr').classList.add('show'); valid=false; } else { document.getElementById('regNameErr').classList.remove('show'); }
+    if (!email.includes('@')) { document.getElementById('regEmailErr').classList.add('show'); valid=false; } else { document.getElementById('regEmailErr').classList.remove('show'); }
+    if (pass.length<6) { document.getElementById('regPassErr').classList.add('show'); valid=false; } else { document.getElementById('regPassErr').classList.remove('show'); }
+    if (!valid) return;
+
+    setLoading('btnReg','spinReg',true);
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      await setDoc(doc(db,'users',cred.user.uid),{
+        uid: cred.user.uid, email, name, role:'parent',
+        createdAt: new Date().toISOString()
+      });
+      window.location.href = 'app.html';
+    } catch(e) {
+      showError(friendlyError(e.code));
+    } finally {
+      setLoading('btnReg','spinReg',false);
+    }
+  };
+</script>
+
+<script>
+  function switchTab(tab) {
+    document.getElementById('formLogin').style.display    = tab==='login'    ? 'block' : 'none';
+    document.getElementById('formRegister').style.display = tab==='register' ? 'block' : 'none';
+    document.getElementById('tab-login').classList.toggle('active', tab==='login');
+    document.getElementById('tab-register').classList.toggle('active', tab==='register');
+    document.getElementById('globalError').classList.remove('show');
+  }
+
+  function togglePass(id, btn) {
+    const input = document.getElementById(id);
+    if (input.type==='password') { input.type='text'; btn.textContent='🙈'; }
+    else { input.type='password'; btn.textContent='👁️'; }
+  }
+
+  // Enter key submit
+  document.addEventListener('keydown', e => {
+    if (e.key!=='Enter') return;
+    const loginVisible = document.getElementById('formLogin').style.display!=='none';
+    if (loginVisible) window.doLogin();
+    else window.doRegister();
+  });
+
+  // Pré-selecionar tab via URL
+  if (window.location.search.includes('tab=register')) switchTab('register');
+</script>
+</body>
+</html>

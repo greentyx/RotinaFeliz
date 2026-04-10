@@ -1,0 +1,142 @@
+Você é um desenvolvedor especialista em aplicação web, Firebase e criação de SaaS.
+
+Quero que você construa um MVP de um site SaaS voltado para ajudar crianças com Transtorno do Espectro Autista (TEA), com foco em rotina visual interativa, gamificação simples e acompanhamento para pais.
+
+## 🎯 Objetivo do App
+
+Criar um sistema simples onde:
+
+* Pais criam rotinas com tarefas visuais
+* Crianças visualizam e concluem tarefas
+* O sistema recompensa com pontos
+* Pais acompanham o progresso em um dashboard
+
+---
+
+## 📱 Funcionalidades obrigatórias (MVP)
+
+### 1. Autenticação
+
+* Login e cadastro usando Firebase Authentication
+* Usuário do tipo: "parent"
+
+---
+
+### 2. Rotina
+
+* Criar rotina
+* Adicionar tarefas com:
+
+  * nome
+  * imagem
+  * ordem
+* Editar e excluir tarefas
+
+---
+
+### 3. Tela da Criança
+
+* Mostrar lista de tarefas (com imagem e título)
+* Botão para marcar como concluída
+* Feedback visual (ex: check ou animação simples)
+* Mostrar pontos acumulados
+
+---
+
+### 4. Gamificação
+
+* Cada tarefa concluída vale 10 pontos
+* Mostrar total de pontos do dia e geral
+
+---
+
+### 5. Dashboard (Pais)
+
+* Total de tarefas concluídas
+* Pontos acumulados
+* Histórico simples por data
+
+---
+
+## 🧠 Requisitos de UX (importante para TEA)
+
+* Interface simples e limpa
+* Botões grandes
+* Poucos elementos na tela
+* Cores suaves
+* Feedback visual imediato
+
+---
+
+## 🗄️ Banco de Dados (Firestore)
+
+Coleções:
+
+### users
+
+* uid
+* email
+* role
+
+### routines
+
+* id
+* userId
+* name
+
+### tasks
+
+* id
+* routineId
+* title
+* image
+* order
+
+### progress
+
+* taskId
+* date
+* completed
+* points
+
+---
+
+## 🛠️ Tecnologias
+
+* aplicação web SaaS
+* Firebase (Auth + Firestore + Storage)
+
+---
+
+## 📦 O que você deve gerar
+
+* Estrutura completa do projeto aplicação web SaaS
+* Código das telas principais
+* Serviços para Firebase (auth e banco)
+* Modelos de dados (classes Dart)
+* Navegação entre telas
+* Exemplo funcional de CRUD
+* Código limpo e organizado
+
+---
+
+## ⚠️ Restrições
+
+* NÃO criar sistema complexo
+* NÃO adicionar IA
+* NÃO criar funcionalidades extras fora do MVP
+* Focar em código simples, funcional e escalável
+
+---
+
+## 🎯 Resultado esperado
+
+Um aplicativo funcional que permita:
+
+* Criar rotina
+* Exibir tarefas
+* Marcar como concluídas
+* Registrar progresso
+* Visualizar pontos
+
+---

@@ -1,0 +1,100 @@
+/* ============================================================
+   RotinaFeliz — Global Stylesheet
+   Compartilhado por todas as páginas do projeto
+   ============================================================ */
+
+/* ── RESET & ROOT ───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:    #4A90D9;
+  --blue-lt: #EAF3FB;
+  --green:   #5BB974;
+  --green-lt:#E8F7EC;
+  --yellow:  #F7C948;
+  --peach:   #F4956A;
+  --bg:      #F7F5FF;
+  --white:   #FFFFFF;
+  --ink:     #1E1B2E;
+  --muted:   #6B6880;
+  --card:    #FFFFFF;
+  --radius:  20px;
+  --shadow:  0 8px 32px rgba(74,144,217,.13);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ── BUTTONS ─────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 12px 28px;
+  border-radius: 50px; font-family: 'Nunito', sans-serif;
+  font-weight: 800; font-size: 1rem;
+  cursor: pointer; text-decoration: none;
+  transition: transform .18s, box-shadow .18s;
+  border: none;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-primary { background: var(--blue); color: #fff; box-shadow: 0 6px 24px rgba(74,144,217,.35); }
+.btn-primary:hover { box-shadow: 0 10px 32px rgba(74,144,217,.45); }
+.btn-outline { background: transparent; color: var(--blue); border: 2.5px solid var(--blue); }
+.btn-green { background: var(--green); color: #fff; box-shadow: 0 6px 24px rgba(91,185,116,.35); }
+.btn-white { background: #fff; color: var(--blue); font-weight: 800; box-shadow: 0 4px 18px rgba(0,0,0,.12); }
+.btn-sm { padding: 8px 18px; font-size: .88rem; }
+.btn-lg { padding: 16px 40px; font-size: 1.1rem; }
+
+/* ── TOAST ───────────────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--ink); color: #fff; padding: 12px 24px; border-radius: 50px;
+  font-weight: 700; font-size: .95rem; z-index: 500;
+  transition: transform .3s; white-space: nowrap;
+  display: flex; align-items: center; gap: 8px;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── MODAL ───────────────────────────────────────────────── */
+.overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(30,27,46,.5); z-index: 200;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.overlay.open { display: flex; animation: fadeIn .2s ease; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.modal {
+  background: var(--white); border-radius: 24px;
+  padding: 36px; max-width: 480px; width: 100%;
+  animation: slideUp .25s ease; max-height: 90vh; overflow-y: auto;
+}
+@keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+.modal h2 { font-family: 'Baloo 2', cursive; font-size: 1.5rem; font-weight: 900; margin-bottom: 20px; }
+
+/* ── FORM ────────────────────────────────────────────────── */
+.form-group { margin-bottom: 18px; }
+.form-label { display: block; font-weight: 700; font-size: .88rem; margin-bottom: 7px; }
+.form-input {
+  width: 100%; padding: 13px 16px; border: 2px solid #e4e0f0; border-radius: 12px;
+  font-family: 'Nunito', sans-serif; font-size: .95rem; background: var(--white);
+  color: var(--ink); outline: none; transition: border-color .2s;
+}
+.form-input:focus { border-color: var(--blue); }
+.modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+.modal-actions .btn { flex: 1; justify-content: center; padding: 12px; }
+
+/* ── UTILITY ─────────────────────────────────────────────── */
+.badge {
+  display: inline-block; padding: 4px 12px; border-radius: 50px;
+  font-size: .75rem; font-weight: 800;
+}
+.badge-blue { background: var(--blue-lt); color: var(--blue); }
+.empty { text-align: center; padding: 64px 24px; color: var(--muted); }
+.empty-emoji { font-size: 4rem; margin-bottom: 16px; }
+.empty h3 { font-family: 'Baloo 2', cursive; font-size: 1.4rem; font-weight: 900; color: var(--ink); margin-bottom: 8px; }
+.empty p { font-size: .95rem; line-height: 1.6; max-width: 360px; margin: 0 auto 24px; }

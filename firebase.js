@@ -1,0 +1,38 @@
+/**
+ * firebase.js — Configuração centralizada do Firebase
+ * 
+ * ⚠️  COMO USAR:
+ * 1. Acesse https://console.firebase.google.com
+ * 2. Configurações do projeto → Seus aplicativos → Web (</>)
+ * 3. Copie o objeto firebaseConfig e substitua abaixo
+ * 
+ * Este arquivo é importado como módulo ES em todas as páginas.
+ * Exemplo de uso numa página HTML:
+ * 
+ *   <script type="module">
+ *     import { auth, db, storage } from './js/firebase.js';
+ *     // use auth, db, storage normalmente
+ *   </script>
+ */
+
+import { initializeApp }        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth }              from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore }         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage }           from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+// ── SUBSTITUA AQUI com suas credenciais ─────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyCe-c-p0N0fUF5gSGHDDaVHv9IqWPKuAyQ",
+  authDomain: "rotinafelizac.firebaseapp.com",
+  projectId: "rotinafelizac",
+  storageBucket: "rotinafelizac.firebasestorage.app",
+  messagingSenderId: "571656067722",
+  appId: "1:571656067722:web:1c2d43f11a372ce8edeb73",
+  measurementId: "G-8Z6JPRG7H7"
+};
+// ────────────────────────────────────────────────────────────
+
+const app     = initializeApp(firebaseConfig);
+export const auth    = getAuth(app);
+export const db      = getFirestore(app);
+export const storage = getStorage(app);
