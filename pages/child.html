@@ -287,10 +287,11 @@ async function loadRoutines() {
   if (routines.length===0) {
     document.getElementById('tasksContainer').innerHTML=`
       <div class="empty-state">
-        <div class="empty-emoji">📋</div>
-        <h2>Nenhuma rotina</h2>
-        <p>Peça para um adulto criar sua rotina no painel!</p>
+        <div class="empty-emoji">🌟</div>
+        <h2>Ainda não tem rotina</h2>
+        <p>Peça para um adulto de confiança criar a sua rotina. Vai ser divertido! 😊</p>
       </div>`;
+    document.getElementById('routineSelector').innerHTML = '';
     return;
   }
 
