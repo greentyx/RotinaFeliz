@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>RotinaFeliz — Modo Criança 🌟</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="shortcut icon" href="assets/rf.png" type="image/x-icon">
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root {
+      --blue:#4A90D9; --green:#5BB974; --yellow:#F7C948;
+      --bg:#F0F7FF; --white:#fff; --ink:#1E1B2E; --muted:#7A7A9A;
+      --done:#5BB974; --radius:24px;
+    }
+    html, body { height:100%; }
+    body {
+      font-family:'Nunito',sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      min-height:100vh;
+      display:flex; flex-direction:column;
+    }
+
+    /* ── HEADER ────────────────────────────────────────────── */
+    .child-header {
+      background:linear-gradient(135deg,#4A90D9 0%,#6B7FD7 100%);
+      padding:20px 24px;
+      display:flex; flex-direction:column; align-items:center; gap:12px;
+      position:relative;
+    }
+    .header-row { display:flex; align-items:center; width:100%; }
+    .back-link {
+      color:rgba(255,255,255,.85); text-decoration:none;
+      font-weight:800; font-size:.95rem;
+      display:flex; align-items:center; gap:4px;
+      padding:8px 14px; border-radius:50px;
+      background:rgba(255,255,255,.15);
+      transition:background .2s;
+    }
+    .back-link:hover { background:rgba(255,255,255,.25); }
+    .header-title {
+      flex:1; text-align:center;
+      font-family:'Baloo 2',cursive; font-size:1.5rem; font-weight:900;
+      color:#fff;
+    }
+    .points-pill {
+      background:rgba(255,255,255,.2);
+      border-radius:50px; padding:10px 22px;
+      display:inline-flex; align-items:center; gap:10px;
+      border:1.5px solid rgba(255,255,255,.3);
+      backdrop-filter:blur(6px);
+    }
+    .points-pill .star { font-size:1.6rem; }
+    .points-text {
+      font-family:'Baloo 2',cursive; font-size:1.4rem; font-weight:900;
+      color:#fff;
+    }
+    .points-sub { font-size:.82rem; font-weight:700; color:rgba(255,255,255,.75); }
+
+    /* ── ROUTINE SELECTOR ──────────────────────────────────── */
+    .routine-selector {
+      padding:16px 20px 0;
+      display:flex; gap:10px; overflow-x:auto;
+      scrollbar-width:none;
+    }
+    .routine-selector::-webkit-scrollbar { display:none; }
+    .routine-pill {
+      flex-shrink:0; padding:10px 22px; border-radius:50px;
+      font-weight:800; font-size:.9rem; cursor:pointer;
+      border:2px solid #d0d9f5;
+      background:var(--white); color:var(--muted);
+      transition:all .2s;
+    }
+    .routine-pill.active {
+      background:var(--blue); color:#fff;
+      border-color:var(--blue);
+      box-shadow:0 4px 16px rgba(74,144,217,.3);
+    }
+
+    /* ── PROGRESS BAR ──────────────────────────────────────── */
+    .progress-wrap { padding:16px 20px 0; }
+    .progress-labels {
+      display:flex; justify-content:space-between;
+      font-weight:800; font-size:.85rem; color:var(--muted);
+      margin-bottom:8px;
+    }
+    .progress-bar-outer {
+      height:14px; background:#dde6f9; border-radius:50px; overflow:hidden;
+    }
+    .progress-bar-inner {
+      height:100%; background:linear-gradient(90deg,var(--green),#7DD98A);
+      border-radius:50px; transition:width .5s cubic-bezier(.34,1.56,.64,1);
+    }
+
+    /* ── TASKS ─────────────────────────────────────────────── */
+    .tasks-container { flex:1; padding:20px; display:flex; flex-direction:column; gap:14px; }
+
+    .task-card {
+      background:var(--white); border-radius:var(--radius);
+      box-shadow:0 4px 16px rgba(74,144,217,.1);
+      padding:20px 24px;
+      display:flex; align-items:center; gap:20px;
+      cursor:pointer; border:3px solid transparent;
+      transition:all .25s cubic-bezier(.34,1.2,.64,1);
+      user-select:none; -webkit-tap-highlight-color:transparent;
+    }
+    .task-card:active { transform:scale(.97); }
+    .task-card.done {
+      border-color:var(--done);
+      background:linear-gradient(135deg,#fff 0%,#f0fbf3 100%);
+    }
+    .task-card.bounce { animation:bounce .4s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes bounce {
+      0%{transform:scale(1)} 40%{transform:scale(1.04)} 100%{transform:scale(1)}
+    }
+
+    .task-img-wrap {
+      width:90px; height:90px; border-radius:18px;
+      overflow:hidden; flex-shrink:0;
+      background:#f0f2ff;
+      display:flex; align-items:center; justify-content:center;
+      font-size:3rem;
+    }
+    .task-img-wrap img { width:100%; height:100%; object-fit:cover; }
+
+    .task-info { flex:1; }
+    .task-name {
+      font-family:'Baloo 2',cursive;
+      font-size:1.35rem; font-weight:900;
+      line-height:1.2; margin-bottom:4px;
+      transition:color .2s;
+    }
+    .task-card.done .task-name { color:var(--done); text-decoration:line-through; }
+    .task-status { font-size:.85rem; font-weight:700; color:var(--muted); }
+    .task-card.done .task-status { color:var(--done); }
+
+    .task-btn {
+      width:64px; height:64px; border-radius:50%; border:none;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.6rem; cursor:pointer; flex-shrink:0;
+      transition:all .25s cubic-bezier(.34,1.56,.64,1);
+    }
+    .task-btn.pending {
+      background:var(--blue); color:#fff;
+      box-shadow:0 6px 20px rgba(74,144,217,.4);
+    }
+    .task-btn.pending:hover { transform:scale(1.08); }
+    .task-btn.done-btn {
+      background:var(--done); color:#fff;
+      box-shadow:0 6px 20px rgba(91,185,116,.4);
+    }
+
+    /* ── EMPTY ─────────────────────────────────────────────── */
+    .empty-state {
+      flex:1; display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; padding:48px 24px; color:var(--muted);
+    }
+    .empty-emoji { font-size:5rem; margin-bottom:16px; }
+    .empty h2 { font-family:'Baloo 2',cursive; font-size:1.5rem; font-weight:900; color:var(--ink); margin-bottom:8px; }
+    .empty p { font-size:1rem; line-height:1.6; max-width:300px; }
+
+    /* ── ALL DONE ──────────────────────────────────────────── */
+    .all-done-banner {
+      display:none; margin:0 20px;
+      background:linear-gradient(135deg,#5BB974 0%,#3aA55f 100%);
+      border-radius:20px; padding:24px;
+      text-align:center; color:#fff;
+      box-shadow:0 8px 32px rgba(91,185,116,.35);
+      animation:popIn .5s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes popIn { from{transform:scale(.8);opacity:0} to{transform:scale(1);opacity:1} }
+    .all-done-banner h2 { font-family:'Baloo 2',cursive; font-size:1.6rem; font-weight:900; margin-bottom:6px; }
+    .all-done-banner p { font-size:1rem; opacity:.9; }
+
+    /* ── CELEBRATION ───────────────────────────────────────── */
+    .celebration {
+      position:fixed; top:0; left:0; right:0; bottom:0;
+      pointer-events:none; z-index:100;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .confetti-piece {
+      position:absolute; width:10px; height:10px; border-radius:3px;
+      animation:confettiFall 1.2s ease-out forwards;
+    }
+    @keyframes confettiFall {
+      0%   { transform:translateY(-20px) rotate(0deg); opacity:1; }
+      100% { transform:translateY(300px) rotate(720deg); opacity:0; }
+    }
+    .star-burst {
+      font-size:3rem; animation:starPop .5s cubic-bezier(.34,1.56,.64,1) forwards;
+    }
+    @keyframes starPop { from{transform:scale(0) rotate(-20deg);opacity:0} 60%{opacity:1} to{transform:scale(1.2) rotate(10deg);opacity:0} }
+
+    /* ── LOADING ───────────────────────────────────────────── */
+    .loading-screen {
+      flex:1; display:flex; align-items:center; justify-content:center;
+      flex-direction:column; gap:20px;
+    }
+    .spinner { width:48px;height:48px; border:4px solid #dde6f9; border-top-color:var(--blue); border-radius:50%; animation:spin .8s linear infinite; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="child-header">
+  <div class="header-row">
+    <a href="app.html" class="back-link">← Painel</a>
+    <div class="header-title">Minha Rotina 🌟</div>
+    <div style="width:90px"></div>
+  </div>
+  <div class="points-pill">
+    <span class="star">⭐</span>
+    <div>
+      <div class="points-text"><span id="todayPoints">0</span> pontos hoje!</div>
+      <div class="points-sub">Continue assim, vai muito bem!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ROUTINE SELECTOR -->
+<div class="routine-selector" id="routineSelector"></div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-wrap">
+  <div class="progress-labels">
+    <span id="progressLabel">0 de 0 tarefas</span>
+    <span id="progressPct">0%</span>
+  </div>
+  <div class="progress-bar-outer">
+    <div class="progress-bar-inner" id="progressBar" style="width:0%"></div>
+  </div>
+</div>
+
+<!-- ALL DONE BANNER -->
+<div class="all-done-banner" id="allDoneBanner">
+  <div style="font-size:3rem;margin-bottom:8px">🏆</div>
+  <h2>Parabéns! Rotina completa!</h2>
+  <p>Você completou todas as tarefas de hoje! Incrível!</p>
+</div>
+
+<!-- TASKS -->
+<div class="tasks-container" id="tasksContainer">
+  <div class="loading-screen">
+    <div class="spinner"></div>
+    <div style="font-weight:800;color:var(--muted)">Carregando rotina...</div>
+  </div>
+</div>
+
+<!-- CELEBRATION LAYER -->
+<div class="celebration" id="celebration"></div>
+
+<!-- FIREBASE -->
+<script type="module">
+import { auth, db,
+         onAuthStateChanged,
+         collection, doc, addDoc, query, where,
+         orderBy, onSnapshot, getDocs }
+  from "../js/firebase.js";
+
+let currentUser = null;
+let completedIds = new Set();
+let currentRoutineId = null;
+let allTasks = [];
+let unsubTasks = null;
+let todayPoints = 0;
+const today = new Date().toISOString().slice(0,10);
+
+// ── AUTH ──────────────────────────────────────────────────
+onAuthStateChanged(auth, user => {
+  if (!user) { window.location.href='login.html'; return; }
+  currentUser = user;
+  loadRoutines();
+  loadTodayProgress();
+});
+
+// ── LOAD ROUTINES ─────────────────────────────────────────
+async function loadRoutines() {
+  const snap = await getDocs(query(collection(db,'routines'),
+    where('userId','==',currentUser.uid), orderBy('createdAt','desc')));
+  const routines = snap.docs.map(d=>({id:d.id,...d.data()}));
+
+  const selector = document.getElementById('routineSelector');
+  if (routines.length===0) {
+    document.getElementById('tasksContainer').innerHTML=`
+      <div class="empty-state">
+        <div class="empty-emoji">🌟</div>
+        <h2>Ainda não tem rotina</h2>
+        <p>Peça para um adulto de confiança criar a sua rotina. Vai ser divertido! 😊</p>
+      </div>`;
+    document.getElementById('routineSelector').innerHTML = '';
+    return;
+  }
+
+  selector.innerHTML = routines.map((r,i)=>`
+    <div class="routine-pill ${i===0?'active':''}" id="pill_${r.id}" onclick="selectRoutine('${r.id}')">${r.name}</div>
+  `).join('');
+
+  selectRoutine(routines[0].id);
+}
+
+// ── SELECT ROUTINE ────────────────────────────────────────
+window.selectRoutine = async (routineId) => {
+  document.querySelectorAll('.routine-pill').forEach(p=>p.classList.remove('active'));
+  const pill = document.getElementById('pill_'+routineId);
+  if (pill) pill.classList.add('active');
+
+  currentRoutineId = routineId;
+  if (unsubTasks) unsubTasks();
+
+  const q = query(collection(db,'tasks'), where('routineId','==',routineId), orderBy('order'));
+  unsubTasks = onSnapshot(q, snap => {
+    allTasks = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderTasks();
+  });
+};
+
+// ── LOAD TODAY PROGRESS ───────────────────────────────────
+async function loadTodayProgress() {
+  const snap = await getDocs(query(collection(db,'progress'),
+    where('userId','==',currentUser.uid), where('date','==',today)));
+  completedIds = new Set(snap.docs.map(d=>d.data().taskId));
+  todayPoints  = snap.docs.reduce((s,d)=>s+(d.data().points||0),0);
+  document.getElementById('todayPoints').textContent = todayPoints;
+  renderTasks();
+}
+
+// ── RENDER TASKS ──────────────────────────────────────────
+function renderTasks() {
+  const container = document.getElementById('tasksContainer');
+  if (!allTasks.length) {
+    container.innerHTML=`<div class="empty-state">
+      <div class="empty-emoji">✅</div>
+      <h2>Nenhuma tarefa aqui</h2>
+      <p>Peça para um adulto adicionar tarefas nesta rotina.</p>
+    </div>`;
+    updateProgress(0,0);
+    return;
+  }
+
+  const done = allTasks.filter(t=>completedIds.has(t.id)).length;
+  updateProgress(done, allTasks.length);
+
+  // All done banner
+  const banner = document.getElementById('allDoneBanner');
+  banner.style.display = (done===allTasks.length && allTasks.length>0) ? 'block' : 'none';
+
+  container.innerHTML = allTasks.map(t=>{
+    const isDone = completedIds.has(t.id);
+    const emoji  = getEmoji(t.title);
+    return `
+    <div class="task-card ${isDone?'done':''}" id="card_${t.id}" onclick="completeTask('${t.id}')">
+      <div class="task-img-wrap">
+        ${t.imageUrl ? `<img src="${t.imageUrl}" alt="${t.title}" />` : `<span>${emoji}</span>`}
+      </div>
+      <div class="task-info">
+        <div class="task-name">${t.title}</div>
+        <div class="task-status">${isDone?'✅ Feito!':'👆 Toque para concluir'}</div>
+      </div>
+      <button class="task-btn ${isDone?'done-btn':'pending'}" ${isDone?'disabled':''}>
+        ${isDone?'✓':'👆'}
+      </button>
+    </div>`;
+  }).join('');
+}
+
+function updateProgress(done, total) {
+  const pct = total>0 ? Math.round(done/total*100) : 0;
+  document.getElementById('progressLabel').textContent = `${done} de ${total} tarefas`;
+  document.getElementById('progressPct').textContent   = `${pct}%`;
+  document.getElementById('progressBar').style.width   = pct+'%';
+}
+
+// ── COMPLETE TASK ─────────────────────────────────────────
+window.completeTask = async (taskId) => {
+  if (completedIds.has(taskId)) return;
+
+  // Optimistic update
+  completedIds.add(taskId);
+  todayPoints += 10;
+  document.getElementById('todayPoints').textContent = todayPoints;
+
+  // Animate card
+  const card = document.getElementById('card_'+taskId);
+  if (card) { card.classList.add('bounce'); setTimeout(()=>card.classList.remove('bounce'),500); }
+
+  // Show celebration
+  celebrate();
+
+  // Save to Firestore
+  await addDoc(collection(db,'progress'),{
+    taskId, userId:currentUser.uid, date:today,
+    completed:true, points:10, createdAt:new Date().toISOString()
+  });
+
+  renderTasks();
+};
+
+// ── CELEBRATION ───────────────────────────────────────────
+function celebrate() {
+  const layer = document.getElementById('celebration');
+  const colors = ['#4A90D9','#5BB974','#F7C948','#F4956A','#B39DDB','#80DEEA'];
+  let html = '<div class="star-burst">⭐</div>';
+  for (let i=0;i<20;i++) {
+    const color = colors[Math.floor(Math.random()*colors.length)];
+    const left  = Math.random()*100;
+    const delay = Math.random()*.4;
+    const rotate= Math.random()*360;
+    html+=`<div class="confetti-piece" style="left:${left}%;top:10%;background:${color};transform:rotate(${rotate}deg);animation-delay:${delay}s"></div>`;
+  }
+  layer.innerHTML=html;
+  setTimeout(()=>layer.innerHTML='',1800);
+}
+
+// ── EMOJI HELPER ──────────────────────────────────────────
+function getEmoji(title) {
+  const t=title.toLowerCase();
+  if(t.includes('dente')||t.includes('escov'))return'🪥';
+  if(t.includes('café')||t.includes('comida')||t.includes('almoç'))return'🍽️';
+  if(t.includes('banho')||t.includes('ducha'))return'🛁';
+  if(t.includes('roupa')||t.includes('vest'))return'👕';
+  if(t.includes('mochi'))return'🎒';
+  if(t.includes('tarefa')||t.includes('lição'))return'📚';
+  if(t.includes('dormi')||t.includes('cama'))return'😴';
+  if(t.includes('mão')||t.includes('lavar'))return'🧼';
+  if(t.includes('água')||t.includes('beber'))return'💧';
+  return'✅';
+}
+</script>
+</body>
+</html>

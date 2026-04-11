@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Política de Privacidade — RotinaFeliz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="shortcut icon" href="../assets/rf.png" type="image/x-icon"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:#4A90D9; --blue-lt:#EAF3FB; --green:#5BB974; --green-lt:#E8F7EC;
+      --bg:#F7F5FF; --white:#fff; --ink:#1E1B2E; --muted:#6B6880; --radius:16px;
+    }
+    body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--ink); }
+
+    .topbar {
+      background:var(--white); border-bottom:1.5px solid #EDE9FA;
+      padding:16px 40px; display:flex; align-items:center; gap:16px;
+      position:sticky; top:0; z-index:50;
+    }
+    .logo { font-family:'Baloo 2',cursive; font-size:1.4rem; font-weight:900; color:var(--blue); text-decoration:none; }
+    .back-link { color:var(--blue); text-decoration:none; font-weight:700; font-size:.9rem; margin-left:auto; display:flex; align-items:center; gap:6px; }
+    .back-link:hover { text-decoration:underline; }
+
+    .container { max-width:780px; margin:0 auto; padding:48px 24px 80px; }
+
+    .doc-header { margin-bottom:40px; }
+    .doc-header h1 { font-family:'Baloo 2',cursive; font-size:2.2rem; font-weight:900; margin-bottom:10px; }
+    .doc-meta { font-size:.9rem; color:var(--muted); display:flex; gap:24px; flex-wrap:wrap; }
+
+    .lgpd-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      background:var(--green-lt); color:var(--green); border:1.5px solid var(--green);
+      padding:8px 18px; border-radius:50px; font-weight:800; font-size:.85rem;
+      margin-bottom:24px;
+    }
+
+    .toc {
+      background:var(--blue-lt); border-radius:var(--radius);
+      padding:24px 28px; margin-bottom:40px;
+    }
+    .toc h3 { font-family:'Baloo 2',cursive; font-weight:900; margin-bottom:14px; color:var(--blue); }
+    .toc ol { padding-left:20px; }
+    .toc li { margin-bottom:6px; }
+    .toc a { color:var(--blue); text-decoration:none; font-weight:600; font-size:.93rem; }
+    .toc a:hover { text-decoration:underline; }
+
+    .section { margin-bottom:40px; }
+    .section h2 {
+      font-family:'Baloo 2',cursive; font-size:1.25rem; font-weight:900;
+      margin-bottom:14px; border-bottom:2px solid #EDE9FA; padding-bottom:10px;
+    }
+    .section p { line-height:1.75; color:#3a3750; margin-bottom:12px; font-size:.97rem; }
+    .section ul, .section ol { padding-left:22px; margin-bottom:12px; }
+    .section li { line-height:1.7; color:#3a3750; margin-bottom:4px; font-size:.97rem; }
+    .section strong { color:var(--ink); }
+
+    .data-table {
+      width:100%; border-collapse:collapse; margin:16px 0; font-size:.91rem;
+    }
+    .data-table th {
+      background:var(--blue-lt); color:var(--blue); font-weight:800;
+      padding:12px 16px; text-align:left; border-bottom:2px solid #c5d8f0;
+    }
+    .data-table td {
+      padding:11px 16px; border-bottom:1px solid #EDE9FA; color:#3a3750; vertical-align:top;
+    }
+    .data-table tr:last-child td { border-bottom:none; }
+    .data-table tr:nth-child(even) td { background:#faf9ff; }
+
+    .rights-grid {
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+      gap:12px; margin:16px 0;
+    }
+    .right-card {
+      background:var(--white); border-radius:12px; padding:16px;
+      box-shadow:0 2px 10px rgba(74,144,217,.08); border-top:3px solid var(--blue);
+    }
+    .right-card .icon { font-size:1.4rem; margin-bottom:6px; }
+    .right-card .title { font-weight:800; font-size:.9rem; margin-bottom:4px; }
+    .right-card .desc { font-size:.8rem; color:var(--muted); line-height:1.5; }
+
+    .highlight-box {
+      background:var(--white); border-left:4px solid var(--blue);
+      border-radius:0 12px 12px 0; padding:16px 20px; margin:16px 0;
+    }
+    .highlight-box p { margin:0; }
+
+    .green-box {
+      background:var(--green-lt); border-left:4px solid var(--green);
+      border-radius:0 12px 12px 0; padding:16px 20px; margin:16px 0;
+    }
+    .green-box p { margin:0; color:#2d6b3d; }
+
+    .contact-box {
+      background:var(--white); border-radius:var(--radius);
+      padding:24px 28px; box-shadow:0 4px 20px rgba(74,144,217,.1); margin-top:40px;
+    }
+    .contact-box h3 { font-family:'Baloo 2',cursive; font-weight:900; margin-bottom:14px; }
+    .contact-box p { color:var(--muted); line-height:1.7; font-size:.93rem; margin-bottom:8px; }
+    .contact-box a { color:var(--blue); font-weight:700; }
+
+    footer-note { display:block; margin-top:40px; font-size:.85rem; color:var(--muted); text-align:center; border-top:1.5px solid #EDE9FA; padding-top:24px; }
+
+    @media(max-width:600px) {
+      .rights-grid { grid-template-columns:1fr 1fr; }
+      .data-table { font-size:.82rem; }
+      .data-table th, .data-table td { padding:8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="../index.html" class="logo">⭐ RotinaFeliz</a>
+  <a href="javascript:history.back()" class="back-link">← Voltar</a>
+</nav>
+
+<div class="container">
+
+  <div class="doc-header">
+    <div class="lgpd-badge">✅ Em conformidade com a LGPD (Lei 13.709/2018)</div>
+    <h1>🔒 Política de Privacidade</h1>
+    <div class="doc-meta">
+      <span>📅 Última atualização: 10 de abril de 2025</span>
+      <span>🌐 Versão: 1.0</span>
+    </div>
+  </div>
+
+  <div class="toc">
+    <h3>📋 Índice</h3>
+    <ol>
+      <li><a href="#controlador">Quem somos (Controlador de Dados)</a></li>
+      <li><a href="#dados-coletados">Dados Pessoais que Coletamos</a></li>
+      <li><a href="#finalidade">Finalidade e Base Legal do Tratamento</a></li>
+      <li><a href="#menores">Dados de Crianças e Adolescentes</a></li>
+      <li><a href="#compartilhamento">Compartilhamento de Dados</a></li>
+      <li><a href="#retencao">Retenção e Exclusão de Dados</a></li>
+      <li><a href="#seguranca">Segurança dos Dados</a></li>
+      <li><a href="#direitos">Seus Direitos (LGPD)</a></li>
+      <li><a href="#cookies">Cookies e Tecnologias Similares</a></li>
+      <li><a href="#alteracoes">Alterações nesta Política</a></li>
+      <li><a href="#dpo">Encarregado de Dados (DPO)</a></li>
+    </ol>
+  </div>
+
+  <div class="section" id="controlador">
+    <h2>1. Quem Somos (Controlador de Dados)</h2>
+    <p>O <strong>RotinaFeliz</strong> é o controlador dos dados pessoais tratados nesta plataforma. Para fins da LGPD, somos responsáveis pelas decisões sobre o tratamento dos seus dados.</p>
+    <div class="highlight-box">
+      <p>📍 <strong>RotinaFeliz</strong><br/>
+      E-mail: privacidade@rotinasfeliz.com.br<br/>
+      Para solicitações relacionadas a dados pessoais, utilize o e-mail acima com o assunto "Direitos LGPD".</p>
+    </div>
+  </div>
+
+  <div class="section" id="dados-coletados">
+    <h2>2. Dados Pessoais que Coletamos</h2>
+    <p>Coletamos apenas os dados necessários para fornecer o serviço ("princípio da minimização"):</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Categoria</th>
+          <th>Dados</th>
+          <th>Quando</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Cadastro</strong></td>
+          <td>Nome, endereço de e-mail, senha (criptografada)</td>
+          <td>Ao criar conta</td>
+        </tr>
+        <tr>
+          <td><strong>Perfil</strong></td>
+          <td>Foto de perfil (opcional)</td>
+          <td>Ao personalizar perfil</td>
+        </tr>
+        <tr>
+          <td><strong>Conteúdo</strong></td>
+          <td>Nomes de rotinas, títulos de tarefas, imagens enviadas</td>
+          <td>Durante o uso</td>
+        </tr>
+        <tr>
+          <td><strong>Progresso</strong></td>
+          <td>Tarefas concluídas, pontos, datas e horários de conclusão</td>
+          <td>Uso do Modo Criança</td>
+        </tr>
+        <tr>
+          <td><strong>Pagamento</strong></td>
+          <td>Histórico de assinaturas, plano ativo (dados de cartão NÃO são armazenados por nós)</td>
+          <td>Ao assinar plano pago</td>
+        </tr>
+        <tr>
+          <td><strong>Técnicos</strong></td>
+          <td>Endereço IP, tipo de navegador, páginas acessadas, horários</td>
+          <td>Automaticamente</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="green-box">
+      <p>✅ <strong>Não coletamos</strong> dados sensíveis como diagnósticos médicos, dados biométricos, informações genéticas ou dados de localização precisos.</p>
+    </div>
+  </div>
+
+  <div class="section" id="finalidade">
+    <h2>3. Finalidade e Base Legal do Tratamento</h2>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Finalidade</th>
+          <th>Base Legal (LGPD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Criação e gerenciamento da conta de usuário</td>
+          <td>Execução de contrato (Art. 7º, V)</td>
+        </tr>
+        <tr>
+          <td>Prestação do serviço de rotinas visuais</td>
+          <td>Execução de contrato (Art. 7º, V)</td>
+        </tr>
+        <tr>
+          <td>Processamento de pagamentos</td>
+          <td>Execução de contrato (Art. 7º, V)</td>
+        </tr>
+        <tr>
+          <td>Envio de e-mails transacionais (confirmações, alertas)</td>
+          <td>Execução de contrato (Art. 7º, V)</td>
+        </tr>
+        <tr>
+          <td>Comunicações de marketing e novidades</td>
+          <td>Consentimento (Art. 7º, I) — opt-in</td>
+        </tr>
+        <tr>
+          <td>Melhorias no produto e análise de uso agregado</td>
+          <td>Legítimo interesse (Art. 7º, IX)</td>
+        </tr>
+        <tr>
+          <td>Cumprimento de obrigações legais</td>
+          <td>Obrigação legal (Art. 7º, II)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section" id="menores">
+    <h2>4. Dados de Crianças e Adolescentes</h2>
+    <p>O RotinaFeliz foi desenvolvido para auxiliar famílias com crianças. Por isso, adotamos proteções especiais em conformidade com o <strong>Art. 14 da LGPD</strong> e o <strong>Estatuto da Criança e do Adolescente (ECA)</strong>:</p>
+    <ul>
+      <li>O cadastro na plataforma deve ser realizado por um <strong>responsável legal adulto</strong></li>
+      <li>Dados relacionados ao progresso e rotinas das crianças são tratados <strong>exclusivamente</strong> para a finalidade do serviço</li>
+      <li>Esses dados <strong>não são compartilhados</strong> com terceiros para fins comerciais ou publicitários</li>
+      <li>O consentimento para o tratamento de dados de menores é obtido do responsável legal</li>
+      <li>Responsáveis podem solicitar acesso, correção ou exclusão dos dados de crianças a qualquer momento</li>
+    </ul>
+    <div class="highlight-box">
+      <p>🧒 <strong>Sobre o Modo Criança:</strong> O ambiente do Modo Criança não coleta dados além do progresso nas tarefas (tarefas concluídas, pontos e horários). Não há perfil público, chat ou interação social.</p>
+    </div>
+  </div>
+
+  <div class="section" id="compartilhamento">
+    <h2>5. Compartilhamento de Dados</h2>
+    <p><strong>Não vendemos, alugamos nem comercializamos seus dados pessoais.</strong></p>
+    <p>Compartilhamos dados apenas com os seguintes parceiros técnicos, na medida necessária para a prestação do serviço:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Parceiro</th>
+          <th>Finalidade</th>
+          <th>País</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Google Firebase</strong></td>
+          <td>Autenticação, banco de dados, armazenamento de dados</td>
+          <td>EUA (SCCs aplicáveis)</td>
+        </tr>
+        <tr>
+          <td><strong>Cloudinary</strong></td>
+          <td>Armazenamento e otimização de imagens</td>
+          <td>EUA (SCCs aplicáveis)</td>
+        </tr>
+        <tr>
+          <td><strong>Stripe / PagSeguro</strong></td>
+          <td>Processamento seguro de pagamentos</td>
+          <td>EUA / Brasil</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Todos os parceiros são contratualmente obrigados a tratar os dados de acordo com padrões de segurança e privacidade equivalentes aos exigidos pela LGPD.</p>
+    <p>Poderemos também divulgar dados quando exigido por lei, ordem judicial ou autoridade competente.</p>
+  </div>
+
+  <div class="section" id="retencao">
+    <h2>6. Retenção e Exclusão de Dados</h2>
+    <p>Mantemos seus dados pelo tempo necessário para as finalidades descritas:</p>
+    <ul>
+      <li><strong>Dados de conta ativa:</strong> Pelo período de vigência da conta</li>
+      <li><strong>Dados após encerramento da conta:</strong> Excluídos em até <strong>30 dias</strong>, salvo obrigação legal de retenção</li>
+      <li><strong>Dados fiscais e financeiros:</strong> Conforme exigido pela legislação tributária brasileira (até 5 anos)</li>
+      <li><strong>Logs de acesso:</strong> 6 meses, conforme o Marco Civil da Internet (Lei 12.965/14)</li>
+    </ul>
+    <p>Você pode solicitar a exclusão antecipada da sua conta e dados na página de Perfil ou pelo e-mail de contato.</p>
+  </div>
+
+  <div class="section" id="seguranca">
+    <h2>7. Segurança dos Dados</h2>
+    <p>Adotamos medidas técnicas e organizacionais para proteger seus dados:</p>
+    <ul>
+      <li><strong>Criptografia em trânsito:</strong> Todas as comunicações utilizam HTTPS/TLS</li>
+      <li><strong>Criptografia em repouso:</strong> Dados armazenados com criptografia (Google Firebase)</li>
+      <li><strong>Senhas:</strong> Nunca armazenamos sua senha em texto puro; utilizamos hash seguro via Firebase Auth</li>
+      <li><strong>Dados de pagamento:</strong> Processados diretamente pelo gateway de pagamento, sem passar por nossos servidores</li>
+      <li><strong>Controle de acesso:</strong> Regras de segurança do Firestore limitam o acesso de cada usuário apenas aos seus próprios dados</li>
+    </ul>
+    <div class="highlight-box">
+      <p>⚠️ <strong>Incidentes de segurança:</strong> Em caso de violação de dados que possa afetar seus direitos, notificaremos você e a ANPD dentro dos prazos legais estabelecidos pela LGPD.</p>
+    </div>
+  </div>
+
+  <div class="section" id="direitos">
+    <h2>8. Seus Direitos (LGPD)</h2>
+    <p>Como titular de dados, você possui os seguintes direitos garantidos pela LGPD:</p>
+
+    <div class="rights-grid">
+      <div class="right-card">
+        <div class="icon">🔍</div>
+        <div class="title">Acesso</div>
+        <div class="desc">Confirmar e acessar seus dados tratados</div>
+      </div>
+      <div class="right-card">
+        <div class="icon">✏️</div>
+        <div class="title">Correção</div>
+        <div class="desc">Corrigir dados incompletos ou desatualizados</div>
+      </div>
+      <div class="right-card">
+        <div class="icon">🗑️</div>
+        <div class="title">Eliminação</div>
+        <div class="desc">Excluir dados desnecessários ou tratados com consentimento</div>
+      </div>
+      <div class="right-card">
+        <div class="icon">🚫</div>
+        <div class="title">Oposição</div>
+        <div class="desc">Opor-se ao tratamento baseado em legítimo interesse</div>
+      </div>
+      <div class="right-card">
+        <div class="icon">📦</div>
+        <div class="title">Portabilidade</div>
+        <div class="desc">Receber seus dados em formato estruturado</div>
+      </div>
+      <div class="right-card">
+        <div class="icon">↩️</div>
+        <div class="title">Revogação</div>
+        <div class="desc">Revogar consentimento a qualquer momento</div>
+      </div>
+    </div>
+
+    <p>Para exercer qualquer desses direitos, envie um e-mail para <strong>privacidade@rotinasfeliz.com.br</strong> com o assunto "Direitos LGPD" e identificação do titular. Responderemos em até <strong>15 dias úteis</strong>.</p>
+    <p>Você também tem o direito de apresentar reclamação à <strong>Autoridade Nacional de Proteção de Dados (ANPD)</strong> em caso de não atendimento.</p>
+  </div>
+
+  <div class="section" id="cookies">
+    <h2>9. Cookies e Tecnologias Similares</h2>
+    <p>O RotinaFeliz utiliza cookies de forma restrita e transparente:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Finalidade</th>
+          <th>Obrigatório?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Autenticação</strong></td>
+          <td>Manter sua sessão ativa (Firebase Auth)</td>
+          <td>Sim — funcional</td>
+        </tr>
+        <tr>
+          <td><strong>Preferências</strong></td>
+          <td>Salvar configurações de interface</td>
+          <td>Sim — funcional</td>
+        </tr>
+        <tr>
+          <td><strong>Analytics</strong></td>
+          <td>Análise anônima de uso (sem identificação pessoal)</td>
+          <td>Não — opcional</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="green-box">
+      <p>✅ <strong>Não utilizamos cookies de publicidade ou rastreamento entre sites.</strong> Não há compartilhamento de dados de navegação com redes de anúncios.</p>
+    </div>
+    <p>Você pode gerenciar cookies nas configurações do seu navegador. Desativar cookies funcionais pode prejudicar o funcionamento do login.</p>
+  </div>
+
+  <div class="section" id="alteracoes">
+    <h2>10. Alterações nesta Política</h2>
+    <p>Esta Política pode ser atualizada para refletir mudanças no serviço, na legislação ou nas nossas práticas de privacidade.</p>
+    <p>Alterações significativas serão comunicadas por e-mail com pelo menos <strong>15 dias de antecedência</strong>. A data da última atualização está sempre visível no topo deste documento.</p>
+    <p>Recomendamos revisar esta Política periodicamente.</p>
+  </div>
+
+  <div class="section" id="dpo">
+    <h2>11. Encarregado de Dados (DPO)</h2>
+    <p>Em conformidade com o Art. 41 da LGPD, o RotinaFeliz designou um Encarregado de Proteção de Dados (DPO) para atuar como canal de comunicação entre titulares, a empresa e a ANPD.</p>
+    <div class="contact-box">
+      <h3>🛡️ Contato — Encarregado de Dados (DPO)</h3>
+      <p>🔒 <strong>E-mail DPO:</strong> <a href="mailto:privacidade@rotinasfeliz.com.br">privacidade@rotinasfeliz.com.br</a></p>
+      <p>📧 <strong>Suporte geral:</strong> <a href="mailto:contato@rotinasfeliz.com.br">contato@rotinasfeliz.com.br</a></p>
+      <p style="margin-top:12px;font-size:.85rem">Ao entrar em contato, informe:<br/>• Seu nome completo e e-mail cadastrado<br/>• O direito que deseja exercer ou a dúvida<br/>• Qualquer informação adicional relevante</p>
+      <p style="margin-top:10px;font-size:.85rem">⏰ Prazo de resposta: até 15 dias úteis (conforme LGPD)</p>
+    </div>
+  </div>
+
+  <footer-note>
+    © 2025 RotinaFeliz. Todos os direitos reservados. |
+    <a href="privacy.html" style="color:var(--blue)">Política de Privacidade</a> |
+    <a href="terms.html" style="color:var(--blue)">Termos de Uso</a>
+  </footer-note>
+
+</div>
+</body>
+</html>
