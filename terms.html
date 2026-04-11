@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Termos de Uso — RotinaFeliz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="shortcut icon" href="../assets/rf.png" type="image/x-icon"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:#4A90D9; --blue-lt:#EAF3FB; --bg:#F7F5FF; --white:#fff;
+      --ink:#1E1B2E; --muted:#6B6880; --radius:16px;
+    }
+    body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--ink); }
+
+    .topbar {
+      background:var(--white); border-bottom:1.5px solid #EDE9FA;
+      padding:16px 40px; display:flex; align-items:center; gap:16px;
+      position:sticky; top:0; z-index:50;
+    }
+    .logo { font-family:'Baloo 2',cursive; font-size:1.4rem; font-weight:900; color:var(--blue); text-decoration:none; }
+    .back-link { color:var(--blue); text-decoration:none; font-weight:700; font-size:.9rem; margin-left:auto; display:flex; align-items:center; gap:6px; }
+    .back-link:hover { text-decoration:underline; }
+
+    .container { max-width:780px; margin:0 auto; padding:48px 24px 80px; }
+
+    .doc-header { margin-bottom:40px; }
+    .doc-header h1 { font-family:'Baloo 2',cursive; font-size:2.2rem; font-weight:900; margin-bottom:10px; }
+    .doc-meta { font-size:.9rem; color:var(--muted); display:flex; gap:24px; flex-wrap:wrap; }
+    .doc-meta span { display:flex; align-items:center; gap:6px; }
+
+    .toc {
+      background:var(--blue-lt); border-radius:var(--radius);
+      padding:24px 28px; margin-bottom:40px;
+    }
+    .toc h3 { font-family:'Baloo 2',cursive; font-weight:900; margin-bottom:14px; color:var(--blue); }
+    .toc ol { padding-left:20px; }
+    .toc li { margin-bottom:6px; }
+    .toc a { color:var(--blue); text-decoration:none; font-weight:600; font-size:.93rem; }
+    .toc a:hover { text-decoration:underline; }
+
+    .section { margin-bottom:40px; }
+    .section h2 {
+      font-family:'Baloo 2',cursive; font-size:1.25rem; font-weight:900;
+      margin-bottom:14px; padding-top:8px;
+      color:var(--ink); border-bottom:2px solid #EDE9FA; padding-bottom:10px;
+    }
+    .section p { line-height:1.75; color:#3a3750; margin-bottom:12px; font-size:.97rem; }
+    .section ul, .section ol { padding-left:22px; margin-bottom:12px; }
+    .section li { line-height:1.7; color:#3a3750; margin-bottom:4px; font-size:.97rem; }
+    .section strong { color:var(--ink); }
+
+    .highlight-box {
+      background:var(--white); border-left:4px solid var(--blue);
+      border-radius:0 12px 12px 0; padding:16px 20px; margin:16px 0;
+    }
+    .highlight-box p { margin:0; }
+
+    .warning-box {
+      background:#FFF8E6; border-left:4px solid #F7C948;
+      border-radius:0 12px 12px 0; padding:16px 20px; margin:16px 0;
+    }
+    .warning-box p { margin:0; color:#6b5700; }
+
+    .contact-box {
+      background:var(--white); border-radius:var(--radius);
+      padding:24px 28px; box-shadow:0 4px 20px rgba(74,144,217,.1);
+      margin-top:40px;
+    }
+    .contact-box h3 { font-family:'Baloo 2',cursive; font-weight:900; margin-bottom:14px; }
+    .contact-box p { color:var(--muted); line-height:1.7; font-size:.93rem; margin-bottom:8px; }
+    .contact-box a { color:var(--blue); font-weight:700; }
+
+    footer-note { display:block; margin-top:40px; font-size:.85rem; color:var(--muted); text-align:center; border-top:1.5px solid #EDE9FA; padding-top:24px; }
+  </style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="../index.html" class="logo">⭐ RotinaFeliz</a>
+  <a href="javascript:history.back()" class="back-link">← Voltar</a>
+</nav>
+
+<div class="container">
+
+  <div class="doc-header">
+    <h1>📄 Termos de Uso</h1>
+    <div class="doc-meta">
+      <span>📅 Última atualização: 10 de abril de 2025</span>
+      <span>🌐 Versão: 1.0</span>
+      <span>🇧🇷 Aplicável no Brasil</span>
+    </div>
+  </div>
+
+  <div class="toc">
+    <h3>📋 Índice</h3>
+    <ol>
+      <li><a href="#aceitacao">Aceitação dos Termos</a></li>
+      <li><a href="#servico">Descrição do Serviço</a></li>
+      <li><a href="#cadastro">Cadastro e Conta de Usuário</a></li>
+      <li><a href="#planos">Planos e Pagamento</a></li>
+      <li><a href="#cancelamento">Cancelamento e Reembolso</a></li>
+      <li><a href="#uso-aceitavel">Uso Aceitável</a></li>
+      <li><a href="#conteudo">Conteúdo do Usuário</a></li>
+      <li><a href="#propriedade">Propriedade Intelectual</a></li>
+      <li><a href="#privacidade">Privacidade e LGPD</a></li>
+      <li><a href="#responsabilidade">Limitação de Responsabilidade</a></li>
+      <li><a href="#alteracoes">Alterações nos Termos</a></li>
+      <li><a href="#legislacao">Lei Aplicável e Foro</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ol>
+  </div>
+
+  <div class="section" id="aceitacao">
+    <h2>1. Aceitação dos Termos</h2>
+    <p>Ao criar uma conta, acessar ou utilizar o <strong>RotinaFeliz</strong> ("Serviço", "Plataforma"), você ("Usuário") concorda integralmente com estes Termos de Uso e com nossa <a href="privacy.html" style="color:var(--blue);font-weight:700">Política de Privacidade</a>.</p>
+    <p>Se você utiliza o Serviço em nome de uma organização, você declara ter autoridade para vincular essa organização a estes Termos.</p>
+    <div class="warning-box">
+      <p>⚠️ <strong>Se você não concordar com algum destes termos, não utilize o RotinaFeliz.</strong> O uso continuado após modificações implica aceitação das novas condições.</p>
+    </div>
+  </div>
+
+  <div class="section" id="servico">
+    <h2>2. Descrição do Serviço</h2>
+    <p>O RotinaFeliz é uma plataforma digital voltada a auxiliar famílias — especialmente aquelas com crianças com Transtorno do Espectro Autista (TEA) e outros perfis de neurodesenvolvimento — na criação e acompanhamento de <strong>rotinas visuais interativas</strong>.</p>
+    <p>As funcionalidades incluem:</p>
+    <ul>
+      <li>Criação e gerenciamento de rotinas e tarefas visuais</li>
+      <li>Modo Criança com interface simplificada e sistema de pontos</li>
+      <li>Histórico de progresso e relatórios de evolução</li>
+      <li>Upload de imagens personalizadas para tarefas</li>
+      <li>Dashboard com estatísticas de desempenho</li>
+    </ul>
+    <p>O RotinaFeliz <strong>não substitui</strong> acompanhamento médico, terapêutico ou psicológico especializado.</p>
+  </div>
+
+  <div class="section" id="cadastro">
+    <h2>3. Cadastro e Conta de Usuário</h2>
+    <p>Para utilizar o Serviço, é necessário criar uma conta com um endereço de e-mail válido e senha. Você concorda em:</p>
+    <ul>
+      <li>Fornecer informações verdadeiras, precisas e completas no cadastro</li>
+      <li>Manter suas informações cadastrais atualizadas</li>
+      <li>Guardar sua senha com sigilo e não compartilhá-la</li>
+      <li>Notificar imediatamente o RotinaFeliz em caso de uso não autorizado da sua conta</li>
+    </ul>
+    <p>Você é o único responsável por todas as atividades realizadas sob sua conta. O RotinaFeliz não será responsável por perdas resultantes do uso não autorizado de suas credenciais.</p>
+    <div class="highlight-box">
+      <p>ℹ️ <strong>Menores de 13 anos:</strong> O cadastro direto deve ser feito por um responsável legal adulto. Os dados de crianças inseridos na plataforma (perfis de rotinas) estão cobertos pelas proteções especiais da LGPD para dados de menores.</p>
+    </div>
+  </div>
+
+  <div class="section" id="planos">
+    <h2>4. Planos e Pagamento</h2>
+    <p>O RotinaFeliz oferece dois planos:</p>
+    <ul>
+      <li><strong>Plano Gratuito:</strong> Acesso permanente com 1 rotina e até 5 tarefas por rotina, sem custo.</li>
+      <li><strong>Plano Família:</strong> Acesso a rotinas ilimitadas, múltiplos perfis de crianças, histórico completo e funcionalidades exclusivas, mediante assinatura mensal.</li>
+    </ul>
+    <p>O pagamento do Plano Família é processado de forma segura por meio de nosso parceiro de pagamentos. Os valores e condições vigentes estão disponíveis na página de planos.</p>
+    <p>A assinatura é renovada automaticamente ao final de cada período, salvo cancelamento pelo Usuário antes da data de renovação.</p>
+    <p>O RotinaFeliz poderá ajustar os valores dos planos com aviso prévio de <strong>30 dias</strong> por e-mail.</p>
+  </div>
+
+  <div class="section" id="cancelamento">
+    <h2>5. Cancelamento e Reembolso</h2>
+    <p>Você pode cancelar sua assinatura do Plano Família a qualquer momento pela página de Perfil da sua conta ou entrando em contato com o suporte.</p>
+    <p>Após o cancelamento:</p>
+    <ul>
+      <li>Você mantém o acesso ao Plano Família até o fim do período já pago</li>
+      <li>Ao término do período, sua conta é automaticamente revertida ao Plano Gratuito</li>
+      <li>Seus dados e rotinas são preservados (sujeito aos limites do Plano Gratuito)</li>
+    </ul>
+    <div class="highlight-box">
+      <p>🔄 <strong>Direito de Arrependimento (Art. 49 do CDC):</strong> Para compras realizadas exclusivamente online, o Usuário tem direito a solicitar reembolso integral no prazo de <strong>7 (sete) dias corridos</strong> a partir da data da contratação, sem necessidade de justificativa. Para exercer esse direito, entre em contato com suporte@rotinasfeliz.com.br.</p>
+    </div>
+  </div>
+
+  <div class="section" id="uso-aceitavel">
+    <h2>6. Uso Aceitável</h2>
+    <p>Ao utilizar o RotinaFeliz, você concorda em <strong>não</strong>:</p>
+    <ul>
+      <li>Utilizar o Serviço para fins ilegais ou não autorizados</li>
+      <li>Fazer engenharia reversa, descompilar ou tentar extrair o código-fonte da plataforma</li>
+      <li>Transmitir vírus, malware ou qualquer código malicioso</li>
+      <li>Tentar acessar sistemas ou dados de outros usuários sem autorização</li>
+      <li>Utilizar o Serviço de forma que possa sobrecarregar ou prejudicar sua infraestrutura</li>
+      <li>Revender ou redistribuir o acesso ao Serviço a terceiros</li>
+      <li>Publicar conteúdo ilegal, discriminatório, ofensivo ou que viole direitos de terceiros</li>
+    </ul>
+    <p>O RotinaFeliz reserva-se o direito de suspender ou encerrar contas que violem estas condições, sem aviso prévio nos casos de violação grave.</p>
+  </div>
+
+  <div class="section" id="conteudo">
+    <h2>7. Conteúdo do Usuário</h2>
+    <p>Você mantém a <strong>plena propriedade</strong> de todo conteúdo que enviar para a plataforma (imagens, textos, nomes de rotinas e tarefas).</p>
+    <p>Ao enviar conteúdo, você concede ao RotinaFeliz uma licença <strong>limitada, não exclusiva, intransferível e revogável</strong> para armazenar, processar e exibir esse conteúdo exclusivamente com a finalidade de prestar o Serviço a você.</p>
+    <p>Você declara e garante que:</p>
+    <ul>
+      <li>Possui os direitos necessários sobre o conteúdo enviado</li>
+      <li>O conteúdo não viola direitos de terceiros (direitos autorais, privacidade, etc.)</li>
+      <li>O conteúdo não é ilegal ou ofensivo</li>
+    </ul>
+    <p>O RotinaFeliz não monitora proativamente o conteúdo dos usuários, mas poderá removê-lo caso receba notificação de violação ou identifique uso inadequado.</p>
+  </div>
+
+  <div class="section" id="propriedade">
+    <h2>8. Propriedade Intelectual</h2>
+    <p>Todo o conteúdo do RotinaFeliz — incluindo código-fonte, design, marca, logotipos, textos institucionais e funcionalidades — é protegido por leis de propriedade intelectual e pertence ao RotinaFeliz ou a seus licenciadores.</p>
+    <p>É proibida qualquer reprodução, distribuição ou modificação sem autorização expressa por escrito.</p>
+    <p>O uso do Serviço não transfere ao Usuário qualquer direito de propriedade intelectual sobre a plataforma.</p>
+  </div>
+
+  <div class="section" id="privacidade">
+    <h2>9. Privacidade e LGPD</h2>
+    <p>O tratamento dos seus dados pessoais é regido pela nossa <a href="privacy.html" style="color:var(--blue);font-weight:700">Política de Privacidade</a>, elaborada em conformidade com a <strong>Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD)</strong>.</p>
+    <p>Como titular de dados pessoais, você tem direito a:</p>
+    <ul>
+      <li>Confirmar a existência de tratamento dos seus dados</li>
+      <li>Acessar seus dados pessoais</li>
+      <li>Corrigir dados incompletos, inexatos ou desatualizados</li>
+      <li>Solicitar a anonimização, bloqueio ou eliminação de dados desnecessários</li>
+      <li>Portabilidade dos dados (conforme regulamentação da ANPD)</li>
+      <li>Revogar o consentimento a qualquer momento</li>
+      <li>Solicitar a exclusão dos dados tratados com base em consentimento</li>
+    </ul>
+    <p>Para exercer seus direitos, entre em contato com nosso Encarregado de Proteção de Dados (DPO) pelo e-mail: <strong>privacidade@rotinasfeliz.com.br</strong></p>
+  </div>
+
+  <div class="section" id="responsabilidade">
+    <h2>10. Limitação de Responsabilidade</h2>
+    <p>O RotinaFeliz é disponibilizado <strong>"no estado em que se encontra"</strong>, sem garantias de disponibilidade ininterrupta ou ausência de erros.</p>
+    <p>Nos limites permitidos pela legislação brasileira, o RotinaFeliz não será responsável por:</p>
+    <ul>
+      <li>Danos indiretos, incidentais ou consequentes decorrentes do uso do Serviço</li>
+      <li>Perda de dados por falhas técnicas, desde que observadas as boas práticas de segurança</li>
+      <li>Conteúdo de terceiros acessado por links externos</li>
+      <li>Falhas de conectividade fora do controle da plataforma</li>
+    </ul>
+    <p>Em nenhum caso a responsabilidade total do RotinaFeliz excederá os valores pagos pelo Usuário nos últimos 3 meses de assinatura.</p>
+    <p><strong>Nada nestes Termos exclui ou limita direitos do consumidor previstos no Código de Defesa do Consumidor (Lei nº 8.078/1990).</strong></p>
+  </div>
+
+  <div class="section" id="alteracoes">
+    <h2>11. Alterações nos Termos</h2>
+    <p>O RotinaFeliz poderá atualizar estes Termos periodicamente. Alterações relevantes serão comunicadas por:</p>
+    <ul>
+      <li>E-mail para o endereço cadastrado, com antecedência mínima de <strong>15 dias</strong></li>
+      <li>Aviso destacado na interface da plataforma</li>
+    </ul>
+    <p>O uso continuado do Serviço após o prazo de aviso implica aceitação dos Termos atualizados. Caso não concorde com as alterações, você poderá encerrar sua conta antes da data de vigência das mudanças.</p>
+  </div>
+
+  <div class="section" id="legislacao">
+    <h2>12. Lei Aplicável e Foro</h2>
+    <p>Estes Termos são regidos pelas leis da <strong>República Federativa do Brasil</strong>, especialmente o Código de Defesa do Consumidor (Lei 8.078/90), o Marco Civil da Internet (Lei 12.965/14) e a LGPD (Lei 13.709/18).</p>
+    <p>Fica eleito o foro da <strong>Comarca de Recife, Estado de Pernambuco</strong>, para resolução de quaisquer disputas decorrentes destes Termos, ressalvado o direito do consumidor de eleger o foro de seu domicílio.</p>
+    <p>Antes de recorrer ao judiciário, encorajamos o contato direto com nossa equipe para resolução amigável de conflitos.</p>
+  </div>
+
+  <div class="section" id="contato">
+    <h2>13. Contato</h2>
+    <div class="contact-box">
+      <h3>📬 Entre em contato</h3>
+      <p>📧 <strong>Suporte geral:</strong> <a href="mailto:contato@rotinasfeliz.com.br">contato@rotinasfeliz.com.br</a></p>
+      <p>🔒 <strong>Encarregado de Dados (DPO / LGPD):</strong> <a href="mailto:privacidade@rotinasfeliz.com.br">privacidade@rotinasfeliz.com.br</a></p>
+      <p>💳 <strong>Cancelamentos e reembolsos:</strong> <a href="mailto:suporte@rotinasfeliz.com.br">suporte@rotinasfeliz.com.br</a></p>
+      <p style="margin-top:12px;font-size:.85rem">⏰ Atendimento: Segunda a Sexta, das 9h às 18h (horário de Brasília). Respondemos em até 2 dias úteis.</p>
+    </div>
+  </div>
+
+  <footer-note>
+    © 2025 RotinaFeliz. Todos os direitos reservados. |
+    <a href="privacy.html" style="color:var(--blue)">Política de Privacidade</a> |
+    <a href="terms.html" style="color:var(--blue)">Termos de Uso</a>
+  </footer-note>
+
+</div>
+</body>
+</html>
