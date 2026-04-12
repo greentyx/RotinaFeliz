@@ -74,7 +74,7 @@ body {
   animation: slideUp .25s ease; max-height: 90vh; overflow-y: auto;
 }
 @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
-.modal h2 { font-family: 'Baloo 2', cursive; font-size: 1.5rem; font-weight: 900; margin-bottom: 20px; }
+.modal h2 { font-family: 'Baloo 2', sans-serif; font-size: 1.5rem; font-weight: 900; margin-bottom: 20px; }
 
 /* ── FORM ────────────────────────────────────────────────── */
 .form-group { margin-bottom: 18px; }
@@ -96,5 +96,5 @@ body {
 .badge-blue { background: var(--blue-lt); color: var(--blue); }
 .empty { text-align: center; padding: 64px 24px; color: var(--muted); }
 .empty-emoji { font-size: 4rem; margin-bottom: 16px; }
-.empty h3 { font-family: 'Baloo 2', cursive; font-size: 1.4rem; font-weight: 900; color: var(--ink); margin-bottom: 8px; }
+.empty h3 { font-family: 'Baloo 2', sans-serif; font-size: 1.4rem; font-weight: 900; color: var(--ink); margin-bottom: 8px; }
 .empty p { font-size: .95rem; line-height: 1.6; max-width: 360px; margin: 0 auto 24px; }
