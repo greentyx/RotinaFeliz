@@ -4,6 +4,13 @@
  * Cloud Name : ddqpi6qne
  * Upload Preset: RotinaFeliz  (deve estar como "Unsigned" no painel)
  *
+ * 🔒 SEGURANÇA — configure no painel do Cloudinary (Settings → Upload):
+ *   1. No upload preset "RotinaFeliz", ative:
+ *      - "Max file size": 5MB
+ *      - "Allowed formats": jpg, png, webp, gif
+ *   2. Em "Settings → Security", ative "Enable strict transformations"
+ *   3. Em "Settings → Upload", defina "Max image pixels": 25000000
+ *
  * Uso:
  *   import { uploadImage, resizeImage } from './cloudinary.js';
  *   const url = await uploadImage(file, 'avatars');   // folder opcional
@@ -20,7 +27,19 @@ const UPLOAD_URL    = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/uploa
  * @param {string}    publicId   - nome público do arquivo (opcional)
  * @returns {Promise<string>}    - URL segura (https) da imagem
  */
+const MAX_FILE_SIZE_MB = 5;
+const ALLOWED_TYPES    = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
 export async function uploadImage(file, folder = 'uploads', publicId = null) {
+  // Validação de tipo
+  if (!ALLOWED_TYPES.includes(file.type)) {
+    throw new Error('Tipo de arquivo não permitido. Use JPG, PNG, WEBP ou GIF.');
+  }
+  // Validação de tamanho (antes do resize, como segurança extra)
+  if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+    throw new Error(`Imagem muito grande. Tamanho máximo: ${MAX_FILE_SIZE_MB}MB.`);
+  }
+
   const form = new FormData();
   form.append('file', file);
   form.append('upload_preset', UPLOAD_PRESET);
