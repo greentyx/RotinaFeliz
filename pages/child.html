@@ -271,6 +271,7 @@ import { auth, db,
          collection, doc, addDoc, query, where,
          orderBy, onSnapshot, getDocs }
   from "../js/firebase.js";
+import { sanitizeHtml } from "../js/security.js";
 
 let currentUser = null;
 let completedIds = new Set();
@@ -307,7 +308,7 @@ async function loadRoutines() {
   }
 
   selector.innerHTML = routines.map((r,i)=>`
-    <div class="routine-pill ${i===0?'active':''}" id="pill_${r.id}" onclick="selectRoutine('${r.id}')">${r.name}</div>
+    <div class="routine-pill ${i===0?'active':''}" id="pill_${r.id}" onclick="selectRoutine('${r.id}')">${sanitizeHtml(r.title || r.name || "")}</div>
   `).join('');
 
   selectRoutine(routines[0].id);
@@ -365,10 +366,10 @@ function renderTasks() {
     return `
     <div class="task-card ${isDone?'done':''}" id="card_${t.id}" onclick="completeTask('${t.id}')">
       <div class="task-img-wrap">
-        ${t.imageUrl ? `<img src="${t.imageUrl}" alt="${t.title}" />` : `<span>${emoji}</span>`}
+        ${t.imageUrl ? `<img src="${t.imageUrl}" alt="${sanitizeHtml(t.title || "")}" />` : `<span>${emoji}</span>`}
       </div>
       <div class="task-info">
-        <div class="task-name">${t.title}</div>
+        <div class="task-name">${sanitizeHtml(t.title || "")}</div>
         <div class="task-status">${isDone?'✅ Feito!':'👆 Toque para concluir'}</div>
       </div>
       <button class="task-btn ${isDone?'done-btn':'pending'}" ${isDone?'disabled':''}>
