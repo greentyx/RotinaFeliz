@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Entrar — RotinaFeliz</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="shortcut icon" href="assets/rf.png" type="image/x-icon">
   <style>
@@ -37,12 +39,12 @@
       bottom:-60px; left:-60px;
     }
     .panel-logo {
-      font-family:'Baloo 2',cursive; font-size:1.7rem; font-weight:900;
+      font-family:'Baloo 2',sans-serif; font-size:1.7rem; font-weight:900;
       color:#fff; text-decoration:none; position:relative;z-index:1;
     }
     .panel-content { position:relative;z-index:1; }
     .panel-content h2 {
-      font-family:'Baloo 2',cursive; font-size:2rem; font-weight:900;
+      font-family:'Baloo 2',sans-serif; font-size:2rem; font-weight:900;
       color:#fff; line-height:1.2; margin-bottom:16px;
     }
     .panel-content p { color:rgba(255,255,255,.8); line-height:1.7; font-size:1rem; margin-bottom:32px; }
@@ -63,7 +65,7 @@
     }
     .auth-box { width:100%; max-width:440px; }
     .mobile-logo {
-      display:block; font-family:'Baloo 2',cursive;
+      display:block; font-family:'Baloo 2',sans-serif;
       font-size:1.5rem; font-weight:900; color:var(--blue);
       text-decoration:none; margin-bottom:36px; text-align:center;
     }
@@ -81,7 +83,7 @@
     }
     .tab-btn.active { background:#fff; color:var(--ink); box-shadow:0 2px 8px rgba(0,0,0,.1); }
 
-    h1 { font-family:'Baloo 2',cursive; font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+    h1 { font-family:'Baloo 2',sans-serif; font-size:1.8rem; font-weight:900; margin-bottom:6px; }
     .auth-sub { color:var(--muted); font-size:.95rem; margin-bottom:28px; }
 
     .form-group { margin-bottom:18px; }
@@ -261,26 +263,7 @@
 
 <!-- FIREBASE SDK -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged }
-    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc }
-    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-  // 🔧 SUBSTITUA com suas credenciais Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyCe-c-p0N0fUF5gSGHDDaVHv9IqWPKuAyQ",
-  authDomain: "rotinafelizac.firebaseapp.com",
-  projectId: "rotinafelizac",
-  storageBucket: "rotinafelizac.firebasestorage.app",
-  messagingSenderId: "571656067722",
-  appId: "1:571656067722:web:1c2d43f11a372ce8edeb73",
-  measurementId: "G-8Z6JPRG7H7"
-};
-
-  const app  = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db   = getFirestore(app);
+  import { auth, db, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, doc, setDoc } from '../js/firebase.js';
 
   // Redireciona se já logado
   onAuthStateChanged(auth, user => {
