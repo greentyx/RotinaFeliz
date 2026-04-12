@@ -418,9 +418,16 @@ import { auth, db,
 import { uploadImage, resizeImage } from "../js/cloudinary.js";
 
 let currentUser = null;
+let currentPlan  = 'free';
 let routinesMap  = {};
 let currentRoutineId = null;
 let editingRoutineId = null;
+
+// Limites por plano
+const PLAN_LIMITS = {
+  free:    { routines: 1, tasks: 5, historyDays: 7,        uploadImage: false },
+  familia: { routines: Infinity, tasks: Infinity, historyDays: 30, uploadImage: true  }
+};
 
 // ── AUTH GUARD ──────────────────────────────────────────────
 onAuthStateChanged(auth, async user => {
@@ -431,6 +438,7 @@ onAuthStateChanged(auth, async user => {
     const data = userDoc.exists() ? userDoc.data() : {};
     const name = data.name || user.email.split('@')[0];
     const plan = data.plan || 'free';
+    currentPlan = plan;
     document.getElementById('sidebarName').textContent  = name;
     document.getElementById('sidebarPlan').textContent  = plan === 'familia' ? 'plano Família' : 'plano Gratuito';
     // foto na sidebar
@@ -526,6 +534,16 @@ window.openCreateRoutineModal = () => {
 window.createRoutine = async () => {
   const name = document.getElementById('newRoutineName').value.trim();
   if (!name) { toast('⚠️ Informe o nome da rotina'); return; }
+
+  // Verificar limite do plano
+  const limit = PLAN_LIMITS[currentPlan]?.routines ?? 1;
+  const totalRotinas = Object.keys(routinesMap).length;
+  if (totalRotinas >= limit) {
+    closeModalById('modalCreateRoutine');
+    toast('🔒 Seu plano gratuito permite apenas 1 rotina. Assine o Plano Família para criar rotinas ilimitadas!');
+    return;
+  }
+
   const btn = document.querySelector('#modalCreateRoutine .btn-primary');
   btn.disabled = true; btn.textContent = 'Criando...';
   try {
@@ -652,8 +670,21 @@ function getTaskEmoji(title) {
 window.openAddTaskModal = () => {
   document.getElementById('newTaskTitle').value='';
   document.getElementById('imgPreview').style.display='none';
-  document.getElementById('imgUploadText').textContent='🖼️ Clique para escolher uma foto';
   document.getElementById('taskImageInput').value='';
+
+  const canUpload = PLAN_LIMITS[currentPlan]?.uploadImage;
+  const uploadLabel = document.querySelector('label[for="taskImageInput"]') ||
+                      document.getElementById('taskImageInput')?.parentElement;
+
+  if (canUpload) {
+    document.getElementById('imgUploadText').textContent='🖼️ Clique para escolher uma foto';
+    if (uploadLabel) { uploadLabel.style.opacity='1'; uploadLabel.style.pointerEvents='auto'; }
+    document.getElementById('taskImageInput').disabled = false;
+  } else {
+    document.getElementById('imgUploadText').textContent='🔒 Upload disponível no Plano Família';
+    if (uploadLabel) { uploadLabel.style.opacity='0.5'; uploadLabel.style.pointerEvents='none'; }
+    document.getElementById('taskImageInput').disabled = true;
+  }
   openModalById('modalAddTask');
 };
 
@@ -673,6 +704,15 @@ window.addTask = async () => {
   const title = document.getElementById('newTaskTitle').value.trim();
   if (!title) { toast('⚠️ Informe o nome da tarefa'); return; }
 
+  // Verificar limite de tarefas do plano
+  const taskLimit = PLAN_LIMITS[currentPlan]?.tasks ?? 5;
+  const tSnapCheck = await getDocs(query(collection(db,'tasks'),where('routineId','==',currentRoutineId)));
+  if (tSnapCheck.size >= taskLimit) {
+    closeModalById('modalAddTask');
+    toast('🔒 Seu plano gratuito permite até 5 tarefas por rotina. Assine o Plano Família para tarefas ilimitadas!');
+    return;
+  }
+
   document.getElementById('btnAddTask').disabled=true;
   document.getElementById('btnAddTask').textContent='Salvando...';
 
@@ -682,6 +722,13 @@ window.addTask = async () => {
     let imageUrl = '';
     const file = document.getElementById('taskImageInput').files[0];
     if (file) {
+      if (!PLAN_LIMITS[currentPlan]?.uploadImage) {
+        closeModalById('modalAddTask');
+        toast('🔒 Upload de imagens é exclusivo do Plano Família. Faça upgrade para usar essa função!');
+        document.getElementById('btnAddTask').disabled=false;
+        document.getElementById('btnAddTask').textContent='Adicionar';
+        return;
+      }
       document.getElementById('btnAddTask').textContent = 'Enviando imagem...';
       const resized = await resizeImage(file, 512);
       imageUrl = await uploadImage(resized, 'rotina-feliz/tasks', `task_${currentUser.uid}_${Date.now()}`);
@@ -718,14 +765,22 @@ async function loadDashboard() {
   document.getElementById('dTasks').textContent    = todayTasks;
   document.getElementById('statPoints').textContent = todayPts;
 
-  // All-time: collect points + active dates for streak
+  // Histórico limitado por plano (free = 7 dias, familia = 30 dias)
+  const historyDays = PLAN_LIMITS[currentPlan]?.historyDays ?? 7;
+  const historyLimit = new Date();
+  historyLimit.setDate(historyLimit.getDate() - historyDays);
+  const historyLimitStr = historyLimit.toISOString().slice(0,10);
+
   const allSnap = await getDocs(query(collection(db,'progress'),
     where('userId','==',currentUser.uid), where('completed','==',true)));
   let total = 0;
   const activeDates = new Set();
   allSnap.docs.forEach(d => {
+    const date = d.data().date || '';
+    // Pontuação total sempre conta tudo (independente do plano)
     total += d.data().points || 0;
-    if (d.data().date) activeDates.add(d.data().date);
+    // Histórico de datas limitado pelo plano
+    if (date && date >= historyLimitStr) activeDates.add(date);
   });
   document.getElementById('dTotal').textContent = total;
 
@@ -822,8 +877,9 @@ async function renderWeekChart() {
 // ── STREAK CALENDAR (14-day dot grid) ───────────────────────
 function renderStreakCalendar(activeDates) {
   const container = document.getElementById('streakCalendar');
+  const calDays = PLAN_LIMITS[currentPlan]?.historyDays ?? 7;
   const dots = [];
-  for (let i = 13; i >= 0; i--) {
+  for (let i = calDays - 1; i >= 0; i--) {
     const d  = new Date(); d.setDate(d.getDate()-i);
     const ds = d.toISOString().slice(0,10);
     const active  = activeDates.has(ds);
