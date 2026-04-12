@@ -358,7 +358,7 @@
     <h2>📋 Nova Rotina</h2>
     <div class="form-group">
       <label class="form-label">Nome da rotina</label>
-      <input class="form-input" id="newRoutineName" placeholder="Ex: Rotina da Manhã" />
+      <input class="form-input" id="newRoutineName" placeholder="Ex: Rotina da Manhã" maxlength="100" />
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModalById('modalCreateRoutine')">Cancelar</button>
@@ -373,7 +373,7 @@
     <h2>✅ Nova Tarefa</h2>
     <div class="form-group">
       <label class="form-label">Nome da tarefa</label>
-      <input class="form-input" id="newTaskTitle" placeholder="Ex: Escovar os dentes" />
+      <input class="form-input" id="newTaskTitle" placeholder="Ex: Escovar os dentes" maxlength="200" />
     </div>
     <div class="form-group">
       <label class="form-label">Imagem (opcional)</label>
@@ -396,7 +396,7 @@
     <h2>✏️ Editar Rotina</h2>
     <div class="form-group">
       <label class="form-label">Nome da rotina</label>
-      <input class="form-input" id="editRoutineName" />
+      <input class="form-input" id="editRoutineName" maxlength="100" />
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModalById('modalEditRoutine')">Cancelar</button>
@@ -416,6 +416,7 @@ import { auth, db,
          query, where, orderBy, onSnapshot, getDoc, getDocs, setDoc }
   from "../js/firebase.js";
 import { uploadImage, resizeImage } from "../js/cloudinary.js";
+import { sanitizeHtml, hasInjection } from "../js/security.js";
 
 let currentUser = null;
 let currentPlan  = 'free';
@@ -515,11 +516,11 @@ function renderRoutines(routines) {
     <div class="routine-card" onclick="openRoutine('${r.id}')">
       <div class="routine-card-header">📋</div>
       <div class="routine-card-body">
-        <div class="routine-card-name">${r.name}</div>
+        <div class="routine-card-name">${sanitizeHtml(r.title || '')}</div>
         <div class="routine-meta">${new Date(r.createdAt).toLocaleDateString('pt-BR')}</div>
         <div class="routine-card-actions" onclick="event.stopPropagation()">
           <button class="btn btn-ghost btn-sm" onclick="openEditRoutine('${r.id}')">✏️ Editar</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteRoutine('${r.id}','${r.name}')">🗑️ Excluir</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteRoutine('${r.id}','${sanitizeHtml(r.title || '')}')">🗑️ Excluir</button>
         </div>
       </div>
     </div>
@@ -534,6 +535,7 @@ window.openCreateRoutineModal = () => {
 window.createRoutine = async () => {
   const name = document.getElementById('newRoutineName').value.trim();
   if (!name) { toast('⚠️ Informe o nome da rotina'); return; }
+  if (hasInjection(name)) { toast('⚠️ Nome inválido. Remova caracteres especiais.'); return; }
 
   // Verificar limite do plano
   const limit = PLAN_LIMITS[currentPlan]?.routines ?? 1;
@@ -549,7 +551,7 @@ window.createRoutine = async () => {
   try {
     console.log('[createRoutine] userId:', currentUser.uid, '| name:', name);
     await addDoc(collection(db,'routines'),{
-      userId: currentUser.uid, name, createdAt: new Date().toISOString()
+      userId: currentUser.uid, title: name, createdAt: new Date().toISOString()
     });
     console.log('[createRoutine] ✅ sucesso');
     closeModalById('modalCreateRoutine');
@@ -593,14 +595,14 @@ window.showPermissionError = showPermissionError;
 
 window.openEditRoutine = (id) => {
   editingRoutineId = id;
-  document.getElementById('editRoutineName').value = routinesMap[id]?.name || '';
+  document.getElementById('editRoutineName').value = routinesMap[id]?.title || '';
   openModalById('modalEditRoutine');
 };
 
 window.saveEditRoutine = async () => {
   const name = document.getElementById('editRoutineName').value.trim();
   if (!name) { toast('⚠️ Informe o nome'); return; }
-  await updateDoc(doc(db,'routines',editingRoutineId),{name});
+  await updateDoc(doc(db,'routines',editingRoutineId),{title: name});
   closeModalById('modalEditRoutine');
   toast('✅ Rotina atualizada!');
 };
@@ -616,7 +618,7 @@ window.deleteRoutine = async (id, name) => {
 // ── TASKS ───────────────────────────────────────────────────
 window.openRoutine = (routineId) => {
   currentRoutineId = routineId;
-  document.getElementById('taskRoutineName').textContent = routinesMap[routineId]?.name || 'Rotina';
+  document.getElementById('taskRoutineName').textContent = routinesMap[routineId]?.title || 'Rotina';
   showPage('tasks');
   loadTasks(routineId);
 };
@@ -641,10 +643,10 @@ function renderTasks(tasks) {
     <div class="task-row">
       <div style="color:var(--muted);font-weight:800;font-size:.9rem;min-width:28px">#${i+1}</div>
       <div class="task-img">
-        ${t.imageUrl ? `<img src="${t.imageUrl}" alt="${t.title}"/>` : `<span>${getTaskEmoji(t.title)}</span>`}
+        ${t.imageUrl ? `<img src="${t.imageUrl}" alt="${sanitizeHtml(t.title || '')}"/>` : `<span>${getTaskEmoji(t.title)}</span>`}
       </div>
       <div class="task-info">
-        <div class="task-title">${t.title}</div>
+        <div class="task-title">${sanitizeHtml(t.title || '')}</div>
         <div class="task-order">Ordem: ${t.order+1}</div>
       </div>
       <div class="task-actions">
@@ -703,6 +705,7 @@ window.previewImage = (input) => {
 window.addTask = async () => {
   const title = document.getElementById('newTaskTitle').value.trim();
   if (!title) { toast('⚠️ Informe o nome da tarefa'); return; }
+  if (hasInjection(title)) { toast('⚠️ Nome inválido. Remova caracteres especiais.'); return; }
 
   // Verificar limite de tarefas do plano
   const taskLimit = PLAN_LIMITS[currentPlan]?.tasks ?? 5;
