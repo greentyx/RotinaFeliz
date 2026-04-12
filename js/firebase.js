@@ -1,14 +1,23 @@
 /**
  * firebase.js — Configuração centralizada do Firebase
- * 
+ *
+ * 🔒 SEGURANÇA:
+ * As chaves abaixo são públicas por natureza em aplicações web Firebase.
+ * A proteção real vem de duas fontes:
+ *   1. Regras do Firestore — só usuários autenticados acessam os dados
+ *   2. Restrição de domínio na API Key — configure em:
+ *      console.cloud.google.com → APIs & Services → Credentials → sua chave
+ *      Em "Application restrictions" selecione "HTTP referrers (websites)"
+ *      e adicione apenas: https://rotina-feliz.vercel.app/*
+ *
  * ⚠️  COMO USAR:
  * 1. Acesse https://console.firebase.google.com
  * 2. Configurações do projeto → Seus aplicativos → Web (</>)
  * 3. Copie o objeto firebaseConfig e substitua abaixo
- * 
+ *
  * Este arquivo é importado como módulo ES em todas as páginas.
  * Exemplo de uso numa página HTML:
- * 
+ *
  *   <script type="module">
  *     import { auth, db, storage } from './js/firebase.js';
  *     // use auth, db, storage normalmente
