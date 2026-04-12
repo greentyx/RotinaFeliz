@@ -331,7 +331,7 @@
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Nome completo</label>
-          <input class="form-input" id="fieldName" type="text" placeholder="Seu nome" />
+          <input class="form-input" id="fieldName" type="text" placeholder="Seu nome" maxlength="80" />
         </div>
         <div class="form-group">
           <label class="form-label">Email</label>
@@ -433,6 +433,7 @@ import { auth, db, storage,
          doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, deleteDoc }
   from "../js/firebase.js";
 import { uploadImage, resizeImage } from "../js/cloudinary.js";
+import { sanitizeHtml, hasInjection } from "../js/security.js";
 
 
 let currentUser = null;
@@ -461,16 +462,41 @@ onAuthStateChanged(auth, async user => {
   try {
     const userDoc = await getDoc(doc(db, 'users', user.uid));
     const data = userDoc.exists() ? userDoc.data() : {};
-    const name = data.name || emailName;
-    const plan = data.plan || 'free';
-    const photoURL = data.photoURL || null;
+    const name         = data.name || emailName;
+    const plan         = data.plan || 'free';
+    const photoURL     = data.photoURL || null;
+    const paymentFailed = data.paymentFailed || false;
     fillProfile(name, user.email, plan, photoURL);
+    if (paymentFailed) showPaymentFailedBanner();
   } catch(e) {
     console.warn('Firestore indisponível, usando dados do auth:', e.message);
   }
 
   loadStats(user.uid);
 });
+
+function showPaymentFailedBanner() {
+  if (document.getElementById('paymentFailedBanner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'paymentFailedBanner';
+  banner.innerHTML = `
+    <span style="font-size:1.1rem">⚠️</span>
+    <div>
+      <strong>Pagamento não processado</strong><br/>
+      <span style="font-size:.9rem;opacity:.9">Atualize seu cartão no Stripe para continuar com o Plano Família.</span>
+    </div>
+    <button onclick="this.parentElement.remove()" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;padding:0 4px;opacity:.8">✕</button>
+  `;
+  Object.assign(banner.style, {
+    position: 'fixed', top: '0', left: '0', right: '0',
+    background: '#E24B4A', color: '#fff',
+    padding: '14px 20px',
+    display: 'flex', alignItems: 'center', gap: '14px',
+    fontFamily: "'Nunito', sans-serif", fontSize: '1rem',
+    zIndex: '9999', boxShadow: '0 2px 12px rgba(0,0,0,.2)',
+  });
+  document.body.prepend(banner);
+}
 
 function fillProfile(name, email, plan, photoURL) {
   const isFamilia = plan === 'familia';
