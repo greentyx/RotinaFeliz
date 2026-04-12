@@ -7,8 +7,8 @@
 //   • Offline page → exibida quando HTML não está em cache e rede está fora
 // ─────────────────────────────────────────────────────────────
 
-const CACHE_NAME    = 'rotinafeliz-v1';
-const OFFLINE_URL   = '/404.html';
+const CACHE_NAME    = 'rotinafeliz-v2';
+const OFFLINE_URL   = '/offline.html';
 
 // Assets estáticos que sempre ficam em cache
 const PRECACHE_ASSETS = [
@@ -28,6 +28,7 @@ const PRECACHE_ASSETS = [
   '/assets/icon-512x512.png',
   '/manifest.json',
   '/404.html',
+  '/offline.html',
 ];
 
 // Domínios que NUNCA devem ser cacheados (dados dinâmicos / autenticação)
