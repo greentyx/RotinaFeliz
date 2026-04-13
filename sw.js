@@ -7,7 +7,7 @@
 //   • Offline page → exibida quando HTML não está em cache e rede está fora
 // ─────────────────────────────────────────────────────────────
 
-const CACHE_NAME    = 'rotinafeliz-v2';
+const CACHE_NAME    = 'rotinafeliz-v3';
 const OFFLINE_URL   = '/offline.html';
 
 // Assets estáticos que sempre ficam em cache
@@ -43,6 +43,8 @@ const BYPASS_DOMAINS = [
   'cloudinary.com',
   'px-cloud.net',
   'px-cdn.net',
+  'gstatic.com',
+  'firebaseinstallations.googleapis.com',
 ];
 
 function shouldBypass(url) {
