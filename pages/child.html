@@ -9,6 +9,10 @@
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@600;700;800;900&display=swap" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet"/>
   <link rel="shortcut icon" href="assets/rf.png" type="image/x-icon">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/twemoji.min.js" crossorigin="anonymous"></script>
+  <style>
+    img.emoji { height:1.3em; width:1.3em; vertical-align:-0.2em; display:inline-block; }
+  </style>
   <style>
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
     :root {
@@ -613,6 +617,10 @@ function getEmoji(title) {
   // Aplicar tema salvo antes do render para evitar flash
   const t = localStorage.getItem('rf-theme');
   if (t) { document.documentElement.setAttribute('data-theme', t); }
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() { twemoji.parse(document.body, { folder: "svg", ext: ".svg" }); });
 </script>
 </body>
 </html>
