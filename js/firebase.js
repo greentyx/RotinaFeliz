@@ -31,7 +31,9 @@ import { getAuth,
          updatePassword,
          deleteUser,
          createUserWithEmailAndPassword,
-         signInWithEmailAndPassword }
+         signInWithEmailAndPassword,
+         GoogleAuthProvider,
+         signInWithPopup }
                                 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore,
          collection, doc,
@@ -61,7 +63,8 @@ export const storage = getStorage(app);
 
 // Re-export Auth helpers
 export { onAuthStateChanged, signOut, updatePassword, deleteUser,
-         createUserWithEmailAndPassword, signInWithEmailAndPassword };
+         createUserWithEmailAndPassword, signInWithEmailAndPassword,
+         GoogleAuthProvider, signInWithPopup };
 
 // Re-export Firestore helpers
 export { collection, doc, addDoc, setDoc, getDoc, getDocs, updateDoc, deleteDoc,
