@@ -122,6 +122,16 @@
     }
     .btn-submit:hover { background:#3d7fcb; transform:translateY(-1px); box-shadow:0 8px 24px rgba(74,144,217,.3); }
     .btn-submit:disabled { background:#c5d8f0; cursor:not-allowed; transform:none; box-shadow:none; }
+    .btn-google {
+      width:100%; padding:14px; border-radius:12px;
+      border:2px solid #e4e0f0; background:#fff;
+      font-family:'Nunito',sans-serif; font-weight:800; font-size:1rem;
+      cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;
+      transition:all .2s; margin-bottom:16px; color:#1E1B2E;
+    }
+    .btn-google:hover { border-color:#4A90D9; background:#f5f9ff; }
+    .divider { display:flex; align-items:center; gap:12px; margin-bottom:20px; color:#9992b0; font-size:.85rem; font-weight:700; }
+    .divider::before, .divider::after { content:''; flex:1; height:1px; background:#e4e0f0; }
 
     .divider { display:flex; align-items:center; gap:12px; margin:20px 0; }
     .divider::before, .divider::after { content:''; flex:1; height:1px; background:#e4e0f0; }
@@ -146,6 +156,31 @@
       margin-top:16px; line-height:1.6;
     }
     .terms a { color:var(--blue); font-weight:700; text-decoration:none; }
+  
+    /* ── MODO ESCURO ────────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg: #12101E; --white: #1E1B2E; --ink: #F0EEF8;
+      --muted: #9992B8; --blue-lt: #1A2A3D; --card: #1E1B2E;
+    }
+    [data-theme="dark"] body { background: var(--bg); color: var(--ink); }
+    [data-theme="dark"] .sidebar,
+    [data-theme="dark"] .topbar,
+    [data-theme="dark"] .stat-card,
+    [data-theme="dark"] .routine-card,
+    [data-theme="dark"] .task-row,
+    [data-theme="dark"] .modal { background: var(--white); border-color: #2E2B3E; }
+    [data-theme="dark"] .form-input { background: #12101E; color: var(--ink); border-color: #3A3560; }
+    [data-theme="dark"] .btn-ghost { background: #2A2740; color: var(--ink); }
+    .dark-toggle {
+      position:fixed; bottom:24px; left:24px; z-index:100;
+      width:42px; height:42px; border-radius:50%;
+      background:var(--white); border:2px solid #EDE9FA;
+      font-size:1.2rem; cursor:pointer;
+      box-shadow:0 4px 16px rgba(0,0,0,.12);
+      display:flex; align-items:center; justify-content:center;
+      transition:transform .2s;
+    }
+    .dark-toggle:hover { transform:scale(1.1); }
   </style>
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
@@ -212,6 +247,11 @@
         <div class="field-error" id="loginPassErr">Mínimo 6 caracteres</div>
       </div>
 
+      <button class="btn-google" id="btnGoogleLogin" onclick="doGoogleLogin()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Entrar com Google
+      </button>
+      <div class="divider">ou entre com email</div>
       <button class="btn-submit" id="btnLogin" onclick="doLogin()">
         <span>Entrar na minha conta</span>
         <div class="spinner" id="spinLogin"></div>
@@ -252,6 +292,11 @@
         <div class="field-error" id="regPassErr">Mínimo 6 caracteres</div>
       </div>
 
+      <button class="btn-google" id="btnGoogleReg" onclick="doGoogleLogin()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Cadastrar com Google
+      </button>
+      <div class="divider">ou crie com email</div>
       <button class="btn-submit" id="btnReg" onclick="doRegister()">
         <span>Criar conta grátis</span>
         <div class="spinner" id="spinReg"></div>
@@ -263,7 +308,34 @@
 
 <!-- FIREBASE SDK -->
 <script type="module">
-  import { auth, db, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, doc, setDoc } from '../js/firebase.js';
+  import { auth, db, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, doc, setDoc, getDoc } from '../js/firebase.js';
+
+  const googleProvider = new GoogleAuthProvider();
+
+  window.doGoogleLogin = async function() {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user   = result.user;
+      // Cria documento do usuário se for a primeira vez
+      const userRef  = doc(db, 'users', user.uid);
+      const userSnap = await getDoc(userRef);
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          uid: user.uid,
+          email: user.email,
+          name: user.displayName || user.email.split('@')[0],
+          photoURL: user.photoURL || null,
+          role: 'parent',
+          createdAt: new Date().toISOString()
+        });
+      }
+      redirectTo('app.html');
+    } catch(e) {
+      if (e.code !== 'auth/popup-closed-by-user') {
+        showError('Erro ao entrar com Google. Tente novamente.');
+      }
+    }
+  };
 
   // Redireciona se já logado
   onAuthStateChanged(auth, user => {
@@ -377,6 +449,28 @@
 
   // Pré-selecionar tab via URL
   if (window.location.search.includes('tab=register')) switchTab('register');
+</script>
+
+<button class="dark-toggle" id="darkToggle" title="Alternar modo escuro" onclick="toggleDark()">🌙</button>
+<script>
+  (function(){
+    const saved = localStorage.getItem('rf-theme');
+    if (saved) { document.documentElement.setAttribute('data-theme', saved); document.getElementById('darkToggle') && updateDarkBtn(saved); }
+  })();
+  function toggleDark() {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('rf-theme', next);
+    updateDarkBtn(next);
+  }
+  function updateDarkBtn(theme) {
+    const btn = document.getElementById('darkToggle');
+    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+  // Aplicar tema salvo antes do render para evitar flash
+  const t = localStorage.getItem('rf-theme');
+  if (t) { document.documentElement.setAttribute('data-theme', t); }
 </script>
 </body>
 </html>
