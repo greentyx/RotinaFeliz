@@ -240,7 +240,96 @@
       .hero-stat { border-right:none; border-bottom:1.5px solid rgba(255,255,255,.15); }
       .plan-card { flex-wrap:wrap; }
     }
-  </style>
+
+    /* ── NOVO SIDEBAR ────────────────────────────────────── */
+    .sidebar {
+      width: 280px; flex-shrink: 0;
+      background: var(--white); border-right: 1.5px solid #ede9f8;
+      display: flex; flex-direction: column;
+      padding: 28px 20px; position: fixed; top: 0; left: 0; bottom: 0;
+      z-index: 50; transition: transform .3s; gap: 16px;
+    }
+    .sidebar-logo {
+      font-family: 'Baloo 2', sans-serif; font-size: 1.45rem; font-weight: 900;
+      color: var(--blue); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+      padding-bottom: 20px; border-bottom: 1.5px solid #ede9f8;
+    }
+
+    /* Bloco do usuário */
+    .sb-user-block {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; background: var(--bg);
+      border-radius: 16px;
+    }
+    .sb-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--blue); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 1.1rem; flex-shrink: 0;
+      overflow: hidden;
+    }
+    .sb-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .sb-user-name { font-weight: 800; font-size: .92rem; line-height: 1.3; }
+    .sb-user-plan { font-size: .76rem; color: var(--muted); margin-top: 2px; }
+
+    /* Card de menu */
+    .sb-menu-card {
+      background: var(--bg); border-radius: 18px;
+      padding: 8px; display: flex; flex-direction: column; gap: 2px;
+      border: 1.5px solid #ede9f8;
+    }
+    .sb-menu-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 12px;
+      font-weight: 700; font-size: .93rem; color: var(--ink);
+      text-decoration: none; cursor: pointer;
+      transition: all .15s; border: none; background: none;
+      width: 100%; text-align: left;
+    }
+    .sb-menu-item:hover { background: var(--white); }
+    .sb-menu-item.active {
+      background: var(--white);
+      font-weight: 800;
+      box-shadow: 0 2px 12px rgba(74,144,217,.10);
+    }
+    .sb-menu-icon { font-size: 1rem; width: 22px; text-align: center; flex-shrink: 0; }
+
+    /* Botão sair */
+    .sb-bottom { margin-top: auto; }
+    .sb-logout {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; border-radius: 12px;
+      font-weight: 700; font-size: .9rem; color: var(--error);
+      background: none; border: 1.5px solid #fcd4d4; cursor: pointer;
+      width: 100%; transition: background .15s;
+    }
+    .sb-logout:hover { background: #fff5f5; }
+
+    /* Main agora começa em 280px */
+    .main { margin-left: 280px; flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+    @media(max-width:768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+    }
+  
+    /* ── MODO ESCURO ────────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg: #12101E; --white: #1E1B2E; --ink: #F0EEF8;
+      --muted: #9992B8; --blue-lt: #1A2A3D; --card: #1E1B2E;
+    }
+    [data-theme="dark"] body { background: var(--bg); color: var(--ink); }
+    [data-theme="dark"] .sidebar,
+    [data-theme="dark"] .topbar,
+    [data-theme="dark"] .stat-card,
+    [data-theme="dark"] .routine-card,
+    [data-theme="dark"] .task-row,
+    [data-theme="dark"] .modal { background: var(--white); border-color: #2E2B3E; }
+    [data-theme="dark"] .form-input { background: #12101E; color: var(--ink); border-color: #3A3560; }
+    [data-theme="dark"] .btn-ghost { background: #2A2740; color: var(--ink); }
+    </style>
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#4A90D9" />
@@ -256,22 +345,45 @@
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <a href="../index.html" class="sidebar-logo">⭐ RotinaFeliz</a>
-  <div class="nav-section">
-    <div class="nav-label">Menu</div>
-    <a href="app.html" class="nav-item"><span class="nav-icon">📋</span> Minhas Rotinas</a>
-    <a href="app.html" class="nav-item"><span class="nav-icon">📊</span> Progresso</a>
-    <a href="child.html" class="nav-item" style="color:var(--green)"><span class="nav-icon">🧒</span> Modo Criança</a>
-    <a href="profile.html" class="nav-item active"><span class="nav-icon">👤</span> Meu Perfil</a>
-  </div>
-  <div class="sidebar-footer">
-    <div class="user-card">
-      <div class="user-avatar" id="sidebarAvatar">?</div>
-      <div>
-        <div class="user-name" id="sidebarName">Carregando...</div>
-        <div class="user-email" id="sidebarPlan" style="color:var(--muted);font-size:.75rem"></div>
-      </div>
+
+  <!-- Avatar + nome -->
+  <div class="sb-user-block">
+    <div class="sb-avatar" id="sidebarAvatar">?</div>
+    <div class="sb-user-info">
+      <div class="sb-user-name" id="sidebarName">Carregando...</div>
+      <div class="sb-user-plan" id="sidebarPlan"></div>
     </div>
-    <button class="btn-logout" onclick="doLogout()">🚪 Sair da conta</button>
+  </div>
+
+  <!-- Menu card -->
+  <div class="sb-menu-card">
+    <a href="profile.html" class="sb-menu-item active">
+      <span class="sb-menu-icon">👤</span>
+      <span>Meu Perfil</span>
+    </a>
+    <a href="app.html" class="sb-menu-item">
+      <span class="sb-menu-icon">📋</span>
+      <span>Minhas Rotinas</span>
+    </a>
+    <a href="app.html#dashboard" class="sb-menu-item">
+      <span class="sb-menu-icon">📊</span>
+      <span>Progresso</span>
+    </a>
+    <a href="child.html" class="sb-menu-item" style="color:var(--green)">
+      <span class="sb-menu-icon">🧒</span>
+      <span>Modo Criança</span>
+    </a>
+    <button class="sb-menu-item" onclick="toggleDark()" id="themeItem">
+      <span class="sb-menu-icon" id="themeIcon">🌙</span>
+      <span id="themeLabel">Modo escuro</span>
+    </button>
+  </div>
+
+  <!-- Sair -->
+  <div class="sb-bottom">
+    <button class="sb-logout" onclick="doLogout()">
+      <span>↪</span> Sair da conta
+    </button>
   </div>
 </aside>
 
@@ -322,6 +434,19 @@
         <div class="plan-desc" id="planCardDesc">Crie rotinas e acompanhe o progresso da sua criança.</div>
       </div>
       <button id="planCardBtn" onclick="openPaymentModal()" class="plan-cta" style="display:none">⭐ Assinar Plano Família</button>
+        <!-- Relatório semanal -->
+        <div id="weeklyReportSection" style="display:none;margin-top:16px;padding-top:16px;border-top:1.5px solid #EDE9FA">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div>
+              <div style="font-weight:800;font-size:.95rem">📊 Relatório semanal por email</div>
+              <div style="font-size:.82rem;color:var(--muted);margin-top:2px">Receba um resumo do progresso toda segunda-feira</div>
+            </div>
+            <label style="position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0">
+              <input type="checkbox" id="weeklyReportToggle" onchange="toggleWeeklyReport(this.checked)" style="opacity:0;width:0;height:0">
+              <span id="toggleSlider" style="position:absolute;cursor:pointer;inset:0;background:#ccc;border-radius:24px;transition:.3s"></span>
+            </label>
+          </div>
+        </div>
     </div>
 
     <!-- EDIT PROFILE -->
@@ -465,9 +590,16 @@ onAuthStateChanged(auth, async user => {
     const name         = data.name || emailName;
     const plan         = data.plan || 'free';
     const photoURL     = data.photoURL || null;
-    const paymentFailed = data.paymentFailed || false;
+    const paymentFailed  = data.paymentFailed || false;
+    const weeklyReport   = data.weeklyReport || false;
     fillProfile(name, user.email, plan, photoURL);
     if (paymentFailed) showPaymentFailedBanner();
+    if (plan === 'familia') {
+      const sec = document.getElementById('weeklyReportSection');
+      if (sec) sec.style.display = 'block';
+      const tog = document.getElementById('weeklyReportToggle');
+      if (tog) { tog.checked = weeklyReport; const sl = document.getElementById('toggleSlider'); if(sl) sl.style.background = weeklyReport ? 'var(--green)' : '#ccc'; }
+    }
   } catch(e) {
     console.warn('Firestore indisponível, usando dados do auth:', e.message);
   }
@@ -475,6 +607,17 @@ onAuthStateChanged(auth, async user => {
   loadStats(user.uid);
 });
 
+
+window.toggleWeeklyReport = async function(enabled) {
+  const slider = document.getElementById('toggleSlider');
+  if (slider) slider.style.background = enabled ? 'var(--green)' : '#ccc';
+  try {
+    await setDoc(doc(db,'users',currentUser.uid), { weeklyReport: enabled }, { merge: true });
+    toast(enabled ? '📊 Relatório semanal ativado!' : '📊 Relatório semanal desativado.');
+  } catch(e) {
+    toast('❌ Erro ao salvar preferência.');
+  }
+};
 function showPaymentFailedBanner() {
   if (document.getElementById('paymentFailedBanner')) return;
   const banner = document.createElement('div');
@@ -503,14 +646,15 @@ function fillProfile(name, email, plan, photoURL) {
 
   // Sidebar
   document.getElementById('sidebarName').textContent   = name;
-  document.getElementById('sidebarPlan').textContent   = isFamilia ? 'plano Família' : 'plano Gratuito';
+  document.getElementById('sidebarPlan').textContent   = isFamilia ? '⭐ Plano Família' : 'Plano Gratuito';
+  document.getElementById('sidebarPlan').style.color   = isFamilia ? 'var(--yellow)' : 'var(--muted)';
 
   // Avatar — foto ou inicial
   const avatarEl       = document.getElementById('profileAvatar');
   const sidebarAvatarEl = document.getElementById('sidebarAvatar');
   if (photoURL) {
     avatarEl.innerHTML = `<img src="${photoURL}" alt="${name}"/>`;
-    sidebarAvatarEl.innerHTML = `<img src="${photoURL}" alt="${name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;
+    sidebarAvatarEl.innerHTML = `<img src="${photoURL}" alt="${name}"/>`;
   } else {
     avatarEl.innerHTML        = name[0].toUpperCase();
     sidebarAvatarEl.textContent = name[0].toUpperCase();
@@ -705,6 +849,28 @@ window.processPayment = () => {
   }
 })();
 
+</script>
+
+<script>
+  (function(){
+    const saved = localStorage.getItem('rf-theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  })();
+  function toggleDark() {
+    const cur  = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('rf-theme', next);
+    updateDarkBtn(next);
+  }
+  function updateDarkBtn(theme) {
+    const icon  = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+    if (icon)  icon.textContent  = theme === 'dark' ? '☀️' : '🌙';
+    if (label) label.textContent = theme === 'dark' ? 'Modo claro' : 'Modo escuro';
+  }
+  const t = localStorage.getItem('rf-theme');
+  if (t) { updateDarkBtn(t); }
 </script>
 </body>
 </html>
