@@ -82,12 +82,7 @@
     }
     .sb-logout:hover { background: #fff5f5; }
 
-    /* ── SVG icon alignment ─────────────────────────────── */
-    .sb-menu-icon svg, .sb-menu-icon { display:flex; align-items:center; justify-content:center; }
-    .stat-emoji svg { display:block; }
     .stat-emoji { display:flex; align-items:center; justify-content:center; margin-bottom:4px; }
-    .empty-emoji svg { display:block; margin:0 auto; }
-    .nav-icon svg { display:block; }
 
     /* ── MAIN ─────────────────────────────────────────────── */
     .main { margin-left: 280px; flex:1; display:flex; flex-direction:column; min-height:100vh; }
@@ -279,13 +274,12 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="RotinaFeliz" />
   <link rel="apple-touch-icon" href="/assets/icon-192x192.png" />
-  <script src="/js/pwa.js" defer></script>
 </head>
 <body>
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
-  <a href="../index.html" class="sidebar-logo"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> RotinaFeliz</a>
+  <a href="../index.html" class="sidebar-logo">⭐ RotinaFeliz</a>
 
   <!-- Avatar + nome -->
   <div class="sb-user-block">
@@ -299,23 +293,23 @@
   <!-- Menu card -->
   <div class="sb-menu-card">
     <a href="profile.html" class="sb-menu-item">
-      <span class="sb-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
+      <span class="sb-menu-icon">👤</span>
       <span>Meu Perfil</span>
     </a>
     <button class="sb-menu-item active" id="navRotinas" onclick="showPage('routines')">
-      <span class="sb-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>
+      <span class="sb-menu-icon">📋</span>
       <span>Minhas Rotinas</span>
     </button>
     <button class="sb-menu-item" id="navDash" onclick="showPage('dashboard')">
-      <span class="sb-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 4-6"/></svg></span>
+      <span class="sb-menu-icon">📊</span>
       <span>Progresso</span>
     </button>
     <a href="child.html" class="sb-menu-item" style="color:var(--green)">
-      <span class="sb-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M8 14c-2.5 1-4 3-4 5h16c0-2-1.5-4-4-5"/><path d="M9 21v-2m6 2v-2"/></svg></span>
+      <span class="sb-menu-icon">🧒</span>
       <span>Modo Criança</span>
     </a>
     <button class="sb-menu-item" onclick="toggleDark()" id="themeItem">
-      <span class="sb-menu-icon" id="themeIcon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+      <span class="sb-menu-icon" id="themeIcon">🌙</span>
       <span id="themeLabel">Modo escuro</span>
     </button>
   </div>
@@ -323,7 +317,7 @@
   <!-- Sair -->
   <div class="sb-bottom">
     <button class="sb-logout" onclick="doLogout()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Sair da conta
+      🚪 Sair da conta
     </button>
   </div>
 </aside>
@@ -343,9 +337,9 @@
 
     <!-- Stats -->
     <div class="stats-row" id="routineStats" style="display:none">
-      <div class="stat-card"><div class="stat-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></div><div class="stat-value" id="statRoutines">0</div><div class="stat-label">Rotinas criadas</div></div>
-      <div class="stat-card"><div class="stat-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="stat-value" id="statTasks">0</div><div class="stat-label">Total de tarefas</div></div>
-      <div class="stat-card"><div class="stat-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="stat-value" id="statPoints">0</div><div class="stat-label">Pontos hoje</div></div>
+      <div class="stat-card"><div class="stat-emoji">📋</div><div class="stat-value" id="statRoutines">0</div><div class="stat-label">Rotinas criadas</div></div>
+      <div class="stat-card"><div class="stat-emoji">✅</div><div class="stat-value" id="statTasks">0</div><div class="stat-label">Total de tarefas</div></div>
+      <div class="stat-card"><div class="stat-emoji">⭐</div><div class="stat-value" id="statPoints">0</div><div class="stat-label">Pontos hoje</div></div>
     </div>
 
     <!-- Routines list -->
@@ -367,7 +361,7 @@
   <div class="page" id="pageTasks" style="padding:32px">
     <!-- Cabeçalho visível só na impressão -->
     <div class="print-header">
-      <span style="line-height:1;display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      <span style="line-height:1;font-size:3rem">⭐</span>
       <div>
         <h2 id="printRoutineName">Rotina</h2>
         <p id="printRoutineDate"></p>
@@ -378,7 +372,7 @@
       <h2 style="font-family:'Baloo 2',sans-serif;font-weight:900" id="taskRoutineName">Rotina</h2>
     </div>
     <div style="margin-bottom:16px;display:flex;justify-content:flex-end;gap:8px">
-      <button class="btn btn-ghost btn-sm" id="btnPrintRoutine" onclick="printRoutine()" style="display:none"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Imprimir</button>
+      <button class="btn btn-ghost btn-sm" id="btnPrintRoutine" onclick="printRoutine()" style="display:none">🖨️ Imprimir</button>
       <button class="btn btn-primary btn-sm" onclick="openAddTaskModal()">+ Adicionar Tarefa</button>
     </div>
     <div class="tasks-list" id="tasksList"></div>
@@ -389,10 +383,10 @@
 
     <!-- Top stats row -->
     <div class="stats-row">
-      <div class="stat-card"><div class="stat-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="stat-value" id="dToday">0</div><div class="stat-label">Pontos hoje</div></div>
-      <div class="stat-card"><div class="stat-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="stat-value" id="dTasks">0</div><div class="stat-label">Tarefas hoje</div></div>
-      <div class="stat-card"><div class="stat-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg></div><div class="stat-value" id="dTotal">0</div><div class="stat-label">Total de pontos</div></div>
-      <div class="stat-card" id="streakCard"><div class="stat-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg></div><div class="stat-value" id="dStreak">0</div><div class="stat-label">Dias seguidos</div></div>
+      <div class="stat-card"><div class="stat-emoji">⭐</div><div class="stat-value" id="dToday">0</div><div class="stat-label">Pontos hoje</div></div>
+      <div class="stat-card"><div class="stat-emoji">✅</div><div class="stat-value" id="dTasks">0</div><div class="stat-label">Tarefas hoje</div></div>
+      <div class="stat-card"><div class="stat-emoji">🏆</div><div class="stat-value" id="dTotal">0</div><div class="stat-label">Total de pontos</div></div>
+      <div class="stat-card" id="streakCard"><div class="stat-emoji">🔥</div><div class="stat-value" id="dStreak">0</div><div class="stat-label">Dias seguidos</div></div>
     </div>
 
     <!-- Week evolution chart -->
@@ -411,7 +405,7 @@
 
       <!-- Streak card -->
       <div style="background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)">
-        <div style="font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:900;margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg> Sequência de dias</div>
+        <div style="font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:900;margin-bottom:16px">🔥 Sequência de dias</div>
         <div id="streakCalendar" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px"></div>
         <div style="font-size:.82rem;color:var(--muted)">
           <span id="streakBest" style="font-weight:800;color:var(--ink)">0</span> dias — melhor sequência
@@ -420,7 +414,7 @@
 
       <!-- Achievements card -->
       <div style="background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)">
-        <div style="font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:900;margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"/><path d="M11 12 5.12 2.2"/><path d="m13 12 5.88-9.8"/><path d="M8 7h8"/><circle cx="12" cy="17" r="5"/><path d="M12 18v-2h-.5"/></svg> Conquistas</div>
+        <div style="font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:900;margin-bottom:16px">🏆 Conquistas</div>
         <div id="achievementsList" style="display:flex;flex-direction:column;gap:8px"></div>
       </div>
     </div>
@@ -1054,13 +1048,13 @@ function renderStreakCalendar(activeDates) {
 
 // ── ACHIEVEMENTS ─────────────────────────────────────────────
 const ACHIEVEMENTS = [
-  { emoji:'', label:'Primeira conquista!', desc:'Acumulou os primeiros 10 pontos',    check: d => d.total >= 10    },
-  { emoji:'', label:'100 pontos!',          desc:'Acumulou 100 pontos no total',        check: d => d.total >= 100   },
-  { emoji:'', label:'500 pontos!',          desc:'Acumulou 500 pontos no total',        check: d => d.total >= 500   },
-  { emoji:'', label:'3 dias seguidos',      desc:'Sequência de 3 dias consecutivos',    check: d => d.best >= 3      },
-  { emoji:'', label:'Semana perfeita!',     desc:'7 dias em sequência — incrível!',     check: d => d.best >= 7      },
-  { emoji:'', label:'Super dia!',           desc:'Completou 5+ tarefas em um dia',      check: d => d.todayTasks >= 5},
-  { emoji:'', label:'Semana crescente',     desc:'Progresso maior que o início da semana',
+  { emoji:'⭐', label:'Primeira conquista!', desc:'Acumulou os primeiros 10 pontos',    check: d => d.total >= 10    },
+  { emoji:'💯', label:'100 pontos!',          desc:'Acumulou 100 pontos no total',        check: d => d.total >= 100   },
+  { emoji:'🌟', label:'500 pontos!',          desc:'Acumulou 500 pontos no total',        check: d => d.total >= 500   },
+  { emoji:'🔥', label:'3 dias seguidos',      desc:'Sequência de 3 dias consecutivos',    check: d => d.best >= 3      },
+  { emoji:'🏆', label:'Semana perfeita!',     desc:'7 dias em sequência — incrível!',     check: d => d.best >= 7      },
+  { emoji:'🎯', label:'Super dia!',           desc:'Completou 5+ tarefas em um dia',      check: d => d.todayTasks >= 5},
+  { emoji:'📈', label:'Semana crescente',     desc:'Progresso maior que o início da semana',
     check: d => d.weekData && d.weekData.slice(4).reduce((s,x)=>s+x.pts,0) > d.weekData.slice(0,3).reduce((s,x)=>s+x.pts,0) },
 ];
 
@@ -1083,7 +1077,7 @@ function renderAchievements(data) {
 function renderTodayProgress(items, taskTitles={}) {
   const el = document.getElementById('todayProgress');
   if (!items.length) {
-    el.innerHTML = '<div class="empty"><div class="empty-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div><h3>Nenhuma tarefa hoje ainda</h3><p>Ative o Modo Criança para começar!</p></div>';
+    el.innerHTML = '<div class="empty"><div class="empty-emoji">😊</div><h3>Nenhuma tarefa hoje ainda</h3><p>Ative o Modo Criança para começar!</p></div>';
     return;
   }
   el.innerHTML = items.map(item => {
@@ -1159,7 +1153,7 @@ window.toast = toast;
   function updateDarkBtn(theme) {
     const icon  = document.getElementById('themeIcon');
     const label = document.getElementById('themeLabel');
-    if (icon)  icon.innerHTML  = theme === 'dark' ? '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    if (icon)  icon.textContent = theme === 'dark' ? '☀️' : '🌙';
     if (label) label.textContent = theme === 'dark' ? 'Modo claro' : 'Modo escuro';
   }
   const t = localStorage.getItem('rf-theme');
