@@ -57,20 +57,47 @@
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 60px;
-      background: rgba(247,245,255,.92);
-      backdrop-filter: blur(14px);
+      padding: 14px 60px;
+      background: rgba(247,245,255,.95);
+      backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(74,144,217,.1);
+      transition: background .3s;
     }
     .nav-logo {
       font-family: 'Baloo 2', sans-serif;
-      font-size: 1.6rem; font-weight: 900;
+      font-size: 1.55rem; font-weight: 900;
       color: var(--blue); text-decoration: none;
       display: flex; align-items: center; gap: 8px;
     }
-    .nav-links { display: flex; align-items: center; gap: 32px; }
-    .nav-links a { font-weight: 700; font-size: .95rem; color: var(--muted); text-decoration: none; transition: color .2s; }
-    .nav-links a:hover { color: var(--blue); }
+    .nav-center { display: flex; align-items: center; gap: 28px; }
+    .nav-center a { font-weight: 700; font-size: .9rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .nav-center a:hover { color: var(--blue); }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+    /* Theme toggle in nav */
+    .nav-theme-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1.5px solid rgba(74,144,217,.2);
+      background: var(--blue-lt); color: var(--blue);
+      font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+    }
+    .nav-theme-btn:hover { background: var(--blue); color: #fff; transform: scale(1.08); }
+
+    /* Logged-in user area */
+    .nav-user { display: none; align-items: center; gap: 10px; }
+    .nav-user.visible { display: flex; }
+    .nav-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--blue); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: .9rem; overflow: hidden;
+      border: 2px solid var(--blue-lt); flex-shrink: 0;
+    }
+    .nav-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .nav-guest { display: flex; align-items: center; gap: 10px; }
+    .nav-guest.hidden { display: none; }
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
       gap: 8px; padding: 12px 28px;
@@ -282,6 +309,36 @@
       .hero-cta { flex-direction: column; align-items: center; }
       .footer-inner { grid-template-columns: 1fr; gap: 28px; }
     }
+  
+    /* ── MODO ESCURO ────────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg: #12101E; --white: #1E1B2E; --ink: #F0EEF8;
+      --muted: #9992B8; --blue-lt: #1A2A3D; --card: #1E1B2E;
+    }
+    [data-theme="dark"] body { background: var(--bg); color: var(--ink); }
+    [data-theme="dark"] nav {
+      background: rgba(18,16,30,.95);
+      border-bottom-color: rgba(74,144,217,.15);
+    }
+    [data-theme="dark"] .feature-card,
+    [data-theme="dark"] .pricing-card,
+    [data-theme="dark"] .testi-card,
+    [data-theme="dark"] .faq-item,
+    [data-theme="dark"] .hero-mockup { background: var(--white); border-color: #2E2B3E; }
+    [data-theme="dark"] .how-bg { background: #1A1728; }
+    [data-theme="dark"] .mock-card { background: #12101E; }
+    [data-theme="dark"] .mock-done { background: #0e2a1a; }
+    [data-theme="dark"] footer {
+      background: #0D0B18;
+      color: rgba(255,255,255,.45);
+    }
+    [data-theme="dark"] .footer-logo { color: #fff; }
+    [data-theme="dark"] .footer-col h4 { color: rgba(255,255,255,.9); }
+    [data-theme="dark"] .footer-col ul li a { color: rgba(255,255,255,.45); }
+    [data-theme="dark"] .footer-bottom { border-top-color: rgba(255,255,255,.08); }
+    [data-theme="dark"] .faq-question { color: var(--ink); }
+    [data-theme="dark"] .faq-question:hover { background: #1A2A3D; }
+    [data-theme="dark"] .testi-bg { background: linear-gradient(135deg, #1A2A3D 0%, #0e2a1a 100%); }
   </style>
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
@@ -292,19 +349,36 @@
   <meta name="apple-mobile-web-app-title" content="RotinaFeliz" />
   <link rel="apple-touch-icon" href="/assets/icon-192x192.png" />
   <script src="/js/pwa.js" defer></script>
+  <script>(function(){ const t=localStorage.getItem('rf-theme'); if(t) document.documentElement.setAttribute('data-theme',t); })();</script>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
   <a href="index.html" class="nav-logo">⭐ RotinaFeliz</a>
-  <div class="nav-links">
+
+  <div class="nav-center">
     <a href="#funcionalidades">Funcionalidades</a>
     <a href="#como-funciona">Como Funciona</a>
     <a href="#precos">Preços</a>
     <a href="#faq">FAQ</a>
-    <a href="pages/login.html" class="btn btn-outline" style="padding:10px 22px">Entrar</a>
-    <a href="pages/login.html?tab=register" class="btn btn-primary" style="padding:10px 22px">Começar Grátis</a>
+  </div>
+
+  <div class="nav-actions">
+    <!-- Botão de tema integrado ao nav -->
+    <button class="nav-theme-btn" onclick="toggleDark()" id="navThemeBtn" title="Alternar tema">🌙</button>
+
+    <!-- Visitante não logado -->
+    <div class="nav-guest" id="navGuest">
+      <a href="pages/login.html" class="btn btn-outline" style="padding:9px 20px;font-size:.88rem">Entrar</a>
+      <a href="pages/login.html?tab=register" class="btn btn-primary" style="padding:9px 20px;font-size:.88rem">Começar Grátis</a>
+    </div>
+
+    <!-- Usuário logado -->
+    <div class="nav-user" id="navUser">
+      <div class="nav-avatar" id="navAvatar">?</div>
+      <a href="pages/app.html" class="btn btn-primary" style="padding:9px 20px;font-size:.88rem">Acessar Dashboard</a>
+    </div>
   </div>
 </nav>
 
@@ -524,7 +598,7 @@
     <div class="faq-list">
       <div class="faq-item">
         <button class="faq-question" onclick="toggleFaq(this)">
-          O Rotina Feliz funciona para qualquer criança com TEA?
+          O RotinaFeliz funciona para qualquer criança com TEA?
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer">
@@ -537,7 +611,7 @@
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer">
-          <p>Não! O RotinaFeliz é 100% web, funciona direto no navegador de qualquer dispositivo: celular, tablet ou computador. Basta acessar o site e fazer login. Nenhum download necessário.</p>
+          <p>Não! O RotinaFeliz é 100% web — funciona direto no navegador de qualquer dispositivo: celular, tablet ou computador. Basta acessar o site e fazer login. Nenhum download necessário.</p>
         </div>
       </div>
       <div class="faq-item">
@@ -555,7 +629,7 @@
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer">
-          <p>A gamificação é suave e positiva, cada tarefa concluída gera pontos, sem penalidades por tarefas não feitas. Não há cronômetro nem pressão. O objetivo é celebrar o que foi realizado, não criar ansiedade pelo que ficou pendente.</p>
+          <p>A gamificação é suave e positiva — cada tarefa concluída gera pontos, sem penalidades por tarefas não feitas. Não há cronômetro nem pressão. O objetivo é celebrar o que foi realizado, não criar ansiedade pelo que ficou pendente.</p>
         </div>
       </div>
       <div class="faq-item">
@@ -582,8 +656,8 @@
 
 <!-- CTA FINAL -->
 <section class="cta-section">
-  <h2>Comece hoje mesmo, é grátis ✨</h2>
-  <p>Junte-se a centenas de famílias que já estão transformando a rotina dos seus filhos com o Rotina Feliz.</p>
+  <h2>Comece hoje mesmo — é grátis ✨</h2>
+  <p>Junte-se a centenas de famílias que já estão transformando a rotina dos seus filhos com o RotinaFeliz.</p>
   <a href="pages/login.html?tab=register" class="btn btn-white btn-lg">Criar minha conta grátis</a>
 </section>
 
@@ -591,7 +665,7 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
-      <div class="footer-logo">⭐ Rotina Feliz</div>
+      <div class="footer-logo">⭐ RotinaFeliz</div>
       <p>Rotinas visuais interativas para crianças com TEA. Feito com 💙 para famílias especiais.</p>
     </div>
     <div class="footer-col">
@@ -622,7 +696,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 Rotina Feliz · Todos os direitos reservados</span>
+    <span>© 2025 RotinaFeliz · Todos os direitos reservados</span>
     <div class="footer-bottom-links">
       <a href="pages/terms.html">Termos</a>
       <a href="pages/privacy.html">Privacidade</a>
@@ -712,6 +786,57 @@ function openLegalModal(type) {
       btn.classList.add('open');
       answer.classList.add('open');
     }
+  }
+</script>
+
+<script type="module">
+  // ── Tema ──────────────────────────────────────────────────
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const btn = document.getElementById('navThemeBtn');
+    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+  window.toggleDark = function() {
+    const cur  = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('rf-theme', next);
+    applyTheme(next);
+  };
+  const savedTheme = localStorage.getItem('rf-theme');
+  if (savedTheme) applyTheme(savedTheme);
+
+  // ── Auth — detecta se usuário está logado ─────────────────
+  try {
+    const { auth, db, onAuthStateChanged, getDoc, doc } = await import('./js/firebase.js');
+
+    onAuthStateChanged(auth, async (user) => {
+      const guestEl  = document.getElementById('navGuest');
+      const userEl   = document.getElementById('navUser');
+      const avatarEl = document.getElementById('navAvatar');
+
+      if (user) {
+        guestEl.classList.add('hidden');
+        userEl.classList.add('visible');
+        try {
+          const snap = await getDoc(doc(db, 'users', user.uid));
+          const data = snap.exists() ? snap.data() : {};
+          const photo = data.photoURL || user.photoURL;
+          const name  = data.name || user.displayName || user.email;
+          if (photo) {
+            avatarEl.innerHTML = `<img src="${photo}" alt="foto"/>`;
+          } else if (name) {
+            avatarEl.textContent = name[0].toUpperCase();
+          }
+        } catch(_) {
+          if (user.email) avatarEl.textContent = user.email[0].toUpperCase();
+        }
+      } else {
+        guestEl.classList.remove('hidden');
+        userEl.classList.remove('visible');
+      }
+    });
+  } catch(_) {
+    // Firebase não disponível — mostra botões de guest (default)
   }
 </script>
 </body>
