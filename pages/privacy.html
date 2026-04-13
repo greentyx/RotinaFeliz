@@ -111,6 +111,31 @@
       .data-table { font-size:.82rem; }
       .data-table th, .data-table td { padding:8px 10px; }
     }
+  
+    /* ── MODO ESCURO ────────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg: #12101E; --white: #1E1B2E; --ink: #F0EEF8;
+      --muted: #9992B8; --blue-lt: #1A2A3D; --card: #1E1B2E;
+    }
+    [data-theme="dark"] body { background: var(--bg); color: var(--ink); }
+    [data-theme="dark"] .sidebar,
+    [data-theme="dark"] .topbar,
+    [data-theme="dark"] .stat-card,
+    [data-theme="dark"] .routine-card,
+    [data-theme="dark"] .task-row,
+    [data-theme="dark"] .modal { background: var(--white); border-color: #2E2B3E; }
+    [data-theme="dark"] .form-input { background: #12101E; color: var(--ink); border-color: #3A3560; }
+    [data-theme="dark"] .btn-ghost { background: #2A2740; color: var(--ink); }
+    .dark-toggle {
+      position:fixed; bottom:24px; left:24px; z-index:100;
+      width:42px; height:42px; border-radius:50%;
+      background:var(--white); border:2px solid #EDE9FA;
+      font-size:1.2rem; cursor:pointer;
+      box-shadow:0 4px 16px rgba(0,0,0,.12);
+      display:flex; align-items:center; justify-content:center;
+      transition:transform .2s;
+    }
+    .dark-toggle:hover { transform:scale(1.1); }
   </style>
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
@@ -443,5 +468,27 @@
   </footer-note>
 
 </div>
+
+<button class="dark-toggle" id="darkToggle" title="Alternar modo escuro" onclick="toggleDark()">🌙</button>
+<script>
+  (function(){
+    const saved = localStorage.getItem('rf-theme');
+    if (saved) { document.documentElement.setAttribute('data-theme', saved); document.getElementById('darkToggle') && updateDarkBtn(saved); }
+  })();
+  function toggleDark() {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('rf-theme', next);
+    updateDarkBtn(next);
+  }
+  function updateDarkBtn(theme) {
+    const btn = document.getElementById('darkToggle');
+    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+  // Aplicar tema salvo antes do render para evitar flash
+  const t = localStorage.getItem('rf-theme');
+  if (t) { document.documentElement.setAttribute('data-theme', t); }
+</script>
 </body>
 </html>
