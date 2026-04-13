@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrar — RotinaFeliz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="shortcut icon" href="assets/rf.png" type="image/x-icon">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:#4A90D9; --blue-lt:#EAF3FB; --green:#5BB974;
+      --bg:#F7F5FF; --white:#fff; --ink:#1E1B2E; --muted:#6B6880;
+      --error:#E05C5C; --radius:18px;
+    }
+    body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; display:flex; }
+
+    /* ── LEFT PANEL ───────────────────────────────────────── */
+    .left-panel {
+      display:none;
+      width:420px; flex-shrink:0;
+      background:linear-gradient(160deg,#4A90D9 0%,#6B7FD7 100%);
+      padding:60px 48px;
+      flex-direction:column; justify-content:space-between;
+      position:relative; overflow:hidden;
+    }
+    @media(min-width:900px){ .left-panel{display:flex;} }
+    .left-panel::before {
+      content:''; position:absolute; width:360px;height:360px;
+      border-radius:50%; background:rgba(255,255,255,.08);
+      top:-80px; right:-80px;
+    }
+    .left-panel::after {
+      content:''; position:absolute; width:260px;height:260px;
+      border-radius:50%; background:rgba(255,255,255,.06);
+      bottom:-60px; left:-60px;
+    }
+    .panel-logo {
+      font-family:'Baloo 2',sans-serif; font-size:1.7rem; font-weight:900;
+      color:#fff; text-decoration:none; position:relative;z-index:1;
+    }
+    .panel-content { position:relative;z-index:1; }
+    .panel-content h2 {
+      font-family:'Baloo 2',sans-serif; font-size:2rem; font-weight:900;
+      color:#fff; line-height:1.2; margin-bottom:16px;
+    }
+    .panel-content p { color:rgba(255,255,255,.8); line-height:1.7; font-size:1rem; margin-bottom:32px; }
+    .panel-perks { display:flex; flex-direction:column; gap:16px; }
+    .perk {
+      display:flex; align-items:center; gap:14px;
+      background:rgba(255,255,255,.12); border-radius:12px;
+      padding:14px 18px; backdrop-filter:blur(8px);
+    }
+    .perk-icon { font-size:1.4rem; }
+    .perk-text { color:#fff; font-weight:700; font-size:.9rem; }
+    .panel-footer { color:rgba(255,255,255,.5); font-size:.8rem; position:relative;z-index:1; }
+
+    /* ── RIGHT PANEL ──────────────────────────────────────── */
+    .right-panel {
+      flex:1; display:flex; align-items:center; justify-content:center;
+      padding:40px 24px;
+    }
+    .auth-box { width:100%; max-width:440px; }
+    .mobile-logo {
+      display:block; font-family:'Baloo 2',sans-serif;
+      font-size:1.5rem; font-weight:900; color:var(--blue);
+      text-decoration:none; margin-bottom:36px; text-align:center;
+    }
+    @media(min-width:900px){ .mobile-logo{display:none;} }
+
+    .auth-tabs {
+      display:flex; background:#ece9f8; border-radius:14px;
+      padding:5px; margin-bottom:36px; gap:4px;
+    }
+    .tab-btn {
+      flex:1; padding:12px; border:none; border-radius:10px;
+      font-family:'Nunito',sans-serif; font-weight:800; font-size:.95rem;
+      cursor:pointer; transition:all .2s;
+      background:transparent; color:var(--muted);
+    }
+    .tab-btn.active { background:#fff; color:var(--ink); box-shadow:0 2px 8px rgba(0,0,0,.1); }
+
+    h1 { font-family:'Baloo 2',sans-serif; font-size:1.8rem; font-weight:900; margin-bottom:6px; }
+    .auth-sub { color:var(--muted); font-size:.95rem; margin-bottom:28px; }
+
+    .form-group { margin-bottom:18px; }
+    label { display:block; font-weight:700; font-size:.9rem; margin-bottom:7px; color:var(--ink); }
+    .input-wrap { position:relative; }
+    .input-wrap .ico {
+      position:absolute; left:16px; top:50%; transform:translateY(-50%);
+      font-size:1rem; color:var(--muted); pointer-events:none;
+    }
+    input[type=text], input[type=email], input[type=password] {
+      width:100%; padding:14px 16px 14px 44px;
+      border:2px solid #e4e0f0; border-radius:12px;
+      font-family:'Nunito',sans-serif; font-size:1rem;
+      background:#fff; color:var(--ink);
+      transition:border-color .2s, box-shadow .2s;
+      outline:none;
+    }
+    input:focus { border-color:var(--blue); box-shadow:0 0 0 4px rgba(74,144,217,.12); }
+    input.error { border-color:var(--error); }
+    .field-error { color:var(--error); font-size:.8rem; margin-top:5px; font-weight:700; display:none; }
+    .field-error.show { display:block; }
+
+    .toggle-pass {
+      position:absolute; right:14px; top:50%; transform:translateY(-50%);
+      background:none; border:none; cursor:pointer; color:var(--muted);
+      font-size:1.1rem; padding:4px;
+    }
+
+    .btn-submit {
+      width:100%; padding:15px; margin-top:8px;
+      background:var(--blue); color:#fff;
+      border:none; border-radius:12px;
+      font-family:'Nunito',sans-serif; font-weight:800; font-size:1.05rem;
+      cursor:pointer; transition:all .2s;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .btn-submit:hover { background:#3d7fcb; transform:translateY(-1px); box-shadow:0 8px 24px rgba(74,144,217,.3); }
+    .btn-submit:disabled { background:#c5d8f0; cursor:not-allowed; transform:none; box-shadow:none; }
+    .btn-google {
+      width:100%; padding:14px; border-radius:12px;
+      border:2px solid #e4e0f0; background:#fff;
+      font-family:'Nunito',sans-serif; font-weight:800; font-size:1rem;
+      cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;
+      transition:all .2s; margin-bottom:16px; color:#1E1B2E;
+    }
+    .btn-google:hover { border-color:#4A90D9; background:#f5f9ff; }
+    .divider { display:flex; align-items:center; gap:12px; margin-bottom:20px; color:#9992b0; font-size:.85rem; font-weight:700; }
+    .divider::before, .divider::after { content:''; flex:1; height:1px; background:#e4e0f0; }
+
+    .divider { display:flex; align-items:center; gap:12px; margin:20px 0; }
+    .divider::before, .divider::after { content:''; flex:1; height:1px; background:#e4e0f0; }
+    .divider span { color:var(--muted); font-size:.8rem; font-weight:700; }
+
+    .global-error {
+      background:#FEE; border:1.5px solid #f5c0c0; border-radius:10px;
+      padding:12px 16px; color:var(--error); font-weight:700;
+      font-size:.9rem; margin-bottom:20px; display:none;
+    }
+    .global-error.show { display:block; }
+
+    .spinner {
+      width:18px; height:18px; border:2.5px solid rgba(255,255,255,.4);
+      border-top-color:#fff; border-radius:50%;
+      animation:spin .7s linear infinite; display:none;
+    }
+    @keyframes spin { to{transform:rotate(360deg);} }
+
+    .terms {
+      font-size:.8rem; color:var(--muted); text-align:center;
+      margin-top:16px; line-height:1.6;
+    }
+    .terms a { color:var(--blue); font-weight:700; text-decoration:none; }
+  
+    /* ── MODO ESCURO ────────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg: #12101E; --white: #1E1B2E; --ink: #F0EEF8;
+      --muted: #9992B8; --blue-lt: #1A2A3D; --card: #1E1B2E;
+    }
+    [data-theme="dark"] body { background: var(--bg); color: var(--ink); }
+    [data-theme="dark"] .sidebar,
+    [data-theme="dark"] .topbar,
+    [data-theme="dark"] .stat-card,
+    [data-theme="dark"] .routine-card,
+    [data-theme="dark"] .task-row,
+    [data-theme="dark"] .modal { background: var(--white); border-color: #2E2B3E; }
+    [data-theme="dark"] .form-input { background: #12101E; color: var(--ink); border-color: #3A3560; }
+    [data-theme="dark"] .btn-ghost { background: #2A2740; color: var(--ink); }
+    .dark-toggle {
+      position:fixed; bottom:24px; left:24px; z-index:100;
+      width:42px; height:42px; border-radius:50%;
+      background:var(--white); border:2px solid #EDE9FA;
+      font-size:1.2rem; cursor:pointer;
+      box-shadow:0 4px 16px rgba(0,0,0,.12);
+      display:flex; align-items:center; justify-content:center;
+      transition:transform .2s;
+    }
+    .dark-toggle:hover { transform:scale(1.1); }
+  </style>
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#4A90D9" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="RotinaFeliz" />
+  <link rel="apple-touch-icon" href="/assets/icon-192x192.png" />
+  <script src="/js/pwa.js" defer></script>
+</head>
+<body>
+
+<!-- LEFT PANEL -->
+<div class="left-panel">
+  <a href="../index.html" class="panel-logo"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> RotinaFeliz</a>
+  <div class="panel-content">
+    <h2>Transforme a rotina do seu filho</h2>
+    <p>Rotinas visuais interativas que ajudam crianças com TEA a ganhar autonomia e confiança.</p>
+    <div class="panel-perks">
+      <div class="perk"><span class="perk-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span><span class="perk-text">Crie rotinas com imagens personalizadas</span></div>
+      <div class="perk"><span class="perk-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span><span class="perk-text">Gamificação que motiva sem pressionar</span></div>
+      <div class="perk"><span class="perk-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 4-6"/></svg></span><span class="perk-text">Acompanhe o progresso em tempo real</span></div>
+    </div>
+  </div>
+  <div class="panel-footer">© 2025 RotinaFeliz · Feito com <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right-panel">
+  <div class="auth-box">
+    <a href="../index.html" class="mobile-logo"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> RotinaFeliz</a>
+
+    <!-- TABS -->
+    <div class="auth-tabs">
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Entrar</button>
+      <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Criar conta</button>
+    </div>
+
+    <!-- ERRO GLOBAL -->
+    <div class="global-error" id="globalError"></div>
+
+    <!-- ── FORM LOGIN ──────────────────────────────────────── -->
+    <div id="formLogin">
+      <h1>Bem-vindo de volta!</h1>
+      <p class="auth-sub">Entre na sua conta para continuar</p>
+
+      <div class="form-group">
+        <label>Email</label>
+        <div class="input-wrap">
+          <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+          <input type="email" id="loginEmail" placeholder="seu@email.com" />
+        </div>
+        <div class="field-error" id="loginEmailErr">Email inválido</div>
+      </div>
+
+      <div class="form-group">
+        <label>Senha</label>
+        <div class="input-wrap">
+          <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+          <input type="password" id="loginPass" placeholder="••••••••" />
+          <button class="toggle-pass" type="button" onclick="togglePass('loginPass',this)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+        <div class="field-error" id="loginPassErr">Mínimo 6 caracteres</div>
+      </div>
+
+      <button class="btn-google" id="btnGoogleLogin" onclick="doGoogleLogin()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Entrar com Google
+      </button>
+      <div class="divider">ou entre com email</div>
+      <button class="btn-submit" id="btnLogin" onclick="doLogin()">
+        <span>Entrar na minha conta</span>
+        <div class="spinner" id="spinLogin"></div>
+      </button>
+      <p class="terms">Ao entrar você concorda com nossos <a href="#">Termos de Uso</a></p>
+    </div>
+
+    <!-- ── FORM REGISTER ───────────────────────────────────── -->
+    <div id="formRegister" style="display:none">
+      <h1>Criar sua conta</h1>
+      <p class="auth-sub">Comece gratuitamente, sem cartão de crédito</p>
+
+      <div class="form-group">
+        <label>Seu nome</label>
+        <div class="input-wrap">
+          <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
+          <input type="text" id="regName" placeholder="Ex: Ana Paula" />
+        </div>
+        <div class="field-error" id="regNameErr">Informe seu nome</div>
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <div class="input-wrap">
+          <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+          <input type="email" id="regEmail" placeholder="seu@email.com" />
+        </div>
+        <div class="field-error" id="regEmailErr">Email inválido</div>
+      </div>
+
+      <div class="form-group">
+        <label>Senha</label>
+        <div class="input-wrap">
+          <span class="ico"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+          <input type="password" id="regPass" placeholder="Mínimo 6 caracteres" />
+          <button class="toggle-pass" type="button" onclick="togglePass('regPass',this)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+        <div class="field-error" id="regPassErr">Mínimo 6 caracteres</div>
+      </div>
+
+      <button class="btn-google" id="btnGoogleReg" onclick="doGoogleLogin()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Cadastrar com Google
+      </button>
+      <div class="divider">ou crie com email</div>
+      <button class="btn-submit" id="btnReg" onclick="doRegister()">
+        <span>Criar conta grátis</span>
+        <div class="spinner" id="spinReg"></div>
+      </button>
+      <p class="terms">Ao criar conta você concorda com nossos <a href="#">Termos de Uso</a> e <a href="#">Privacidade</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- FIREBASE SDK -->
+<script type="module">
+  import { auth, db, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, doc, setDoc, getDoc } from '../js/firebase.js';
+
+  const googleProvider = new GoogleAuthProvider();
+
+  window.doGoogleLogin = async function() {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user   = result.user;
+      // Cria documento do usuário se for a primeira vez
+      const userRef  = doc(db, 'users', user.uid);
+      const userSnap = await getDoc(userRef);
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          uid: user.uid,
+          email: user.email,
+          name: user.displayName || user.email.split('@')[0],
+          photoURL: user.photoURL || null,
+          role: 'parent',
+          createdAt: new Date().toISOString()
+        });
+      }
+      redirectTo('app.html');
+    } catch(e) {
+      if (e.code !== 'auth/popup-closed-by-user') {
+        showError('Erro ao entrar com Google. Tente novamente.');
+      }
+    }
+  };
+
+  // Redireciona se já logado
+  onAuthStateChanged(auth, user => {
+    if (user) redirectTo('app.html');
+  });
+
+  function redirectTo(url) {
+    document.body.style.transition = 'opacity .35s ease';
+    document.body.style.opacity = '0';
+    setTimeout(() => window.location.href = url, 360);
+  }
+
+  // ── HELPERS ────────────────────────────────────────────
+  function setLoading(btnId, spinId, loading) {
+    const btn  = document.getElementById(btnId);
+    const spin = document.getElementById(spinId);
+    btn.disabled = loading;
+    spin.style.display = loading ? 'block' : 'none';
+  }
+  function showError(msg) {
+    const el = document.getElementById('globalError');
+    el.textContent = msg; el.classList.add('show');
+  }
+  function clearError() {
+    document.getElementById('globalError').classList.remove('show');
+  }
+  function friendlyError(code) {
+    const map = {
+      'auth/user-not-found': 'Usuário não encontrado. Verifique o email.',
+      'auth/wrong-password': 'Senha incorreta. Tente novamente.',
+      'auth/invalid-email': 'Email inválido.',
+      'auth/email-already-in-use': 'Este email já está cadastrado.',
+      'auth/weak-password': 'Senha muito fraca. Use pelo menos 6 caracteres.',
+      'auth/network-request-failed': 'Erro de conexão. Verifique sua internet.',
+      'auth/invalid-credential': 'Email ou senha incorretos.',
+    };
+    return map[code] || 'Ocorreu um erro. Tente novamente.';
+  }
+
+  // ── LOGIN ──────────────────────────────────────────────
+  window.doLogin = async function() {
+    clearError();
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass  = document.getElementById('loginPass').value;
+    let valid = true;
+    if (!email.includes('@')) { document.getElementById('loginEmailErr').classList.add('show'); valid=false; } else { document.getElementById('loginEmailErr').classList.remove('show'); }
+    if (pass.length < 6) { document.getElementById('loginPassErr').classList.add('show'); valid=false; } else { document.getElementById('loginPassErr').classList.remove('show'); }
+    if (!valid) return;
+
+    setLoading('btnLogin','spinLogin',true);
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      redirectTo('app.html');
+    } catch(e) {
+      showError(friendlyError(e.code));
+    } finally {
+      setLoading('btnLogin','spinLogin',false);
+    }
+  };
+
+  // ── REGISTER ───────────────────────────────────────────
+  window.doRegister = async function() {
+    clearError();
+    const name  = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass  = document.getElementById('regPass').value;
+    let valid = true;
+    if (!name) { document.getElementById('regNameErr').classList.add('show'); valid=false; } else { document.getElementById('regNameErr').classList.remove('show'); }
+    if (!email.includes('@')) { document.getElementById('regEmailErr').classList.add('show'); valid=false; } else { document.getElementById('regEmailErr').classList.remove('show'); }
+    if (pass.length<6) { document.getElementById('regPassErr').classList.add('show'); valid=false; } else { document.getElementById('regPassErr').classList.remove('show'); }
+    if (!valid) return;
+
+    setLoading('btnReg','spinReg',true);
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      await setDoc(doc(db,'users',cred.user.uid),{
+        uid: cred.user.uid, email, name, role:'parent',
+        createdAt: new Date().toISOString()
+      });
+      window.location.href = 'app.html';
+    } catch(e) {
+      showError(friendlyError(e.code));
+    } finally {
+      setLoading('btnReg','spinReg',false);
+    }
+  };
+</script>
+
+<script>
+  function switchTab(tab) {
+    document.getElementById('formLogin').style.display    = tab==='login'    ? 'block' : 'none';
+    document.getElementById('formRegister').style.display = tab==='register' ? 'block' : 'none';
+    document.getElementById('tab-login').classList.toggle('active', tab==='login');
+    document.getElementById('tab-register').classList.toggle('active', tab==='register');
+    document.getElementById('globalError').classList.remove('show');
+  }
+
+  function togglePass(id, btn) {
+    const input = document.getElementById(id);
+    if (input.type==='password') { input.type='text'; btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'; }
+    else { input.type='password'; btn.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'; }
+  }
+
+  // Enter key submit
+  document.addEventListener('keydown', e => {
+    if (e.key!=='Enter') return;
+    const loginVisible = document.getElementById('formLogin').style.display!=='none';
+    if (loginVisible) window.doLogin();
+    else window.doRegister();
+  });
+
+  // Pré-selecionar tab via URL
+  if (window.location.search.includes('tab=register')) switchTab('register');
+</script>
+
+<button class="dark-toggle" id="darkToggle" title="Alternar modo escuro" onclick="toggleDark()">🌙</button>
+<script>
+  (function(){
+    const saved = localStorage.getItem('rf-theme');
+    if (saved) { document.documentElement.setAttribute('data-theme', saved); document.getElementById('darkToggle') && updateDarkBtn(saved); }
+  })();
+  function toggleDark() {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('rf-theme', next);
+    updateDarkBtn(next);
+  }
+  function updateDarkBtn(theme) {
+    const btn = document.getElementById('darkToggle');
+    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+  // Aplicar tema salvo antes do render para evitar flash
+  const t = localStorage.getItem('rf-theme');
+  if (t) { document.documentElement.setAttribute('data-theme', t); }
+</script>
+</body>
+</html>

@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>RotinaFeliz — Painel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="shortcut icon" href="assets/rf.png" type="image/x-icon">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:#4A90D9; --blue-lt:#EAF3FB; --green:#5BB974; --green-lt:#E8F7EC;
+      --yellow:#F7C948; --peach:#F4956A; --bg:#F7F5FF; --white:#fff;
+      --ink:#1E1B2E; --muted:#6B6880; --error:#E05C5C;
+      --sidebar:260px; --radius:16px;
+      --shadow:0 4px 20px rgba(74,144,217,.1);
+    }
+    body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--ink); display:flex; min-height:100vh; }
+
+    /* ── SIDEBAR ─────────────────────────────────────────── */
+    .sidebar {
+      width: 280px; flex-shrink: 0;
+      background: var(--white); border-right: 1.5px solid #ede9f8;
+      display: flex; flex-direction: column;
+      padding: 28px 20px; position: fixed; top: 0; left: 0; bottom: 0;
+      z-index: 50; transition: transform .3s; gap: 16px;
+    }
+    .sidebar-logo {
+      font-family: 'Baloo 2', sans-serif; font-size: 1.45rem; font-weight: 900;
+      color: var(--blue); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+      padding-bottom: 20px; border-bottom: 1.5px solid #ede9f8;
+    }
+    /* Bloco do usuário */
+    .sb-user-block {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; background: var(--bg);
+      border-radius: 16px;
+    }
+    .sb-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--blue); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 1.1rem; flex-shrink: 0;
+      overflow: hidden;
+    }
+    .sb-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .sb-user-name { font-weight: 800; font-size: .92rem; line-height: 1.3; }
+    .sb-user-plan { font-size: .76rem; color: var(--muted); margin-top: 2px; }
+    /* Card de menu */
+    .sb-menu-card {
+      background: var(--bg); border-radius: 18px;
+      padding: 8px; display: flex; flex-direction: column; gap: 2px;
+      border: 1.5px solid #ede9f8;
+    }
+    .sb-menu-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 12px;
+      font-weight: 700; font-size: .93rem; color: var(--ink);
+      text-decoration: none; cursor: pointer;
+      transition: all .15s; border: none; background: none;
+      width: 100%; text-align: left;
+    }
+    .sb-menu-item:hover { background: var(--white); }
+    .sb-menu-item.active {
+      background: var(--white);
+      font-weight: 800;
+      box-shadow: 0 2px 12px rgba(74,144,217,.10);
+    }
+    .sb-menu-icon { font-size: 1rem; width: 22px; text-align: center; flex-shrink: 0; }
+    /* Botão sair */
+    .sb-bottom { margin-top: auto; }
+    .sb-logout {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; border-radius: 12px;
+      font-weight: 700; font-size: .9rem; color: var(--error);
+      background: none; border: 1.5px solid #fcd4d4; cursor: pointer;
+      width: 100%; transition: background .15s;
+    }
+    .sb-logout:hover { background: #fff5f5; }
+
+    /* ── SVG icon alignment ─────────────────────────────── */
+    .sb-menu-icon svg, .sb-menu-icon { display:flex; align-items:center; justify-content:center; }
+    .stat-emoji svg { display:block; }
+    .stat-emoji { display:flex; align-items:center; justify-content:center; margin-bottom:4px; }
+    .empty-emoji svg { display:block; margin:0 auto; }
+    .nav-icon svg { display:block; }
+
+    /* ── MAIN ─────────────────────────────────────────────── */
+    .main { margin-left: 280px; flex:1; display:flex; flex-direction:column; min-height:100vh; }
+    .topbar {
+      background:var(--white); border-bottom:1.5px solid #EDE9FA;
+      padding:16px 32px; display:flex; align-items:center;
+      justify-content:space-between; position:sticky; top:0; z-index:40;
+    }
+    .topbar h1 { font-family:'Baloo 2',sans-serif; font-size:1.4rem; font-weight:900; }
+    .topbar-actions { display:flex; gap:10px; align-items:center; }
+    .btn { display:inline-flex; align-items:center; gap:7px; padding:10px 22px; border-radius:50px; font-family:'Nunito',sans-serif; font-weight:800; font-size:.9rem; cursor:pointer; border:none; transition:all .18s; text-decoration:none; }
+    .btn-primary { background:var(--blue); color:#fff; box-shadow:0 4px 16px rgba(74,144,217,.3); }
+    .btn-primary:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(74,144,217,.35); }
+    .btn-green  { background:var(--green); color:#fff; box-shadow:0 4px 16px rgba(91,185,116,.3); }
+    .btn-green:hover { transform:translateY(-1px); }
+    .btn-outline { background:transparent; color:var(--blue); border:2px solid var(--blue); }
+    .btn-ghost  { background:#f0edf9; color:var(--ink); }
+    .btn-ghost:hover { background:#e4dff5; }
+    .btn-danger { background:#FEE; color:var(--error); }
+    .btn-danger:hover { background:#fdd; }
+    .btn-sm { padding:7px 16px; font-size:.82rem; }
+
+    /* ── PAGE CONTENT ─────────────────────────────────────── */
+    .page { display:none; padding:32px; flex:1; }
+    .page.active { display:block; }
+
+    /* ── STATS ROW ─────────────────────────────────────────── */
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:28px; }
+    .stat-card {
+      background:var(--white); border-radius:var(--radius);
+      padding:22px 24px; box-shadow:var(--shadow);
+      display:flex; flex-direction:column; gap:6px;
+    }
+    .stat-emoji { font-size:1.8rem; }
+    .stat-value { font-family:'Baloo 2',sans-serif; font-size:2rem; font-weight:900; }
+    .stat-label { font-size:.82rem; font-weight:700; color:var(--muted); }
+
+    /* ── ROUTINES GRID ─────────────────────────────────────── */
+    .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+    .section-header h2 { font-family:'Baloo 2',sans-serif; font-size:1.3rem; font-weight:900; }
+    .routines-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
+    .routine-card {
+      background:var(--white); border-radius:var(--radius);
+      box-shadow:var(--shadow); overflow:hidden;
+      transition:transform .2s, box-shadow .2s;
+      cursor:pointer; border:2px solid transparent;
+    }
+    .routine-card:hover { transform:translateY(-4px); box-shadow:0 12px 36px rgba(74,144,217,.16); border-color:var(--blue-lt); }
+    .routine-card-header {
+      height:80px; background:linear-gradient(135deg,var(--blue) 0%,#6B7FD7 100%);
+      display:flex; align-items:center; justify-content:center; font-size:2.2rem;
+    }
+    .routine-card-body { padding:20px; }
+    .routine-card-name { font-family:'Baloo 2',sans-serif; font-size:1.1rem; font-weight:900; margin-bottom:6px; }
+    .routine-meta { font-size:.82rem; color:var(--muted); margin-bottom:14px; }
+    .routine-card-actions { display:flex; gap:8px; }
+
+    /* ── TASK TABLE ────────────────────────────────────────── */
+    .tasks-header { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+    .back-btn { background:none; border:none; color:var(--blue); font-weight:800; cursor:pointer; font-size:.95rem; display:flex; align-items:center; gap:4px; }
+    .tasks-list { display:flex; flex-direction:column; gap:12px; }
+    .task-row {
+      background:var(--white); border-radius:var(--radius); padding:16px 20px;
+      box-shadow:var(--shadow); display:flex; align-items:center; gap:16px;
+      transition:box-shadow .2s;
+    }
+    .task-row:hover { box-shadow:0 8px 28px rgba(74,144,217,.14); }
+    .task-img {
+      width:56px; height:56px; border-radius:12px; object-fit:cover;
+      background:var(--bg); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.8rem;
+    }
+    .task-img img { width:100%; height:100%; border-radius:12px; object-fit:cover; }
+    .task-info { flex:1; }
+    .task-title { font-weight:800; font-size:1rem; }
+    .task-order { font-size:.8rem; color:var(--muted); }
+    .task-actions { display:flex; gap:8px; flex-shrink:0; }
+
+    /* ── EMPTY STATE ───────────────────────────────────────── */
+    .empty { text-align:center; padding:64px 24px; color:var(--muted); }
+    .empty-emoji { font-size:4rem; margin-bottom:16px; }
+    .empty h3 { font-family:'Baloo 2',sans-serif; font-size:1.4rem; font-weight:900; color:var(--ink); margin-bottom:8px; }
+    .empty p { font-size:.95rem; line-height:1.6; max-width:360px; margin:0 auto 24px; }
+
+    /* ── MODAL ─────────────────────────────────────────────── */
+    .overlay {
+      display:none; position:fixed; inset:0;
+      background:rgba(30,27,46,.5); z-index:200;
+      align-items:center; justify-content:center; padding:24px;
+    }
+    .overlay.open { display:flex; animation:fadeIn .2s ease; }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .modal {
+      background:var(--white); border-radius:24px;
+      padding:36px; max-width:480px; width:100%;
+      animation:slideUp .25s ease; max-height:90vh; overflow-y:auto;
+    }
+    @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .modal h2 { font-family:'Baloo 2',sans-serif; font-size:1.5rem; font-weight:900; margin-bottom:20px; }
+    .form-group { margin-bottom:18px; }
+    .form-label { display:block; font-weight:700; font-size:.88rem; margin-bottom:7px; }
+    .form-input {
+      width:100%; padding:13px 16px; border:2px solid #e4e0f0; border-radius:12px;
+      font-family:'Nunito',sans-serif; font-size:.95rem; background:var(--white);
+      color:var(--ink); outline:none; transition:border-color .2s;
+    }
+    .form-input:focus { border-color:var(--blue); }
+    .modal-actions { display:flex; gap:10px; margin-top:24px; }
+    .modal-actions .btn { flex:1; justify-content:center; padding:12px; }
+
+    /* image preview */
+    .img-upload-label {
+      display:flex; flex-direction:column; align-items:center; gap:10px;
+      border:2.5px dashed #c5d8f0; border-radius:14px; padding:24px;
+      cursor:pointer; transition:border-color .2s; background:var(--bg);
+    }
+    .img-upload-label:hover { border-color:var(--blue); }
+    .img-upload-label span { font-weight:700; color:var(--muted); font-size:.9rem; }
+    #imgPreview { width:100%; max-height:140px; object-fit:cover; border-radius:10px; display:none; }
+
+    .badge {
+      display:inline-block; padding:4px 12px; border-radius:50px;
+      font-size:.75rem; font-weight:800;
+    }
+    .badge-blue { background:var(--blue-lt); color:var(--blue); }
+
+    /* ── TOAST ─────────────────────────────────────────────── */
+    .toast {
+      position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px);
+      background:var(--ink); color:#fff; padding:12px 24px; border-radius:50px;
+      font-weight:700; font-size:.95rem; z-index:500;
+      transition:transform .3s; white-space:nowrap;
+      display:flex; align-items:center; gap:8px;
+    }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+
+    @media(max-width:768px) {
+      .sidebar { transform:translateX(-100%); }
+      .sidebar.open { transform:translateX(0); }
+      .main { margin-left:0; }
+    }
+  
+    /* ── MODO ESCURO ────────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg: #12101E; --white: #1E1B2E; --ink: #F0EEF8;
+      --muted: #9992B8; --blue-lt: #1A2A3D; --card: #1E1B2E;
+    }
+    [data-theme="dark"] body { background: var(--bg); color: var(--ink); }
+    [data-theme="dark"] .sidebar,
+    [data-theme="dark"] .topbar,
+    [data-theme="dark"] .stat-card,
+    [data-theme="dark"] .routine-card,
+    [data-theme="dark"] .task-row,
+    [data-theme="dark"] .modal { background: var(--white); border-color: #2E2B3E; }
+    [data-theme="dark"] .form-input { background: #12101E; color: var(--ink); border-color: #3A3560; }
+    [data-theme="dark"] .btn-ghost { background: #2A2740; color: var(--ink); }
+    .dark-toggle { display:none !important; }
+  
+    .days-selector { display:flex; gap:6px; flex-wrap:wrap; margin-top:4px; }
+    .day-pill {
+      padding:6px 12px; border-radius:50px; font-size:.78rem; font-weight:800;
+      border:2px solid #e4e0f0; background:var(--white); cursor:pointer;
+      transition:all .15s; user-select:none;
+    }
+    .day-pill.selected { background:var(--blue); color:#fff; border-color:var(--blue); }
+  
+    @media print {
+      .sidebar, .topbar, .dark-toggle, .toast, .routine-card-actions,
+      .tasks-header button, #topbarActionBtn, .back-btn { display:none !important; }
+      .main { margin-left:0 !important; }
+      body { background:#fff !important; }
+      .page { display:block !important; padding:0 !important; }
+      .print-header { display:flex !important; }
+      .task-row { box-shadow:none !important; border:1px solid #eee !important; break-inside:avoid; }
+      .task-img { background:#f5f5f5 !important; }
+    }
+    .print-header {
+      display:none; align-items:center; gap:12px;
+      margin-bottom:24px; padding-bottom:16px;
+      border-bottom:2px solid var(--blue);
+    }
+    .print-header h2 { font-family:'Baloo 2',sans-serif; font-size:1.6rem; font-weight:900; }
+    .print-header p { font-size:.9rem; color:var(--muted); }
+  </style>
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#4A90D9" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="RotinaFeliz" />
+  <link rel="apple-touch-icon" href="/assets/icon-192x192.png" />
+  <script src="/js/pwa.js" defer></script>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <a href="../index.html" class="sidebar-logo"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> RotinaFeliz</a>
+
+  <!-- Avatar + nome -->
+  <div class="sb-user-block">
+    <div class="sb-avatar" id="sidebarAvatar">?</div>
+    <div class="sb-user-info">
+      <div class="sb-user-name" id="sidebarName">Carregando...</div>
+      <div class="sb-user-plan" id="sidebarPlan"></div>
+    </div>
+  </div>
+
+  <!-- Menu card -->
+  <div class="sb-menu-card">
+    <a href="profile.html" class="sb-menu-item">
+      <span class="sb-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
+      <span>Meu Perfil</span>
+    </a>
+    <button class="sb-menu-item active" id="navRotinas" onclick="showPage('routines')">
+      <span class="sb-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>
+      <span>Minhas Rotinas</span>
+    </button>
+    <button class="sb-menu-item" id="navDash" onclick="showPage('dashboard')">
+      <span class="sb-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 4-6"/></svg></span>
+      <span>Progresso</span>
+    </button>
+    <a href="child.html" class="sb-menu-item" style="color:var(--green)">
+      <span class="sb-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M8 14c-2.5 1-4 3-4 5h16c0-2-1.5-4-4-5"/><path d="M9 21v-2m6 2v-2"/></svg></span>
+      <span>Modo Criança</span>
+    </a>
+    <button class="sb-menu-item" onclick="toggleDark()" id="themeItem">
+      <span class="sb-menu-icon" id="themeIcon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+      <span id="themeLabel">Modo escuro</span>
+    </button>
+  </div>
+
+  <!-- Sair -->
+  <div class="sb-bottom">
+    <button class="sb-logout" onclick="doLogout()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Sair da conta
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <h1 id="pageTitle">📋 Minhas Rotinas</h1>
+    <div class="topbar-actions">
+      <a href="child.html" class="btn btn-green btn-sm">🧒 Modo Criança</a>
+      <button class="btn btn-primary btn-sm" id="topbarActionBtn" onclick="openCreateRoutineModal()">+ Nova Rotina</button>
+    </div>
+  </div>
+
+  <!-- ── PAGE: ROUTINES ───────────────────────────────────── -->
+  <div class="page active" id="pageRoutines" style="padding:32px">
+
+    <!-- Stats -->
+    <div class="stats-row" id="routineStats" style="display:none">
+      <div class="stat-card"><div class="stat-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></div><div class="stat-value" id="statRoutines">0</div><div class="stat-label">Rotinas criadas</div></div>
+      <div class="stat-card"><div class="stat-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="stat-value" id="statTasks">0</div><div class="stat-label">Total de tarefas</div></div>
+      <div class="stat-card"><div class="stat-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="stat-value" id="statPoints">0</div><div class="stat-label">Pontos hoje</div></div>
+    </div>
+
+    <!-- Routines list -->
+    <div class="section-header">
+      <h2>Rotinas</h2>
+      <button class="btn btn-primary btn-sm" onclick="openCreateRoutineModal()">+ Nova Rotina</button>
+    </div>
+    <div class="routines-grid" id="routinesGrid">
+      <div class="empty" style="grid-column:1/-1">
+        <div class="empty-emoji">📋</div>
+        <h3>Nenhuma rotina ainda</h3>
+        <p>Crie sua primeira rotina para começar a organizar o dia!</p>
+        <button class="btn btn-primary" onclick="openCreateRoutineModal()">+ Criar primeira rotina</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PAGE: TASKS ──────────────────────────────────────── -->
+  <div class="page" id="pageTasks" style="padding:32px">
+    <!-- Cabeçalho visível só na impressão -->
+    <div class="print-header">
+      <span style="line-height:1;display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+      <div>
+        <h2 id="printRoutineName">Rotina</h2>
+        <p id="printRoutineDate"></p>
+      </div>
+    </div>
+    <div class="tasks-header">
+      <button class="back-btn" onclick="showPage('routines')">← Voltar</button>
+      <h2 style="font-family:'Baloo 2',sans-serif;font-weight:900" id="taskRoutineName">Rotina</h2>
+    </div>
+    <div style="margin-bottom:16px;display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn btn-ghost btn-sm" id="btnPrintRoutine" onclick="printRoutine()" style="display:none"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Imprimir</button>
+      <button class="btn btn-primary btn-sm" onclick="openAddTaskModal()">+ Adicionar Tarefa</button>
+    </div>
+    <div class="tasks-list" id="tasksList"></div>
+  </div>
+
+  <!-- ── PAGE: DASHBOARD ─────────────────────────────────── -->
+  <div class="page" id="pageDashboard" style="padding:32px">
+
+    <!-- Top stats row -->
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="stat-value" id="dToday">0</div><div class="stat-label">Pontos hoje</div></div>
+      <div class="stat-card"><div class="stat-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="stat-value" id="dTasks">0</div><div class="stat-label">Tarefas hoje</div></div>
+      <div class="stat-card"><div class="stat-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg></div><div class="stat-value" id="dTotal">0</div><div class="stat-label">Total de pontos</div></div>
+      <div class="stat-card" id="streakCard"><div class="stat-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg></div><div class="stat-value" id="dStreak">0</div><div class="stat-label">Dias seguidos</div></div>
+    </div>
+
+    <!-- Week evolution chart -->
+    <div class="section-header" style="margin-top:8px"><h2>📈 Evolução semanal</h2></div>
+    <div style="background:var(--white);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);margin-bottom:24px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <div style="font-size:.85rem;font-weight:700;color:var(--muted)">Pontos por dia nos últimos 7 dias</div>
+        <div id="weekTrend" style="font-size:.85rem;font-weight:800"></div>
+      </div>
+      <div id="weekChart" style="display:flex;align-items:flex-end;justify-content:space-around;height:160px;gap:8px;"></div>
+      <div id="weekLabels" style="display:flex;justify-content:space-around;margin-top:10px;"></div>
+    </div>
+
+    <!-- Streak + Achievements row -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+
+      <!-- Streak card -->
+      <div style="background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)">
+        <div style="font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:900;margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg> Sequência de dias</div>
+        <div id="streakCalendar" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px"></div>
+        <div style="font-size:.82rem;color:var(--muted)">
+          <span id="streakBest" style="font-weight:800;color:var(--ink)">0</span> dias — melhor sequência
+        </div>
+      </div>
+
+      <!-- Achievements card -->
+      <div style="background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)">
+        <div style="font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:900;margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"/><path d="M11 12 5.12 2.2"/><path d="m13 12 5.88-9.8"/><path d="M8 7h8"/><circle cx="12" cy="17" r="5"/><path d="M12 18v-2h-.5"/></svg> Conquistas</div>
+        <div id="achievementsList" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+    </div>
+
+    <!-- Today's tasks -->
+    <div class="section-header" style="margin-top:4px"><h2>Tarefas de hoje</h2></div>
+    <div id="todayProgress" class="tasks-list"></div>
+  </div>
+</main>
+
+<!-- ── MODALS ───────────────────────────────────────────────── -->
+
+<!-- Create Routine -->
+<div class="overlay" id="modalCreateRoutine" onclick="closeModal(event,'modalCreateRoutine')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>📋 Nova Rotina</h2>
+    <div class="form-group">
+      <label class="form-label">Nome da rotina</label>
+      <input class="form-input" id="newRoutineName" placeholder="Ex: Rotina da Manhã" maxlength="100" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Para qual criança? <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+      <input class="form-input" id="newRoutineChild" placeholder="Ex: João, Maria..." maxlength="60" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Dias da semana <span style="font-weight:400;color:var(--muted)">(opcional — vazio = todos os dias)</span></label>
+      <div class="days-selector" id="daysPicker">
+        <span class="day-pill" data-day="0" onclick="toggleDay(this)">Dom</span>
+        <span class="day-pill" data-day="1" onclick="toggleDay(this)">Seg</span>
+        <span class="day-pill" data-day="2" onclick="toggleDay(this)">Ter</span>
+        <span class="day-pill" data-day="3" onclick="toggleDay(this)">Qua</span>
+        <span class="day-pill" data-day="4" onclick="toggleDay(this)">Qui</span>
+        <span class="day-pill" data-day="5" onclick="toggleDay(this)">Sex</span>
+        <span class="day-pill" data-day="6" onclick="toggleDay(this)">Sáb</span>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModalById('modalCreateRoutine')">Cancelar</button>
+      <button class="btn btn-primary" onclick="createRoutine()">Criar Rotina</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Task -->
+<div class="overlay" id="modalAddTask" onclick="closeModal(event,'modalAddTask')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>✅ Nova Tarefa</h2>
+    <div class="form-group">
+      <label class="form-label">Nome da tarefa</label>
+      <input class="form-input" id="newTaskTitle" placeholder="Ex: Escovar os dentes" maxlength="200" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Imagem (opcional)</label>
+      <label class="img-upload-label" for="taskImageInput">
+        <img id="imgPreview" src="" alt="preview"/>
+        <span id="imgUploadText">🖼️ Clique para escolher uma foto</span>
+      </label>
+      <input type="file" id="taskImageInput" accept="image/*" style="display:none" onchange="previewImage(this)" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModalById('modalAddTask')">Cancelar</button>
+      <button class="btn btn-primary" id="btnAddTask" onclick="addTask()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Routine -->
+<div class="overlay" id="modalEditRoutine" onclick="closeModal(event,'modalEditRoutine')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>✏️ Editar Rotina</h2>
+    <div class="form-group">
+      <label class="form-label">Nome da rotina</label>
+      <input class="form-input" id="editRoutineName" maxlength="100" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModalById('modalEditRoutine')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveEditRoutine()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FIREBASE -->
+<script type="module">
+import { auth, db,
+         onAuthStateChanged, signOut,
+         collection, doc, addDoc, updateDoc, deleteDoc,
+         query, where, orderBy, onSnapshot, getDoc, getDocs, setDoc }
+  from "../js/firebase.js";
+import { uploadImage, resizeImage } from "../js/cloudinary.js";
+import { sanitizeHtml, hasInjection } from "../js/security.js";
+import { requestNotificationPermission, scheduleReminderNotification } from "../js/pwa.js";
+
+let currentUser = null;
+let currentPlan  = 'free';
+let routinesMap  = {};
+let currentRoutineId = null;
+let editingRoutineId = null;
+
+// Limites por plano
+const PLAN_LIMITS = {
+  free:    { routines: 1, tasks: 5, historyDays: 7,        uploadImage: false },
+  familia: { routines: Infinity, tasks: Infinity, historyDays: 30, uploadImage: true  }
+};
+
+// ── AUTH GUARD ──────────────────────────────────────────────
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href='login.html'; return; }
+  currentUser = user;
+  try {
+    const userDoc = await getDoc(doc(db,'users',user.uid));
+    const data = userDoc.exists() ? userDoc.data() : {};
+    const name = data.name || user.email.split('@')[0];
+    const plan = data.plan || 'free';
+    currentPlan = plan;
+    document.getElementById('sidebarName').textContent  = name;
+    document.getElementById('sidebarPlan').textContent  = plan === 'familia' ? 'plano Família' : 'plano Gratuito';
+    // foto na sidebar
+    if (data.photoURL) {
+      document.getElementById('sidebarAvatar').innerHTML =
+        `<img src="${data.photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="foto"/>`;
+    } else {
+      document.getElementById('sidebarAvatar').textContent = name[0].toUpperCase();
+    }
+  } catch(e) {
+    const fallback = user.email.split('@')[0];
+    document.getElementById('sidebarName').textContent  = fallback;
+    document.getElementById('sidebarPlan').textContent  = 'plano Gratuito';
+    document.getElementById('sidebarAvatar').textContent = fallback[0].toUpperCase();
+  }
+  loadRoutines();
+  loadDashboard();
+});
+
+window.doLogout = () => signOut(auth).then(()=>window.location.href='login.html');
+
+window.printRoutine = function() {
+  if (currentPlan !== 'familia') {
+    toast('🔒 Imprimir rotina é exclusivo do Plano Família!');
+    return;
+  }
+  const name = routinesMap[currentRoutineId]?.title || 'Rotina';
+  const date = new Date().toLocaleDateString('pt-BR', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  const pName = document.getElementById('printRoutineName');
+  const pDate = document.getElementById('printRoutineDate');
+  if (pName) pName.textContent = name;
+  if (pDate) pDate.textContent = 'Impresso em ' + date;
+  window.print();
+};
+
+window.toggleNotifications = async function() {
+  const granted = await requestNotificationPermission();
+  if (granted) {
+    scheduleReminderNotification(8, 0);
+    const lbl2 = document.getElementById('notifLabel');
+    const nav2 = document.getElementById('navNotif');
+    if (lbl2) lbl2.textContent = 'Lembretes ativos ✓';
+    if (nav2) nav2.style.color = 'var(--green)';
+    toast('🔔 Lembrete diário ativado para as 8h!');
+  } else {
+    toast('❌ Permissão de notificação negada. Verifique as configurações do navegador.');
+  }
+};
+
+// Verificar se notificações já estão ativas ao carregar
+if ('Notification' in window && Notification.permission === 'granted') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const lbl = document.getElementById('notifLabel');
+    const nav = document.getElementById('navNotif');
+    if (lbl) lbl.textContent = 'Lembretes ativos ✓';
+    if (nav) nav.style.color = 'var(--green)';
+  });
+}
+
+// ── ROUTINES ────────────────────────────────────────────────
+function loadRoutines() {
+  // Tenta com orderBy (requer índice composto no Firestore)
+  // Se falhar por falta de índice, faz fallback sem orderBy
+  const q = query(collection(db,'routines'), where('userId','==',currentUser.uid), orderBy('createdAt','desc'));
+  const unsub = onSnapshot(q, async snap => {
+    routinesMap = {};
+    const routines = snap.docs.map(d=>({id:d.id,...d.data()}));
+    routines.forEach(r=>routinesMap[r.id]=r);
+    renderRoutines(routines);
+    document.getElementById('statRoutines').textContent = routines.length;
+    let totalTasks = 0;
+    for (const r of routines) {
+      const tSnap = await getDocs(query(collection(db,'tasks'),where('routineId','==',r.id)));
+      totalTasks += tSnap.size;
+    }
+    document.getElementById('statTasks').textContent = totalTasks;
+    if (routines.length > 0) document.getElementById('routineStats').style.display='grid';
+  }, async (err) => {
+    // Índice não existe — fallback sem orderBy, ordena no cliente
+    console.warn('orderBy index missing, falling back:', err.message);
+    const q2 = query(collection(db,'routines'), where('userId','==',currentUser.uid));
+    onSnapshot(q2, async snap => {
+      routinesMap = {};
+      const routines = snap.docs.map(d=>({id:d.id,...d.data()}))
+        .sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+      routines.forEach(r=>routinesMap[r.id]=r);
+      renderRoutines(routines);
+      document.getElementById('statRoutines').textContent = routines.length;
+      let totalTasks = 0;
+      for (const r of routines) {
+        const tSnap = await getDocs(query(collection(db,'tasks'),where('routineId','==',r.id)));
+        totalTasks += tSnap.size;
+      }
+      document.getElementById('statTasks').textContent = totalTasks;
+      if (routines.length > 0) document.getElementById('routineStats').style.display='grid';
+    });
+  });
+}
+
+function renderRoutines(routines) {
+  const grid = document.getElementById('routinesGrid');
+  if (routines.length === 0) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1">
+      <div class="empty-emoji">📋</div>
+      <h3>Nenhuma rotina ainda</h3>
+      <p>Crie sua primeira rotina para começar!</p>
+      <button class="btn btn-primary" onclick="openCreateRoutineModal()">+ Criar primeira rotina</button>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = routines.map(r=>`
+    <div class="routine-card" onclick="openRoutine('${r.id}')">
+      <div class="routine-card-header">📋</div>
+      <div class="routine-card-body">
+        <div class="routine-card-name">${sanitizeHtml(r.title || '')}</div>
+        ${r.childName ? `<div style="font-size:.78rem;font-weight:800;color:var(--green);margin-bottom:4px">👦 ${sanitizeHtml(r.childName)}</div>` : ''}
+        ${r.days && r.days.length ? `<div style="font-size:.75rem;font-weight:800;color:var(--blue);margin-bottom:4px">📅 ${r.days.map(d=>['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'][d]).join(' · ')}</div>` : ''}
+        <div class="routine-meta">${new Date(r.createdAt).toLocaleDateString('pt-BR')}</div>
+        <div class="routine-card-actions" onclick="event.stopPropagation()">
+          <button class="btn btn-ghost btn-sm" onclick="openEditRoutine('${r.id}')">✏️ Editar</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteRoutine('${r.id}','${sanitizeHtml(r.title || '')}')">🗑️ Excluir</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.toggleDay = (el) => el.classList.toggle('selected');
+
+window.openCreateRoutineModal = () => {
+  document.getElementById('newRoutineName').value='';
+  document.getElementById('newRoutineChild').value='';
+  document.querySelectorAll('.day-pill').forEach(p=>p.classList.remove('selected'));
+  openModalById('modalCreateRoutine');
+};
+
+window.createRoutine = async () => {
+  const name = document.getElementById('newRoutineName').value.trim();
+  if (!name) { toast('⚠️ Informe o nome da rotina'); return; }
+  if (hasInjection(name)) { toast('⚠️ Nome inválido. Remova caracteres especiais.'); return; }
+
+  // Verificar limite do plano
+  const limit = PLAN_LIMITS[currentPlan]?.routines ?? 1;
+  const totalRotinas = Object.keys(routinesMap).length;
+  if (totalRotinas >= limit) {
+    closeModalById('modalCreateRoutine');
+    toast('🔒 Seu plano gratuito permite apenas 1 rotina. Assine o Plano Família para criar rotinas ilimitadas!');
+    return;
+  }
+
+  const btn = document.querySelector('#modalCreateRoutine .btn-primary');
+  btn.disabled = true; btn.textContent = 'Criando...';
+  try {
+    console.log('[createRoutine] userId:', currentUser.uid, '| name:', name);
+    const childName   = document.getElementById('newRoutineChild').value.trim();
+    const selectedDays = [...document.querySelectorAll('.day-pill.selected')].map(p=>parseInt(p.dataset.day));
+    await addDoc(collection(db,'routines'),{
+      userId: currentUser.uid, title: name,
+      childName: childName || null,
+      days: selectedDays.length > 0 ? selectedDays : null,
+      createdAt: new Date().toISOString()
+    });
+    console.log('[createRoutine] ✅ sucesso');
+    closeModalById('modalCreateRoutine');
+    toast('✅ Rotina criada!');
+  } catch(e) {
+    console.error('[createRoutine] ❌ erro:', e.code, e.message);
+    if (e.code === 'permission-denied' || e.message.includes('permissions')) {
+      showPermissionError();
+    } else {
+      toast('❌ Erro ao criar rotina: ' + e.message);
+    }
+  } finally {
+    btn.disabled = false; btn.textContent = 'Criar Rotina';
+  }
+};
+
+function showPermissionError() {
+  closeModalById('modalCreateRoutine');
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(30,27,46,.6);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:24px;padding:36px;max-width:480px;width:100%;font-family:'Nunito',sans-serif">
+      <div style="font-size:2.5rem;margin-bottom:12px">🔒</div>
+      <h2 style="font-family:'Baloo 2',sans-serif;font-size:1.4rem;font-weight:900;margin-bottom:10px;color:#1E1B2E">Permissões do Firebase</h2>
+      <p style="color:#6B6880;line-height:1.6;margin-bottom:20px;font-size:.95rem">
+        O Firebase está bloqueando as operações. Você precisa configurar as <strong>Regras de Segurança</strong> no console.
+      </p>
+      <div style="background:#F7F5FF;border-radius:12px;padding:16px;margin-bottom:20px;font-size:.85rem;color:#4a4a6a;line-height:1.8">
+        <b>Passos para corrigir:</b><br>
+        1. Acesse <a href="https://console.firebase.google.com" target="_blank" style="color:#4A90D9">console.firebase.google.com</a><br>
+        2. Projeto <b>rotinafelizac</b> → <b>Firestore Database → Regras</b><br>
+        3. Consulte o arquivo <b>FIRESTORE_RULES.md</b> incluído no projeto<br>
+        4. Cole as regras e clique em <b>Publicar</b><br>
+        5. Repita para <b>Storage → Regras</b>
+      </div>
+      <button onclick="this.closest('div[style]').remove()" style="width:100%;padding:13px;background:#4A90D9;color:#fff;border:none;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;cursor:pointer">Entendi</button>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+window.showPermissionError = showPermissionError;
+
+window.openEditRoutine = (id) => {
+  editingRoutineId = id;
+  document.getElementById('editRoutineName').value = routinesMap[id]?.title || '';
+  openModalById('modalEditRoutine');
+};
+
+window.saveEditRoutine = async () => {
+  const name = document.getElementById('editRoutineName').value.trim();
+  if (!name) { toast('⚠️ Informe o nome'); return; }
+  await updateDoc(doc(db,'routines',editingRoutineId),{title: name});
+  closeModalById('modalEditRoutine');
+  toast('✅ Rotina atualizada!');
+};
+
+window.deleteRoutine = async (id, name) => {
+  if (!confirm(`Excluir a rotina "${name}" e todas as tarefas?`)) return;
+  const tSnap = await getDocs(query(collection(db,'tasks'),where('routineId','==',id)));
+  for (const t of tSnap.docs) await deleteDoc(t.ref);
+  await deleteDoc(doc(db,'routines',id));
+  toast('🗑️ Rotina excluída');
+};
+
+// ── TASKS ───────────────────────────────────────────────────
+window.openRoutine = (routineId) => {
+  currentRoutineId = routineId;
+  const rTitle = routinesMap[routineId]?.title || 'Rotina';
+  document.getElementById('taskRoutineName').textContent = rTitle;
+  const printBtn = document.getElementById('btnPrintRoutine');
+  if (printBtn) printBtn.style.display = currentPlan === 'familia' ? '' : 'none';
+  showPage('tasks');
+  loadTasks(routineId);
+};
+
+let tasksUnsubscribe = null;
+function loadTasks(routineId) {
+  if (tasksUnsubscribe) tasksUnsubscribe();
+  const q = query(collection(db,'tasks'), where('routineId','==',routineId), orderBy('order'));
+  tasksUnsubscribe = onSnapshot(q, snap => {
+    const tasks = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderTasks(tasks);
+  });
+}
+
+function renderTasks(tasks) {
+  const list = document.getElementById('tasksList');
+  if (tasks.length === 0) {
+    list.innerHTML = `<div class="empty"><div class="empty-emoji">✅</div><h3>Nenhuma tarefa</h3><p>Adicione tarefas para esta rotina.</p></div>`;
+    return;
+  }
+  list.innerHTML = tasks.map((t,i)=>`
+    <div class="task-row">
+      <div style="color:var(--muted);font-weight:800;font-size:.9rem;min-width:28px">#${i+1}</div>
+      <div class="task-img">
+        ${t.imageUrl ? `<img src="${t.imageUrl}" alt="${sanitizeHtml(t.title || '')}"/>` : `<span>${getTaskEmoji(t.title)}</span>`}
+      </div>
+      <div class="task-info">
+        <div class="task-title">${sanitizeHtml(t.title || '')}</div>
+        <div class="task-order">Ordem: ${t.order+1}</div>
+      </div>
+      <div class="task-actions">
+        <button class="btn btn-danger btn-sm" onclick="deleteTask('${t.id}')">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getTaskEmoji(title) {
+  const t = title.toLowerCase();
+  if (t.includes('dente')||t.includes('escov')) return '🪥';
+  if (t.includes('café')||t.includes('comid')||t.includes('almoc')) return '🍽️';
+  if (t.includes('banho')||t.includes('ducha')) return '🛁';
+  if (t.includes('roupa')||t.includes('vest')) return '👕';
+  if (t.includes('mochi')) return '🎒';
+  if (t.includes('tarefa')||t.includes('lição')) return '📚';
+  if (t.includes('dormi')||t.includes('cama')) return '😴';
+  if (t.includes('mão')||t.includes('lavar')) return '🧼';
+  return '✅';
+}
+
+window.openAddTaskModal = () => {
+  document.getElementById('newTaskTitle').value='';
+  document.getElementById('imgPreview').style.display='none';
+  document.getElementById('taskImageInput').value='';
+
+  const canUpload = PLAN_LIMITS[currentPlan]?.uploadImage;
+  const uploadLabel = document.querySelector('label[for="taskImageInput"]') ||
+                      document.getElementById('taskImageInput')?.parentElement;
+
+  if (canUpload) {
+    document.getElementById('imgUploadText').textContent='🖼️ Clique para escolher uma foto';
+    if (uploadLabel) { uploadLabel.style.opacity='1'; uploadLabel.style.pointerEvents='auto'; }
+    document.getElementById('taskImageInput').disabled = false;
+  } else {
+    document.getElementById('imgUploadText').textContent='🔒 Upload disponível no Plano Família';
+    if (uploadLabel) { uploadLabel.style.opacity='0.5'; uploadLabel.style.pointerEvents='none'; }
+    document.getElementById('taskImageInput').disabled = true;
+  }
+  openModalById('modalAddTask');
+};
+
+window.previewImage = (input) => {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('imgPreview');
+    img.src = e.target.result; img.style.display='block';
+    document.getElementById('imgUploadText').textContent='✅ Imagem selecionada';
+  };
+  reader.readAsDataURL(file);
+};
+
+window.addTask = async () => {
+  const title = document.getElementById('newTaskTitle').value.trim();
+  if (!title) { toast('⚠️ Informe o nome da tarefa'); return; }
+  if (hasInjection(title)) { toast('⚠️ Nome inválido. Remova caracteres especiais.'); return; }
+
+  // Verificar limite de tarefas do plano
+  const taskLimit = PLAN_LIMITS[currentPlan]?.tasks ?? 5;
+  const tSnapCheck = await getDocs(query(collection(db,'tasks'),where('routineId','==',currentRoutineId)));
+  if (tSnapCheck.size >= taskLimit) {
+    closeModalById('modalAddTask');
+    toast('🔒 Seu plano gratuito permite até 5 tarefas por rotina. Assine o Plano Família para tarefas ilimitadas!');
+    return;
+  }
+
+  document.getElementById('btnAddTask').disabled=true;
+  document.getElementById('btnAddTask').textContent='Salvando...';
+
+  try {
+    const tSnap = await getDocs(query(collection(db,'tasks'),where('routineId','==',currentRoutineId)));
+    const order = tSnap.size;
+    let imageUrl = '';
+    const file = document.getElementById('taskImageInput').files[0];
+    if (file) {
+      if (!PLAN_LIMITS[currentPlan]?.uploadImage) {
+        closeModalById('modalAddTask');
+        toast('🔒 Upload de imagens é exclusivo do Plano Família. Faça upgrade para usar essa função!');
+        document.getElementById('btnAddTask').disabled=false;
+        document.getElementById('btnAddTask').textContent='Adicionar';
+        return;
+      }
+      document.getElementById('btnAddTask').textContent = 'Enviando imagem...';
+      const resized = await resizeImage(file, 512);
+      imageUrl = await uploadImage(resized, 'rotina-feliz/tasks', `task_${currentUser.uid}_${Date.now()}`);
+    }
+    await addDoc(collection(db,'tasks'),{
+      routineId:currentRoutineId, title, imageUrl, order,
+      createdAt:new Date().toISOString()
+    });
+    closeModalById('modalAddTask');
+    toast('✅ Tarefa adicionada!');
+  } finally {
+    document.getElementById('btnAddTask').disabled=false;
+    document.getElementById('btnAddTask').textContent='Adicionar';
+  }
+};
+
+window.deleteTask = async (id) => {
+  if (!confirm('Excluir esta tarefa?')) return;
+  await deleteDoc(doc(db,'tasks',id));
+  toast('🗑️ Tarefa excluída');
+};
+
+// ── DASHBOARD ───────────────────────────────────────────────
+async function loadDashboard() {
+  const today = new Date().toISOString().slice(0,10);
+
+  // Today's progress
+  const pSnap = await getDocs(query(collection(db,'progress'),
+    where('userId','==',currentUser.uid), where('date','==',today), where('completed','==',true)));
+
+  let todayPts = 0, todayTasks = 0;
+  pSnap.docs.forEach(d=>{ todayPts+=d.data().points||0; todayTasks++; });
+  document.getElementById('dToday').textContent    = todayPts;
+  document.getElementById('dTasks').textContent    = todayTasks;
+  document.getElementById('statPoints').textContent = todayPts;
+
+  // Histórico limitado por plano (free = 7 dias, familia = 30 dias)
+  const historyDays = PLAN_LIMITS[currentPlan]?.historyDays ?? 7;
+  const historyLimit = new Date();
+  historyLimit.setDate(historyLimit.getDate() - historyDays);
+  const historyLimitStr = historyLimit.toISOString().slice(0,10);
+
+  const allSnap = await getDocs(query(collection(db,'progress'),
+    where('userId','==',currentUser.uid), where('completed','==',true)));
+  let total = 0;
+  const activeDates = new Set();
+  allSnap.docs.forEach(d => {
+    const date = d.data().date || '';
+    // Pontuação total sempre conta tudo (independente do plano)
+    total += d.data().points || 0;
+    // Histórico de datas limitado pelo plano
+    if (date && date >= historyLimitStr) activeDates.add(date);
+  });
+  document.getElementById('dTotal').textContent = total;
+
+  // Streak
+  const { current: streak, best } = calcStreak(activeDates);
+  document.getElementById('dStreak').textContent    = streak;
+  document.getElementById('streakBest').textContent = best;
+  if (streak >= 3) {
+    document.getElementById('streakCard').style.background = 'linear-gradient(135deg,#fff5e0,#fff)';
+  }
+
+  // Week chart
+  const weekData = await renderWeekChart();
+
+  // Streak calendar (14-day dots)
+  renderStreakCalendar(activeDates);
+
+  // Achievements
+  renderAchievements({ total, streak, best, weekData, todayTasks });
+
+  // Today's task list — enrich with task titles
+  const progressItems = pSnap.docs.map(d => d.data());
+  const taskTitles = {};
+  const taskIds = [...new Set(progressItems.map(p => p.taskId).filter(Boolean))];
+  await Promise.all(taskIds.map(async id => {
+    try {
+      const tDoc = await getDoc(doc(db,'tasks',id));
+      if (tDoc.exists()) taskTitles[id] = tDoc.data().title;
+    } catch(_) {}
+  }));
+  renderTodayProgress(progressItems, taskTitles);
+}
+
+// ── STREAK CALCULATION ───────────────────────────────────────
+function calcStreak(activeDates) {
+  if (activeDates.size === 0) return { current: 0, best: 0 };
+  let current = 0;
+  const checkDate = new Date();
+  while (true) {
+    const ds = checkDate.toISOString().slice(0,10);
+    if (activeDates.has(ds)) { current++; checkDate.setDate(checkDate.getDate()-1); }
+    else break;
+  }
+  const uniqueSorted = [...activeDates].sort();
+  let best = 0, running = 0;
+  for (let i = 0; i < uniqueSorted.length; i++) {
+    if (i === 0) { running = 1; }
+    else {
+      const diff = (new Date(uniqueSorted[i]) - new Date(uniqueSorted[i-1])) / 86400000;
+      running = diff === 1 ? running + 1 : 1;
+    }
+    if (running > best) best = running;
+  }
+  return { current, best };
+}
+
+// ── WEEK CHART ───────────────────────────────────────────────
+async function renderWeekChart() {
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate()-i);
+    const dateStr = d.toISOString().slice(0,10);
+    const label   = d.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','').substring(0,3);
+    const snap    = await getDocs(query(collection(db,'progress'),
+      where('userId','==',currentUser.uid), where('date','==',dateStr), where('completed','==',true)));
+    let pts = 0; snap.docs.forEach(dd => pts += dd.data().points || 0);
+    days.push({ label, pts, isToday: i===0, dateStr });
+  }
+  const max       = Math.max(...days.map(d => d.pts), 1);
+  const firstHalf = days.slice(0,3).reduce((s,d) => s+d.pts, 0);
+  const lastHalf  = days.slice(4).reduce((s,d)  => s+d.pts, 0);
+  const totalWeek = days.reduce((s,d) => s+d.pts, 0);
+  const trendEl   = document.getElementById('weekTrend');
+  if (totalWeek === 0) { trendEl.textContent = ''; }
+  else if (lastHalf >= firstHalf) {
+    trendEl.innerHTML = '<span style="color:var(--green)">📈 +' + (lastHalf-firstHalf) + ' pts vs início da semana</span>';
+  } else {
+    trendEl.innerHTML = '<span style="color:var(--peach)">📉 ' + (lastHalf-firstHalf) + ' pts vs início da semana</span>';
+  }
+  document.getElementById('weekChart').innerHTML = days.map(d =>
+    '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px">' +
+    (d.pts > 0 ? '<span style="font-size:.7rem;font-weight:800;color:' + (d.isToday?'var(--blue)':'var(--muted)') + '">' + d.pts + '</span>' : '') +
+    '<div title="' + d.dateStr + ': ' + d.pts + ' pts" style="width:100%;height:' +
+    Math.max((d.pts/max)*140, d.pts>0?8:2) + 'px;background:' + (d.isToday?'var(--blue)':'var(--blue-lt)') +
+    ';border-radius:8px 8px 0 0;transition:height .5s ease"></div></div>'
+  ).join('');
+  document.getElementById('weekLabels').innerHTML = days.map(d =>
+    '<div style="flex:1;text-align:center;font-size:.75rem;font-weight:' + (d.isToday?800:600) +
+    ';color:' + (d.isToday?'var(--blue)':'var(--muted)') + '">' + d.label + '</div>'
+  ).join('');
+  return days;
+}
+
+// ── STREAK CALENDAR (14-day dot grid) ───────────────────────
+function renderStreakCalendar(activeDates) {
+  const container = document.getElementById('streakCalendar');
+  const calDays = PLAN_LIMITS[currentPlan]?.historyDays ?? 7;
+  const dots = [];
+  for (let i = calDays - 1; i >= 0; i--) {
+    const d  = new Date(); d.setDate(d.getDate()-i);
+    const ds = d.toISOString().slice(0,10);
+    const active  = activeDates.has(ds);
+    const isToday = i === 0;
+    const label   = d.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','').substring(0,3);
+    dots.push(
+      '<div title="' + ds + (active?' ✅':'') + (isToday?' (hoje)':'') + '" style="' +
+      'width:28px;height:28px;border-radius:8px;' +
+      'background:' + (active?'var(--blue)':isToday?'var(--blue-lt)':'#f0edf9') + ';' +
+      'display:flex;align-items:center;justify-content:center;' +
+      'font-size:.6rem;font-weight:700;' +
+      'color:' + (active?'#fff':isToday?'var(--blue)':'var(--muted)') + ';' +
+      'border:' + (isToday?'2px solid var(--blue)':'2px solid transparent') + ';' +
+      '">' + label + '</div>'
+    );
+  }
+  container.innerHTML = dots.join('');
+}
+
+// ── ACHIEVEMENTS ─────────────────────────────────────────────
+const ACHIEVEMENTS = [
+  { emoji:'', label:'Primeira conquista!', desc:'Acumulou os primeiros 10 pontos',    check: d => d.total >= 10    },
+  { emoji:'', label:'100 pontos!',          desc:'Acumulou 100 pontos no total',        check: d => d.total >= 100   },
+  { emoji:'', label:'500 pontos!',          desc:'Acumulou 500 pontos no total',        check: d => d.total >= 500   },
+  { emoji:'', label:'3 dias seguidos',      desc:'Sequência de 3 dias consecutivos',    check: d => d.best >= 3      },
+  { emoji:'', label:'Semana perfeita!',     desc:'7 dias em sequência — incrível!',     check: d => d.best >= 7      },
+  { emoji:'', label:'Super dia!',           desc:'Completou 5+ tarefas em um dia',      check: d => d.todayTasks >= 5},
+  { emoji:'', label:'Semana crescente',     desc:'Progresso maior que o início da semana',
+    check: d => d.weekData && d.weekData.slice(4).reduce((s,x)=>s+x.pts,0) > d.weekData.slice(0,3).reduce((s,x)=>s+x.pts,0) },
+];
+
+function renderAchievements(data) {
+  const el = document.getElementById('achievementsList');
+  el.innerHTML = ACHIEVEMENTS.map(a => {
+    const unlocked = a.check(data);
+    return '<div style="display:flex;align-items:center;gap:10px;padding:5px 0;opacity:' + (unlocked?1:0.35) + '">' +
+      '<div style="font-size:1.3rem;width:26px;text-align:center">' + a.emoji + '</div>' +
+      '<div style="flex:1;min-width:0">' +
+        '<div style="font-weight:800;font-size:.82rem;color:' + (unlocked?'var(--ink)':'var(--muted)') + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + a.label + '</div>' +
+        '<div style="font-size:.72rem;color:var(--muted)">' + a.desc + '</div>' +
+      '</div>' +
+      (unlocked ? '<span style="font-size:.68rem;background:var(--green-lt);color:var(--green);padding:2px 8px;border-radius:50px;font-weight:800;flex-shrink:0">✓</span>' : '') +
+    '</div>';
+  }).join('');
+}
+
+// ── TODAY PROGRESS LIST ──────────────────────────────────────
+function renderTodayProgress(items, taskTitles={}) {
+  const el = document.getElementById('todayProgress');
+  if (!items.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-emoji"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div><h3>Nenhuma tarefa hoje ainda</h3><p>Ative o Modo Criança para começar!</p></div>';
+    return;
+  }
+  el.innerHTML = items.map(item => {
+    const title   = (item.taskId && taskTitles[item.taskId]) || 'Tarefa concluída';
+    const timeStr = item.createdAt
+      ? new Date(item.createdAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})
+      : '';
+    return '<div class="task-row">' +
+      '<div style="font-size:1.4rem">✅</div>' +
+      '<div class="task-info">' +
+        '<div class="task-title">' + title + '</div>' +
+        (timeStr ? '<div class="task-order">⏰ ' + timeStr + '</div>' : '') +
+      '</div>' +
+      '<span class="badge badge-blue">+' + (item.points||10) + ' pts</span>' +
+    '</div>';
+  }).join('');
+}
+
+
+// ── UI HELPERS ──────────────────────────────────────────────
+window.showPage = (page) => {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-menu-item').forEach(n=>n.classList.remove('active'));
+  if (page==='routines') {
+    document.getElementById('pageRoutines').classList.add('active');
+    document.getElementById('navRotinas').classList.add('active');
+    document.getElementById('pageTitle').textContent='📋 Minhas Rotinas';
+    document.getElementById('topbarActionBtn').textContent='+ Nova Rotina';
+    document.getElementById('topbarActionBtn').onclick=openCreateRoutineModal;
+  } else if (page==='tasks') {
+    document.getElementById('pageTasks').classList.add('active');
+    document.getElementById('pageTitle').textContent='✅ Tarefas da Rotina';
+    document.getElementById('topbarActionBtn').textContent='+ Nova Tarefa';
+    document.getElementById('topbarActionBtn').onclick=openAddTaskModal;
+  } else if (page==='dashboard') {
+    document.getElementById('pageDashboard').classList.add('active');
+    document.getElementById('navDash').classList.add('active');
+    document.getElementById('pageTitle').textContent='📊 Progresso';
+    document.getElementById('topbarActionBtn').textContent='Atualizar';
+    document.getElementById('topbarActionBtn').onclick=loadDashboard;
+    loadDashboard();
+  }
+};
+
+function openModalById(id)  { document.getElementById(id).classList.add('open'); }
+function closeModalById(id) { document.getElementById(id).classList.remove('open'); }
+window.openModalById  = openModalById;
+window.closeModalById = closeModalById;
+window.closeModal = (e,id) => { if (e.target===document.getElementById(id)) closeModalById(id); };
+
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove('show'),2800);
+}
+window.toast = toast;
+</script>
+
+<script>
+  (function(){
+    const saved = localStorage.getItem('rf-theme');
+    if (saved) { document.documentElement.setAttribute('data-theme', saved); }
+  })();
+  function toggleDark() {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('rf-theme', next);
+    updateDarkBtn(next);
+  }
+  function updateDarkBtn(theme) {
+    const icon  = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+    if (icon)  icon.innerHTML  = theme === 'dark' ? '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    if (label) label.textContent = theme === 'dark' ? 'Modo claro' : 'Modo escuro';
+  }
+  const t = localStorage.getItem('rf-theme');
+  if (t) { document.documentElement.setAttribute('data-theme', t); updateDarkBtn(t); }
+</script>
+</body>
+</html>
