@@ -73,11 +73,6 @@
     }
     .btn-logout:hover { background:#FEE; }
 
-    /* ── SVG icon alignment ─────────────────────────────── */
-    .sb-menu-icon svg, .sb-menu-icon { display:flex; align-items:center; justify-content:center; }
-    .sb-logout svg { flex-shrink:0; }
-    .ico svg { display:block; }
-
     /* ── MAIN ────────────────────────────────────────────── */
     .main { margin-left:260px; flex:1; min-height:100vh; display:flex; flex-direction:column; }
     .topbar {
@@ -343,13 +338,12 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="RotinaFeliz" />
   <link rel="apple-touch-icon" href="/assets/icon-192x192.png" />
-  <script src="/js/pwa.js" defer></script>
 </head>
 <body>
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
-  <a href="../index.html" class="sidebar-logo"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> RotinaFeliz</a>
+  <a href="../index.html" class="sidebar-logo">⭐ RotinaFeliz</a>
 
   <!-- Avatar + nome -->
   <div class="sb-user-block">
@@ -363,23 +357,23 @@
   <!-- Menu card -->
   <div class="sb-menu-card">
     <a href="profile.html" class="sb-menu-item active">
-      <span class="sb-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
+      <span class="sb-menu-icon">👤</span>
       <span>Meu Perfil</span>
     </a>
     <a href="app.html" class="sb-menu-item">
-      <span class="sb-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span>
+      <span class="sb-menu-icon">📋</span>
       <span>Minhas Rotinas</span>
     </a>
     <a href="app.html#dashboard" class="sb-menu-item">
-      <span class="sb-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 4-6"/></svg></span>
+      <span class="sb-menu-icon">📊</span>
       <span>Progresso</span>
     </a>
     <a href="child.html" class="sb-menu-item" style="color:var(--green)">
-      <span class="sb-menu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M8 14c-2.5 1-4 3-4 5h16c0-2-1.5-4-4-5"/><path d="M9 21v-2m6 2v-2"/></svg></span>
+      <span class="sb-menu-icon">🧒</span>
       <span>Modo Criança</span>
     </a>
     <button class="sb-menu-item" onclick="toggleDark()" id="themeItem">
-      <span class="sb-menu-icon" id="themeIcon"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+      <span class="sb-menu-icon" id="themeIcon">🌙</span>
       <span id="themeLabel">Modo escuro</span>
     </button>
   </div>
@@ -387,7 +381,7 @@
   <!-- Sair -->
   <div class="sb-bottom">
     <button class="sb-logout" onclick="doLogout()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Sair da conta
+      🚪 Sair da conta
     </button>
   </div>
 </aside>
@@ -438,7 +432,7 @@
         <div class="plan-name" id="planCardName">Plano Gratuito</div>
         <div class="plan-desc" id="planCardDesc">Crie rotinas e acompanhe o progresso da sua criança.</div>
       </div>
-      <button id="planCardBtn" onclick="openPaymentModal()" class="plan-cta" style="display:none"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Assinar Plano Família</button>
+      <button id="planCardBtn" onclick="openPaymentModal()" class="plan-cta" style="display:none">⭐ Assinar Plano Família</button>
         <!-- Relatório semanal -->
         <div id="weeklyReportSection" style="display:none;margin-top:16px;padding-top:16px;border-top:1.5px solid #EDE9FA">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
@@ -469,7 +463,7 @@
           <div class="form-hint">O email não pode ser alterado</div>
         </div>
       </div>
-      <button class="btn btn-primary btn-sm" onclick="saveProfile()"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar alterações</button>
+      <button class="btn btn-primary btn-sm" onclick="saveProfile()">💾 Salvar alterações</button>
     </div>
 
     <!-- CHANGE PASSWORD -->
@@ -509,7 +503,7 @@
     <!-- Header -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
       <div>
-        <div style="font-family:'Baloo 2',sans-serif;font-size:1.5rem;font-weight:900"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Plano Família</div>
+        <div style="font-family:'Baloo 2',sans-serif;font-size:1.5rem;font-weight:900">👨‍👩‍👧 Plano Família</div>
         <div style="color:#6B6880;font-size:.88rem;margin-top:4px">Rotinas ilimitadas para sua família</div>
       </div>
       <button onclick="closePaymentModal()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:#6B6880">✕</button>
@@ -524,7 +518,7 @@
 
     <!-- Features -->
     <div style="margin-bottom:24px">
-      <div style="font-weight:800;font-size:.9rem;margin-bottom:12px;color:#1E1B2E"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg> O que está incluído:</div>
+      <div style="font-weight:800;font-size:.9rem;margin-bottom:12px;color:#1E1B2E">✨ O que está incluído:</div>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="display:flex;align-items:center;gap:10px;font-size:.93rem"><span style="color:#5BB974;font-size:1.1rem">✅</span> Rotinas ilimitadas</div>
         <div style="display:flex;align-items:center;gap:10px;font-size:.93rem"><span style="color:#5BB974;font-size:1.1rem">✅</span> Múltiplos perfis de crianças</div>
@@ -547,7 +541,7 @@
 
     <!-- Success state (hidden — usado se necessário via JS) -->
     <div id="paymentSuccess" style="display:none;text-align:center;padding:20px 0">
-      <div style="line-height:1;margin-bottom:12px;display:flex;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg></div>
+      <div style="font-size:2.5rem;margin-bottom:12px">🎉</div>
       <div style="font-family:'Baloo 2',sans-serif;font-size:1.4rem;font-weight:900;margin-bottom:8px">Bem-vindo ao Plano Família!</div>
       <div style="color:#6B6880;font-size:.93rem;line-height:1.6">Redirecionando para o pagamento seguro...</div>
     </div>
@@ -668,7 +662,7 @@ function fillProfile(name, email, plan, photoURL) {
   document.getElementById('heroEmail').innerHTML     = email;
 
   document.getElementById('planBadge').innerHTML = isFamilia
-    ? `<span class="plan-badge plan-familia"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Plano Família</span>`
+    ? `<span class="plan-badge plan-familia">👨‍👩‍👧 Plano Família</span>`
     : `<span class="plan-badge plan-free">🆓 Plano Gratuito</span>`;
 
   // Plan card
@@ -871,7 +865,7 @@ window.processPayment = () => {
   function updateDarkBtn(theme) {
     const icon  = document.getElementById('themeIcon');
     const label = document.getElementById('themeLabel');
-    if (icon)  icon.innerHTML  = theme === 'dark' ? '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    if (icon)  icon.textContent = theme === 'dark' ? '☀️' : '🌙';
     if (label) label.textContent = theme === 'dark' ? 'Modo claro' : 'Modo escuro';
   }
   const t = localStorage.getItem('rf-theme');
