@@ -9,6 +9,13 @@
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="shortcut icon" href="assets/rf.png" type="image/x-icon">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/twemoji.min.js" crossorigin="anonymous"></script>
+  <style>
+    img.emoji { height:1.3em; width:1.3em; vertical-align:-0.2em; display:inline-block; }
+    .stat-emoji img.emoji { height:2rem; width:2rem; vertical-align:middle; }
+    .empty-emoji img.emoji { height:3.5rem; width:3.5rem; }
+    .sb-menu-icon img.emoji { height:1.1em; width:1.1em; vertical-align:-0.15em; }
+  </style>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -1047,7 +1054,7 @@ function renderStreakCalendar(activeDates) {
     dots.push(
       '<div title="' + ds + (active?' ✅':'') + (isToday?' (hoje)':'') + '" style="' +
       'width:28px;height:28px;border-radius:8px;' +
-      'background:' + (active?'var(--blue)':isToday?'var(--blue-lt)':'#f0edf9') + ';' +
+      'background:' + (active?'var(--blue)':isToday?'#B8D4F0':'#e4e0f0') + ';' +
       'display:flex;align-items:center;justify-content:center;' +
       'font-size:.6rem;font-weight:700;' +
       'color:' + (active?'#fff':isToday?'var(--blue)':'var(--muted)') + ';' +
@@ -1170,6 +1177,24 @@ window.toast = toast;
   }
   const t = localStorage.getItem('rf-theme');
   if (t) { document.documentElement.setAttribute('data-theme', t); updateDarkBtn(t); }
+</script>
+
+<script>
+  // Renderiza todos os emojis como imagens Twemoji uniformes
+  document.addEventListener('DOMContentLoaded', function() {
+    twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+  });
+  // Re-renderiza quando o DOM mudar (rotinas, tarefas carregam dinamicamente)
+  const _twObserver = new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      m.addedNodes.forEach(function(node) {
+        if (node.nodeType === 1) twemoji.parse(node, { folder: 'svg', ext: '.svg' });
+      });
+    });
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+    _twObserver.observe(document.body, { childList: true, subtree: true });
+  });
 </script>
 </body>
 </html>
