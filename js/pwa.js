@@ -66,7 +66,7 @@ function showUpdateBanner() {
 // ── 4. NOTIFICAÇÕES DE LEMBRETE ──────────────────────────────
 // Solicita permissão e agenda lembretes diários via localStorage
 
-window.requestNotificationPermission = async function requestNotificationPermission() {
+export async function requestNotificationPermission() {
   if (!('Notification' in window)) return false;
   if (Notification.permission === 'granted') return true;
   if (Notification.permission === 'denied') return false;
@@ -74,7 +74,7 @@ window.requestNotificationPermission = async function requestNotificationPermiss
   return result === 'granted';
 }
 
-window.scheduleReminderNotification = function scheduleReminderNotification(hour = 8, minute = 0, title = 'Hora da rotina! ⭐', body = 'Não esqueça de completar as tarefas de hoje no RotinaFeliz!') {
+export function scheduleReminderNotification(hour = 8, minute = 0, title = 'Hora da rotina! ⭐', body = 'Não esqueça de completar as tarefas de hoje no RotinaFeliz!') {
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
 
   const now     = new Date();
@@ -92,7 +92,7 @@ window.scheduleReminderNotification = function scheduleReminderNotification(hour
       renotify: true,
     });
     // Reagendar para o dia seguinte
-    window.scheduleReminderNotification(hour, minute, title, body);
+    scheduleReminderNotification(hour, minute, title, body);
   }, delay);
 
   console.log('[PWA] Lembrete agendado para', target.toLocaleTimeString('pt-BR'));
