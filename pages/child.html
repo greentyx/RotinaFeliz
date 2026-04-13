@@ -203,6 +203,48 @@
     }
     .spinner { width:48px;height:48px; border:4px solid #dde6f9; border-top-color:var(--blue); border-radius:50%; animation:spin .8s linear infinite; }
     @keyframes spin { to{transform:rotate(360deg)} }
+  
+    /* ── MODO ESCURO ────────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg: #12101E; --white: #1E1B2E; --ink: #F0EEF8;
+      --muted: #9992B8; --blue-lt: #1A2A3D; --card: #1E1B2E;
+    }
+    [data-theme="dark"] body { background: var(--bg); color: var(--ink); }
+    [data-theme="dark"] .sidebar,
+    [data-theme="dark"] .topbar,
+    [data-theme="dark"] .stat-card,
+    [data-theme="dark"] .routine-card,
+    [data-theme="dark"] .task-row,
+    [data-theme="dark"] .modal { background: var(--white); border-color: #2E2B3E; }
+    [data-theme="dark"] .form-input { background: #12101E; color: var(--ink); border-color: #3A3560; }
+    [data-theme="dark"] .btn-ghost { background: #2A2740; color: var(--ink); }
+    .dark-toggle {
+      position:fixed; bottom:24px; left:24px; z-index:100;
+      width:42px; height:42px; border-radius:50%;
+      background:var(--white); border:2px solid #EDE9FA;
+      font-size:1.2rem; cursor:pointer;
+      box-shadow:0 4px 16px rgba(0,0,0,.12);
+      display:flex; align-items:center; justify-content:center;
+      transition:transform .2s;
+    }
+    .dark-toggle:hover { transform:scale(1.1); }
+  
+    .task-timer {
+      display:flex; align-items:center; justify-content:center;
+      gap:8px; margin-top:8px;
+    }
+    .timer-btn {
+      background:rgba(255,255,255,.25); border:none; border-radius:50px;
+      padding:6px 16px; font-family:'Nunito',sans-serif;
+      font-weight:800; font-size:.82rem; color:#fff;
+      cursor:pointer; transition:background .2s;
+    }
+    .timer-btn:hover { background:rgba(255,255,255,.4); }
+    .timer-display {
+      font-family:'Baloo 2',sans-serif; font-size:1.1rem; font-weight:900;
+      color:#fff; min-width:52px; text-align:center;
+    }
+    .task-card.timing { border-color: var(--yellow) !important; }
   </style>
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
@@ -370,6 +412,7 @@ function renderTasks() {
       </div>
       <div class="task-info">
         <div class="task-name">${sanitizeHtml(t.title || "")}</div>
+        ${(()=>{ const dur=getTaskDuration(t.title); if(!dur||isDone) return ''; const m=Math.floor(dur/60).toString().padStart(2,'0'); const s=(dur%60).toString().padStart(2,'0'); return `<div class="task-timer"><span class="timer-display" id="tdisp_${t.id}">${m}:${s}</span><button class="timer-btn" id="tbtn_${t.id}" onclick="event.stopPropagation();startTimer('${t.id}',${dur})">▶</button></div>`; })()}
         <div class="task-status">${isDone?'✅ Feito!':'👆 Toque para concluir'}</div>
       </div>
       <button class="task-btn ${isDone?'done-btn':'pending'}" ${isDone?'disabled':''}>
@@ -384,6 +427,108 @@ function updateProgress(done, total) {
   document.getElementById('progressLabel').textContent = `${done} de ${total} tarefas`;
   document.getElementById('progressPct').textContent   = `${pct}%`;
   document.getElementById('progressBar').style.width   = pct+'%';
+}
+
+
+// ── SONS DE CONQUISTA ─────────────────────────────────────────
+let audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTaskSound() {
+  try {
+    const ctx = getAudioCtx();
+    // Acorde alegre: notas Dó-Mi-Sol
+    const notes = [523.25, 659.25, 783.99];
+    notes.forEach((freq, i) => {
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, ctx.currentTime + i * 0.12);
+      gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + i * 0.12 + 0.05);
+      gain.gain.linearRampToValueAtTime(0, ctx.currentTime + i * 0.12 + 0.35);
+      osc.start(ctx.currentTime + i * 0.12);
+      osc.stop(ctx.currentTime + i * 0.12 + 0.4);
+    });
+  } catch(e) { /* silencioso se Web Audio não disponível */ }
+}
+
+function playAllDoneSound() {
+  try {
+    const ctx = getAudioCtx();
+    // Fanfarra de vitória
+    const melody = [523.25, 659.25, 783.99, 1046.50];
+    melody.forEach((freq, i) => {
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'triangle';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, ctx.currentTime + i * 0.15);
+      gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + i * 0.15 + 0.05);
+      gain.gain.linearRampToValueAtTime(0, ctx.currentTime + i * 0.15 + 0.5);
+      osc.start(ctx.currentTime + i * 0.15);
+      osc.stop(ctx.currentTime + i * 0.15 + 0.55);
+    });
+  } catch(e) {}
+}
+
+
+// ── TIMER POR TAREFA ──────────────────────────────────────────
+const timers = {}; // taskId → { interval, seconds, running }
+
+window.startTimer = function(taskId, seconds) {
+  if (timers[taskId]?.running) {
+    // Pausar
+    clearInterval(timers[taskId].interval);
+    timers[taskId].running = false;
+    document.getElementById('tbtn_'+taskId).textContent = '▶';
+    document.getElementById('card_'+taskId).classList.remove('timing');
+    return;
+  }
+  // Iniciar ou retomar
+  if (!timers[taskId]) timers[taskId] = { seconds, running: false };
+  timers[taskId].running = true;
+  document.getElementById('card_'+taskId).classList.add('timing');
+  document.getElementById('tbtn_'+taskId).textContent = '⏸';
+
+  timers[taskId].interval = setInterval(() => {
+    timers[taskId].seconds--;
+    updateTimerDisplay(taskId, timers[taskId].seconds);
+    if (timers[taskId].seconds <= 0) {
+      clearInterval(timers[taskId].interval);
+      timers[taskId].running = false;
+      document.getElementById('tbtn_'+taskId).textContent = '✓';
+      document.getElementById('card_'+taskId).classList.remove('timing');
+      playTaskSound();
+      new Notification && Notification.permission === 'granted' &&
+        new Notification('Tempo esgotado! ⏰', { body: 'Tarefa concluída!', icon: '/assets/icon-192x192.png' });
+    }
+  }, 1000);
+};
+
+function updateTimerDisplay(taskId, seconds) {
+  const el = document.getElementById('tdisp_'+taskId);
+  if (!el) return;
+  const m = Math.floor(seconds / 60).toString().padStart(2,'0');
+  const s = Math.max(0, seconds % 60).toString().padStart(2,'0');
+  el.textContent = m + ':' + s;
+}
+
+function getTaskDuration(title) {
+  const t = title.toLowerCase();
+  if (t.includes('dente') || t.includes('escov')) return 120; // 2 min
+  if (t.includes('banho') || t.includes('ducha')) return 600; // 10 min
+  if (t.includes('café') || t.includes('almoç') || t.includes('jant')) return 900; // 15 min
+  if (t.includes('lição') || t.includes('tarefa') || t.includes('estud')) return 1800; // 30 min
+  return 0; // sem timer padrão
 }
 
 // ── COMPLETE TASK ─────────────────────────────────────────
@@ -401,6 +546,7 @@ window.completeTask = async (taskId) => {
 
   // Show celebration
   celebrate();
+  playTaskSound();
 
   // Save to Firestore
   await addDoc(collection(db,'progress'),{
@@ -425,12 +571,16 @@ function celebrate() {
   }
   layer.innerHTML=html;
   setTimeout(()=>layer.innerHTML='',1800);
+  // Som especial se completou tudo
+  const total = allTasks.length;
+  const done  = completedIds.size;
+  if (total > 0 && done >= total) playAllDoneSound();
 }
 
 // ── EMOJI HELPER ──────────────────────────────────────────
 function getEmoji(title) {
   const t=title.toLowerCase();
-  if(t.includes('dente')||t.includes('escov'))return'🦷';
+  if(t.includes('dente')||t.includes('escov'))return'🪥';
   if(t.includes('café')||t.includes('comida')||t.includes('almoç'))return'🍽️';
   if(t.includes('banho')||t.includes('ducha'))return'🛁';
   if(t.includes('roupa')||t.includes('vest'))return'👕';
@@ -441,6 +591,28 @@ function getEmoji(title) {
   if(t.includes('água')||t.includes('beber'))return'💧';
   return'✅';
 }
+</script>
+
+<button class="dark-toggle" id="darkToggle" title="Alternar modo escuro" onclick="toggleDark()">🌙</button>
+<script>
+  (function(){
+    const saved = localStorage.getItem('rf-theme');
+    if (saved) { document.documentElement.setAttribute('data-theme', saved); document.getElementById('darkToggle') && updateDarkBtn(saved); }
+  })();
+  function toggleDark() {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('rf-theme', next);
+    updateDarkBtn(next);
+  }
+  function updateDarkBtn(theme) {
+    const btn = document.getElementById('darkToggle');
+    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+  // Aplicar tema salvo antes do render para evitar flash
+  const t = localStorage.getItem('rf-theme');
+  if (t) { document.documentElement.setAttribute('data-theme', t); }
 </script>
 </body>
 </html>
