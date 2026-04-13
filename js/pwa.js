@@ -62,6 +62,42 @@ function showUpdateBanner() {
   document.getElementById('pwa-update-close').onclick = () => banner.remove();
 }
 
+
+// ── 4. NOTIFICAÇÕES DE LEMBRETE ──────────────────────────────
+// Solicita permissão e agenda lembretes diários via localStorage
+
+export async function requestNotificationPermission() {
+  if (!('Notification' in window)) return false;
+  if (Notification.permission === 'granted') return true;
+  if (Notification.permission === 'denied') return false;
+  const result = await Notification.requestPermission();
+  return result === 'granted';
+}
+
+export function scheduleReminderNotification(hour = 8, minute = 0, title = 'Hora da rotina! ⭐', body = 'Não esqueça de completar as tarefas de hoje no RotinaFeliz!') {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+
+  const now     = new Date();
+  const target  = new Date();
+  target.setHours(hour, minute, 0, 0);
+  if (target <= now) target.setDate(target.getDate() + 1); // amanhã se já passou
+
+  const delay = target.getTime() - now.getTime();
+  setTimeout(() => {
+    new Notification(title, {
+      body,
+      icon: '/assets/icon-192x192.png',
+      badge: '/assets/icon-96x96.png',
+      tag: 'rotina-lembrete',
+      renotify: true,
+    });
+    // Reagendar para o dia seguinte
+    scheduleReminderNotification(hour, minute, title, body);
+  }, delay);
+
+  console.log('[PWA] Lembrete agendado para', target.toLocaleTimeString('pt-BR'));
+}
+
 // ── 3. PROMPT DE INSTALAÇÃO (Add to Home Screen) ─────────────
 let deferredPrompt = null;
 
