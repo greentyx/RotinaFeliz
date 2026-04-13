@@ -20,60 +20,70 @@
     }
     body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--ink); display:flex; min-height:100vh; }
 
-    /* ── SIDEBAR ───────────────────────────────────────────── */
+    /* ── SIDEBAR ─────────────────────────────────────────── */
     .sidebar {
-      width:var(--sidebar); flex-shrink:0;
-      background:var(--white); border-right:1.5px solid #EDE9FA;
-      display:flex; flex-direction:column;
-      padding:28px 0;
-      position:fixed; top:0; left:0; height:100vh;
-      z-index:50; transition:transform .3s;
+      width: 280px; flex-shrink: 0;
+      background: var(--white); border-right: 1.5px solid #ede9f8;
+      display: flex; flex-direction: column;
+      padding: 28px 20px; position: fixed; top: 0; left: 0; bottom: 0;
+      z-index: 50; transition: transform .3s; gap: 16px;
     }
     .sidebar-logo {
-      font-family:'Baloo 2',sans-serif; font-size:1.45rem; font-weight:900;
-      color:var(--blue); padding:0 24px 28px; display:flex; align-items:center; gap:8px;
-      text-decoration:none; border-bottom:1.5px solid #EDE9FA; margin-bottom:16px;
+      font-family: 'Baloo 2', sans-serif; font-size: 1.45rem; font-weight: 900;
+      color: var(--blue); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+      padding-bottom: 20px; border-bottom: 1.5px solid #ede9f8;
     }
-    .nav-section { padding:0 12px; margin-bottom:8px; }
-    .nav-label { font-size:.7rem; font-weight:800; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; padding:0 12px; margin-bottom:6px; }
-    .nav-item {
-      display:flex; align-items:center; gap:12px;
-      padding:11px 14px; border-radius:12px;
-      font-weight:700; font-size:.95rem; color:var(--muted);
-      text-decoration:none; cursor:pointer;
-      transition:all .15s; border:none; background:none;
-      width:100%; text-align:left;
+    /* Bloco do usuário */
+    .sb-user-block {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; background: var(--bg);
+      border-radius: 16px;
     }
-    .nav-item:hover { background:var(--blue-lt); color:var(--blue); }
-    .nav-item.active { background:var(--blue-lt); color:var(--blue); }
-    .nav-item .nav-icon { font-size:1.1rem; width:22px; text-align:center; }
-    .sidebar-footer {
-      margin-top:auto; padding:20px 12px 0;
-      border-top:1.5px solid #EDE9FA;
+    .sb-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--blue); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 1.1rem; flex-shrink: 0;
+      overflow: hidden;
     }
-    .user-card {
-      display:flex; align-items:center; gap:12px;
-      padding:12px; border-radius:12px; background:var(--bg);
+    .sb-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .sb-user-name { font-weight: 800; font-size: .92rem; line-height: 1.3; }
+    .sb-user-plan { font-size: .76rem; color: var(--muted); margin-top: 2px; }
+    /* Card de menu */
+    .sb-menu-card {
+      background: var(--bg); border-radius: 18px;
+      padding: 8px; display: flex; flex-direction: column; gap: 2px;
+      border: 1.5px solid #ede9f8;
     }
-    .user-avatar {
-      width:38px; height:38px; border-radius:50%;
-      background:var(--blue); color:#fff;
-      display:flex; align-items:center; justify-content:center;
-      font-weight:900; font-size:1rem; flex-shrink:0;
+    .sb-menu-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 12px;
+      font-weight: 700; font-size: .93rem; color: var(--ink);
+      text-decoration: none; cursor: pointer;
+      transition: all .15s; border: none; background: none;
+      width: 100%; text-align: left;
     }
-    .user-name { font-weight:800; font-size:.9rem; }
-    .user-email { font-size:.75rem; color:var(--muted); }
-    .btn-logout {
-      display:flex; align-items:center; gap:8px;
-      padding:10px 14px; border-radius:10px;
-      font-weight:700; font-size:.85rem; color:var(--error);
-      background:none; border:none; cursor:pointer;
-      width:100%; margin-top:8px; transition:background .15s;
+    .sb-menu-item:hover { background: var(--white); }
+    .sb-menu-item.active {
+      background: var(--white);
+      font-weight: 800;
+      box-shadow: 0 2px 12px rgba(74,144,217,.10);
     }
-    .btn-logout:hover { background:#FEE; }
+    .sb-menu-icon { font-size: 1rem; width: 22px; text-align: center; flex-shrink: 0; }
+    /* Botão sair */
+    .sb-bottom { margin-top: auto; }
+    .sb-logout {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; border-radius: 12px;
+      font-weight: 700; font-size: .9rem; color: var(--error);
+      background: none; border: 1.5px solid #fcd4d4; cursor: pointer;
+      width: 100%; transition: background .15s;
+    }
+    .sb-logout:hover { background: #fff5f5; }
 
     /* ── MAIN ─────────────────────────────────────────────── */
-    .main { margin-left:var(--sidebar); flex:1; display:flex; flex-direction:column; min-height:100vh; }
+    .main { margin-left: 280px; flex:1; display:flex; flex-direction:column; min-height:100vh; }
     .topbar {
       background:var(--white); border-bottom:1.5px solid #EDE9FA;
       padding:16px 32px; display:flex; align-items:center;
@@ -211,6 +221,48 @@
       .sidebar.open { transform:translateX(0); }
       .main { margin-left:0; }
     }
+  
+    /* ── MODO ESCURO ────────────────────────────────────────── */
+    [data-theme="dark"] {
+      --bg: #12101E; --white: #1E1B2E; --ink: #F0EEF8;
+      --muted: #9992B8; --blue-lt: #1A2A3D; --card: #1E1B2E;
+    }
+    [data-theme="dark"] body { background: var(--bg); color: var(--ink); }
+    [data-theme="dark"] .sidebar,
+    [data-theme="dark"] .topbar,
+    [data-theme="dark"] .stat-card,
+    [data-theme="dark"] .routine-card,
+    [data-theme="dark"] .task-row,
+    [data-theme="dark"] .modal { background: var(--white); border-color: #2E2B3E; }
+    [data-theme="dark"] .form-input { background: #12101E; color: var(--ink); border-color: #3A3560; }
+    [data-theme="dark"] .btn-ghost { background: #2A2740; color: var(--ink); }
+    .dark-toggle { display:none !important; }
+  
+    .days-selector { display:flex; gap:6px; flex-wrap:wrap; margin-top:4px; }
+    .day-pill {
+      padding:6px 12px; border-radius:50px; font-size:.78rem; font-weight:800;
+      border:2px solid #e4e0f0; background:var(--white); cursor:pointer;
+      transition:all .15s; user-select:none;
+    }
+    .day-pill.selected { background:var(--blue); color:#fff; border-color:var(--blue); }
+  
+    @media print {
+      .sidebar, .topbar, .dark-toggle, .toast, .routine-card-actions,
+      .tasks-header button, #topbarActionBtn, .back-btn { display:none !important; }
+      .main { margin-left:0 !important; }
+      body { background:#fff !important; }
+      .page { display:block !important; padding:0 !important; }
+      .print-header { display:flex !important; }
+      .task-row { box-shadow:none !important; border:1px solid #eee !important; break-inside:avoid; }
+      .task-img { background:#f5f5f5 !important; }
+    }
+    .print-header {
+      display:none; align-items:center; gap:12px;
+      margin-bottom:24px; padding-bottom:16px;
+      border-bottom:2px solid var(--blue);
+    }
+    .print-header h2 { font-family:'Baloo 2',sans-serif; font-size:1.6rem; font-weight:900; }
+    .print-header p { font-size:.9rem; color:var(--muted); }
   </style>
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
@@ -228,31 +280,44 @@
 <aside class="sidebar" id="sidebar">
   <a href="../index.html" class="sidebar-logo">⭐ RotinaFeliz</a>
 
-  <div class="nav-section">
-    <div class="nav-label">Menu</div>
-    <button class="nav-item active" id="navRotinas" onclick="showPage('routines')">
-      <span class="nav-icon">📋</span> Minhas Rotinas
-    </button>
-    <button class="nav-item" id="navDash" onclick="showPage('dashboard')">
-      <span class="nav-icon">📊</span> Progresso
-    </button>
-    <a href="child.html" class="nav-item" style="color:var(--green)">
-      <span class="nav-icon">🧒</span> Modo Criança
-    </a>
-    <a href="profile.html" class="nav-item">
-      <span class="nav-icon">👤</span> Meu Perfil
-    </a>
+  <!-- Avatar + nome -->
+  <div class="sb-user-block">
+    <div class="sb-avatar" id="sidebarAvatar">?</div>
+    <div class="sb-user-info">
+      <div class="sb-user-name" id="sidebarName">Carregando...</div>
+      <div class="sb-user-plan" id="sidebarPlan"></div>
+    </div>
   </div>
 
-  <div class="sidebar-footer">
-    <div class="user-card">
-      <div class="user-avatar" id="sidebarAvatar">?</div>
-      <div>
-        <div class="user-name" id="sidebarName">Carregando...</div>
-        <div class="user-email" id="sidebarPlan"></div>
-      </div>
-    </div>
-    <button class="btn-logout" onclick="doLogout()">🚪 Sair da conta</button>
+  <!-- Menu card -->
+  <div class="sb-menu-card">
+    <a href="profile.html" class="sb-menu-item">
+      <span class="sb-menu-icon">👤</span>
+      <span>Meu Perfil</span>
+    </a>
+    <button class="sb-menu-item active" id="navRotinas" onclick="showPage('routines')">
+      <span class="sb-menu-icon">📋</span>
+      <span>Minhas Rotinas</span>
+    </button>
+    <button class="sb-menu-item" id="navDash" onclick="showPage('dashboard')">
+      <span class="sb-menu-icon">📊</span>
+      <span>Progresso</span>
+    </button>
+    <a href="child.html" class="sb-menu-item" style="color:var(--green)">
+      <span class="sb-menu-icon">🧒</span>
+      <span>Modo Criança</span>
+    </a>
+    <button class="sb-menu-item" onclick="toggleDark()" id="themeItem">
+      <span class="sb-menu-icon" id="themeIcon">🌙</span>
+      <span id="themeLabel">Modo escuro</span>
+    </button>
+  </div>
+
+  <!-- Sair -->
+  <div class="sb-bottom">
+    <button class="sb-logout" onclick="doLogout()">
+      <span>↪</span> Sair da conta
+    </button>
   </div>
 </aside>
 
@@ -293,11 +358,20 @@
 
   <!-- ── PAGE: TASKS ──────────────────────────────────────── -->
   <div class="page" id="pageTasks" style="padding:32px">
+    <!-- Cabeçalho visível só na impressão -->
+    <div class="print-header">
+      <span style="font-size:2rem">⭐</span>
+      <div>
+        <h2 id="printRoutineName">Rotina</h2>
+        <p id="printRoutineDate"></p>
+      </div>
+    </div>
     <div class="tasks-header">
       <button class="back-btn" onclick="showPage('routines')">← Voltar</button>
       <h2 style="font-family:'Baloo 2',sans-serif;font-weight:900" id="taskRoutineName">Rotina</h2>
     </div>
-    <div style="margin-bottom:16px;display:flex;justify-content:flex-end">
+    <div style="margin-bottom:16px;display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn btn-ghost btn-sm" id="btnPrintRoutine" onclick="printRoutine()" style="display:none">🖨️ Imprimir</button>
       <button class="btn btn-primary btn-sm" onclick="openAddTaskModal()">+ Adicionar Tarefa</button>
     </div>
     <div class="tasks-list" id="tasksList"></div>
@@ -360,6 +434,22 @@
       <label class="form-label">Nome da rotina</label>
       <input class="form-input" id="newRoutineName" placeholder="Ex: Rotina da Manhã" maxlength="100" />
     </div>
+    <div class="form-group">
+      <label class="form-label">Para qual criança? <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+      <input class="form-input" id="newRoutineChild" placeholder="Ex: João, Maria..." maxlength="60" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Dias da semana <span style="font-weight:400;color:var(--muted)">(opcional — vazio = todos os dias)</span></label>
+      <div class="days-selector" id="daysPicker">
+        <span class="day-pill" data-day="0" onclick="toggleDay(this)">Dom</span>
+        <span class="day-pill" data-day="1" onclick="toggleDay(this)">Seg</span>
+        <span class="day-pill" data-day="2" onclick="toggleDay(this)">Ter</span>
+        <span class="day-pill" data-day="3" onclick="toggleDay(this)">Qua</span>
+        <span class="day-pill" data-day="4" onclick="toggleDay(this)">Qui</span>
+        <span class="day-pill" data-day="5" onclick="toggleDay(this)">Sex</span>
+        <span class="day-pill" data-day="6" onclick="toggleDay(this)">Sáb</span>
+      </div>
+    </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModalById('modalCreateRoutine')">Cancelar</button>
       <button class="btn btn-primary" onclick="createRoutine()">Criar Rotina</button>
@@ -417,6 +507,7 @@ import { auth, db,
   from "../js/firebase.js";
 import { uploadImage, resizeImage } from "../js/cloudinary.js";
 import { sanitizeHtml, hasInjection } from "../js/security.js";
+import { requestNotificationPermission, scheduleReminderNotification } from "../js/pwa.js";
 
 let currentUser = null;
 let currentPlan  = 'free';
@@ -460,6 +551,44 @@ onAuthStateChanged(auth, async user => {
 });
 
 window.doLogout = () => signOut(auth).then(()=>window.location.href='login.html');
+
+window.printRoutine = function() {
+  if (currentPlan !== 'familia') {
+    toast('🔒 Imprimir rotina é exclusivo do Plano Família!');
+    return;
+  }
+  const name = routinesMap[currentRoutineId]?.title || 'Rotina';
+  const date = new Date().toLocaleDateString('pt-BR', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  const pName = document.getElementById('printRoutineName');
+  const pDate = document.getElementById('printRoutineDate');
+  if (pName) pName.textContent = name;
+  if (pDate) pDate.textContent = 'Impresso em ' + date;
+  window.print();
+};
+
+window.toggleNotifications = async function() {
+  const granted = await requestNotificationPermission();
+  if (granted) {
+    scheduleReminderNotification(8, 0);
+    const lbl2 = document.getElementById('notifLabel');
+    const nav2 = document.getElementById('navNotif');
+    if (lbl2) lbl2.textContent = 'Lembretes ativos ✓';
+    if (nav2) nav2.style.color = 'var(--green)';
+    toast('🔔 Lembrete diário ativado para as 8h!');
+  } else {
+    toast('❌ Permissão de notificação negada. Verifique as configurações do navegador.');
+  }
+};
+
+// Verificar se notificações já estão ativas ao carregar
+if ('Notification' in window && Notification.permission === 'granted') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const lbl = document.getElementById('notifLabel');
+    const nav = document.getElementById('navNotif');
+    if (lbl) lbl.textContent = 'Lembretes ativos ✓';
+    if (nav) nav.style.color = 'var(--green)';
+  });
+}
 
 // ── ROUTINES ────────────────────────────────────────────────
 function loadRoutines() {
@@ -517,6 +646,8 @@ function renderRoutines(routines) {
       <div class="routine-card-header">📋</div>
       <div class="routine-card-body">
         <div class="routine-card-name">${sanitizeHtml(r.title || '')}</div>
+        ${r.childName ? `<div style="font-size:.78rem;font-weight:800;color:var(--green);margin-bottom:4px">👦 ${sanitizeHtml(r.childName)}</div>` : ''}
+        ${r.days && r.days.length ? `<div style="font-size:.75rem;font-weight:800;color:var(--blue);margin-bottom:4px">📅 ${r.days.map(d=>['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'][d]).join(' · ')}</div>` : ''}
         <div class="routine-meta">${new Date(r.createdAt).toLocaleDateString('pt-BR')}</div>
         <div class="routine-card-actions" onclick="event.stopPropagation()">
           <button class="btn btn-ghost btn-sm" onclick="openEditRoutine('${r.id}')">✏️ Editar</button>
@@ -527,8 +658,12 @@ function renderRoutines(routines) {
   `).join('');
 }
 
+window.toggleDay = (el) => el.classList.toggle('selected');
+
 window.openCreateRoutineModal = () => {
   document.getElementById('newRoutineName').value='';
+  document.getElementById('newRoutineChild').value='';
+  document.querySelectorAll('.day-pill').forEach(p=>p.classList.remove('selected'));
   openModalById('modalCreateRoutine');
 };
 
@@ -550,8 +685,13 @@ window.createRoutine = async () => {
   btn.disabled = true; btn.textContent = 'Criando...';
   try {
     console.log('[createRoutine] userId:', currentUser.uid, '| name:', name);
+    const childName   = document.getElementById('newRoutineChild').value.trim();
+    const selectedDays = [...document.querySelectorAll('.day-pill.selected')].map(p=>parseInt(p.dataset.day));
     await addDoc(collection(db,'routines'),{
-      userId: currentUser.uid, title: name, createdAt: new Date().toISOString()
+      userId: currentUser.uid, title: name,
+      childName: childName || null,
+      days: selectedDays.length > 0 ? selectedDays : null,
+      createdAt: new Date().toISOString()
     });
     console.log('[createRoutine] ✅ sucesso');
     closeModalById('modalCreateRoutine');
@@ -618,7 +758,10 @@ window.deleteRoutine = async (id, name) => {
 // ── TASKS ───────────────────────────────────────────────────
 window.openRoutine = (routineId) => {
   currentRoutineId = routineId;
-  document.getElementById('taskRoutineName').textContent = routinesMap[routineId]?.title || 'Rotina';
+  const rTitle = routinesMap[routineId]?.title || 'Rotina';
+  document.getElementById('taskRoutineName').textContent = rTitle;
+  const printBtn = document.getElementById('btnPrintRoutine');
+  if (printBtn) printBtn.style.display = currentPlan === 'familia' ? '' : 'none';
   showPage('tasks');
   loadTasks(routineId);
 };
@@ -956,7 +1099,7 @@ function renderTodayProgress(items, taskTitles={}) {
 // ── UI HELPERS ──────────────────────────────────────────────
 window.showPage = (page) => {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.sb-menu-item').forEach(n=>n.classList.remove('active'));
   if (page==='routines') {
     document.getElementById('pageRoutines').classList.add('active');
     document.getElementById('navRotinas').classList.add('active');
@@ -992,6 +1135,28 @@ function toast(msg) {
   toastTimer = setTimeout(()=>el.classList.remove('show'),2800);
 }
 window.toast = toast;
+</script>
+
+<script>
+  (function(){
+    const saved = localStorage.getItem('rf-theme');
+    if (saved) { document.documentElement.setAttribute('data-theme', saved); }
+  })();
+  function toggleDark() {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('rf-theme', next);
+    updateDarkBtn(next);
+  }
+  function updateDarkBtn(theme) {
+    const icon  = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+    if (icon)  icon.textContent  = theme === 'dark' ? '☀️' : '🌙';
+    if (label) label.textContent = theme === 'dark' ? 'Modo claro' : 'Modo escuro';
+  }
+  const t = localStorage.getItem('rf-theme');
+  if (t) { document.documentElement.setAttribute('data-theme', t); updateDarkBtn(t); }
 </script>
 </body>
 </html>
